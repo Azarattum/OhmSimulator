@@ -4,6 +4,7 @@ import View from "../common/view.abstract";
 import Events from "./services/events.service";
 import DeviceController from "./controllers/device.controller";
 /**Views */
+import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
 
 /**
@@ -18,7 +19,7 @@ export default class App {
 	 */
 	public async initialize(): Promise<void> {
 		const components: IComponent[] = [DeviceController, Events];
-		const views: View[] = [new DeviceView()];
+		const views: View[] = [new CircuitView(), new DeviceView()];
 
 		this.manger = new Manager(components, views);
 
