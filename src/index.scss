@@ -3,6 +3,10 @@ $media-mobile: "only screen and (max-width: 640px) and (min-width: 0px) ";
 
 //Core styles
 body {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+
     --color-text: rgb(63, 60, 66);
 
     margin: 0;

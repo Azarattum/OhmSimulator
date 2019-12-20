@@ -1,0 +1,27 @@
+.device
+    .scale
+        svg(viewbox="0 0 500 150")
+            path#curve(
+                fill="transparent"
+                d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
+            )
+            path#curve2(
+                fill="transparent"
+                transform="translate(-30, -30) scale(1.12)"
+                d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
+            )
+
+            text(width="500").numbers
+                textpath(xlink:href="#curve2" xml:space="preserve")
+                    | 0       20      40      60      80    100
+
+            text(width="500").deviders
+                textpath(xlink:href="#curve")
+                    | |....|....|....|....|....|....|....|....|....|....|
+    .arrow
+
+    .buttons
+        button.range(data-level="25" style="background:#ff9661") x2
+        button.range(data-level="50" style="background:#ffd366") x4
+        button.range(data-level="75" style="background:#acd376") x6
+        button.range(data-level="100" style="background:#58d185") x10

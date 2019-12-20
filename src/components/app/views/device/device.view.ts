@@ -6,14 +6,16 @@ import View from "../../../common/view.abstract";
  * Device view
  */
 export default class Device extends View {
-	public constructor() {
-		super("Device");
+	public name: string;
+
+	public constructor(name: string) {
+		super(name);
+		this.name = name;
 
 		this.template = Template;
 	}
 
-	public toggle(visible: boolean | null = null): void {
-		super.toggle(visible);
-		///Override here
+	public render(template: Function | null = null, args: {} = {}): void {
+		super.render(template, { name: this.name, ...args });
 	}
 }

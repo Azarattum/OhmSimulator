@@ -1,7 +1,7 @@
 .circuit {
     --margin: 64px;
     --width: calc(100vw - var(--margin) * 2);
-    --height: 500px;
+    --height: 40vw;
 
     transform: translate(0, 0);
 
@@ -19,14 +19,18 @@
 
     .meter {
         position: absolute;
+        display: flex;
+        align-items: center;
 
         width: calc(var(--width) / 6);
         height: calc(var(--height) / 3);
 
         transition: 0.2s;
+        transition-property: transform;
+        cursor: pointer;
 
         &:hover {
-            transform: scale(1.5, 1.5);
+            transform: scale(1.6);
 
             z-index: 100;
         }
@@ -45,6 +49,7 @@
         width: calc(var(--width) / 6);
         height: var(--height);
 
+        cursor: pointer;
         line-height: var(--height);
     }
 

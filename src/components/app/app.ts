@@ -19,7 +19,11 @@ export default class App {
 	 */
 	public async initialize(): Promise<void> {
 		const components: IComponent[] = [DeviceController, Events];
-		const views: View[] = [new CircuitView(), new DeviceView()];
+		const views: View[] = [
+			new CircuitView(),
+			new DeviceView("voltmeter"),
+			new DeviceView("ampermeter")
+		];
 
 		this.manger = new Manager(components, views);
 
