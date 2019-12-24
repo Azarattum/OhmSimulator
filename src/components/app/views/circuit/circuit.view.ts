@@ -11,9 +11,4 @@ export default class Circuit extends View {
 
 		this.template = Template;
 	}
-
-	public toggle(visible: boolean | null = null): void {
-		super.toggle(visible);
-		///Override here
-	}
 }

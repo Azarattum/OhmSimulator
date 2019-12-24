@@ -69,6 +69,17 @@
         z-index: 0;
     }
 
+    .precision {
+        position: absolute;
+        right: 12px;
+        top: 6.8vw;
+
+        opacity: 0.6;
+        font-size: 0.8vw;
+
+        z-index: 0;
+    }
+
     .buttons {
         position: relative;
         margin-top: 3vw;

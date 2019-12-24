@@ -45,10 +45,25 @@ export default class App {
 		}
 
 		return [
-			{ Devices: [132], Power: [30] },
 			{
-				voltmeter: { ranges: [0.5, 1, 2, 3], step: 2, label: "V" },
-				ampermeter: { ranges: [1, 2, 5, 20], step: 20, label: "mA" }
+				//Resistance
+				Devices: [132],
+				//Maximum voltage
+				Power: [30]
+			},
+			{
+				voltmeter: {
+					ranges: [0.5, 1, 2, 3],
+					step: 2,
+					label: "V",
+					precision: "1.5"
+				},
+				ampermeter: {
+					ranges: [1, 2, 5, 20],
+					step: 20,
+					label: "mA",
+					precision: "2.0"
+				}
 			}
 		];
 	}
