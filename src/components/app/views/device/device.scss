@@ -1,4 +1,5 @@
 .device {
+    --value: 0;
     display: block;
     transform: translate(0, 0);
     width: 100%;
@@ -32,16 +33,13 @@
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
 
-        transition: 1s;
-        transform: rotateZ(60deg);
+        transition: 0.6s;
+        transform: rotateZ(calc((var(--value) / var(--limit)) * 120deg - 60deg));
         transform-origin: bottom;
         transition-property: transform;
         transition-timing-function: cubic-bezier(0.250, 0.100, 0.270, 1.225);
 
-        ///TEMP TESTING
-        &:hover {
-            transform: rotateZ(-60deg);
-        }
+        z-index: 1;
 
         &:after {
             content: "";
@@ -58,6 +56,19 @@
         }
     }
 
+    .label {
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        transform: translateX(-50%);
+
+        opacity: 0.6;
+        text-align: center;
+        font-size: 2vw;
+
+        z-index: 0;
+    }
+
     .buttons {
         position: relative;
         margin-top: 3vw;
@@ -65,7 +76,7 @@
         display: flex;
         justify-content: space-evenly;
 
-        button {
+        label {
             background: #ddd;
             color: rgb(80, 80, 80);
             border: none;
@@ -77,15 +88,27 @@
             box-shadow: inset 0 -3px 0px rgba(0, 0, 0, 0.1);
 
             transition: 0.15s;
+            user-select: none;
             cursor: pointer;
 
             &:hover {
-                filter: brightness(0.92);
+                filter: brightness(0.9);
             }
 
             &:active {
                 transform: translateY(2px);
                 box-shadow: inset 0 -1px 0px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        input {
+            position: absolute;
+            visibility: hidden;
+
+            &:checked+label {
+                transform: translateY(2px);
+                box-shadow: inset 0 -1px 0px rgba(0, 0, 0, 0.1);
+                filter: brightness(0.9);
             }
         }
     }

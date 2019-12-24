@@ -61,6 +61,9 @@ export default abstract class View {
 		}
 	}
 
+	/**
+	 * Associated container
+	 */
 	protected get container(): HTMLElement {
 		const container = document.querySelector(
 			`[view=${this.name.toLowerCase()}]`

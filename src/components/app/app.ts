@@ -2,7 +2,8 @@ import Manager, { IComponent } from "../common/manager.class";
 import View from "../common/view.abstract";
 /**Componets */
 import Events from "./services/events.service";
-import DeviceController from "./controllers/device.controller";
+import DevicesController from "./controllers/devices.controller";
+import PowerController from "./controllers/power.controller";
 /**Views */
 import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
@@ -18,7 +19,11 @@ export default class App {
 	 * Note that the page should be already loaded
 	 */
 	public async initialize(): Promise<void> {
-		const components: IComponent[] = [DeviceController, Events];
+		const components: IComponent[] = [
+			PowerController,
+			DevicesController,
+			Events
+		];
 		const views: View[] = [
 			new CircuitView(),
 			new DeviceView("voltmeter"),
@@ -28,19 +33,23 @@ export default class App {
 		this.manger = new Manager(components, views);
 
 		const args = await this.initializeArguments();
-		await this.manger.initialize(args);
+		await this.manger.initialize(...args);
 	}
 
 	/**
 	 * Initializes arguments for the manager
 	 */
-	private async initializeArguments(): Promise<{
-		[component: string]: any[];
-	}> {
+	private initializeArguments(): any[] {
 		if (!this.manger) {
 			throw new Error("Initialize manager first!");
 		}
 
-		return {};
+		return [
+			{ Devices: [132], Power: [30] },
+			{
+				voltmeter: { ranges: [0.5, 1, 2, 3], step: 2, label: "V" },
+				ampermeter: { ranges: [1, 2, 5, 20], step: 20, label: "mA" }
+			}
+		];
 	}
 }

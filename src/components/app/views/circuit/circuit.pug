@@ -1,5 +1,8 @@
 .circuit
-	.element.power &#x26a1;
+	.element.power(
+		controller="power"
+		onclick="Power.updateVoltage()"
+	) &#x26a1;
 	.element.meter.voltmeter(view="voltmeter")
 	.element.meter.ampermeter(view="ampermeter")
 	.element.resistor &Omega;

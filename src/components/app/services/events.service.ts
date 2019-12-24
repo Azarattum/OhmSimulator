@@ -1,4 +1,6 @@
 import Service from "../../common/service.abstract";
+import PowerController from "../controllers/power.controller";
+import DevicesController from "../controllers/devices.controller";
 
 /**
  * One service to rule them all!
@@ -8,7 +10,7 @@ import Service from "../../common/service.abstract";
 export default class Envets extends Service<"registered">() {
 	public static async initialize(): Promise<void> {
 		//Register service events
-		this.registerDevice();
+		this.registerPower();
 
 		this.call("registered");
 	}
@@ -16,7 +18,12 @@ export default class Envets extends Service<"registered">() {
 	/**
 	 * Register Users service events
 	 */
-	private static registerDevice(): void {
-		///Events here
+	private static registerPower(): void {
+		PowerController.addEventListener(
+			"voltageChanged",
+			(voltage: number) => {
+				DevicesController.updateValues(voltage);
+			}
+		);
 	}
 }
