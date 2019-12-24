@@ -1,6 +1,9 @@
 # Ohm Simulator
 A small web app simulator for studying Ohm's law.
 
+### Demo:
+https://azarattum.github.io/OhmSimulator/dist/index.html
+
 ### Usage:
 Start your web server from *./dist* folder.
 
