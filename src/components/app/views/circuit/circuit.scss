@@ -5,11 +5,12 @@
 }
 
 .circuit {
+	position: absolute;
+	left: 0;
+	top: 0;
 	--margin: 64px;
 	--width: calc(100vw - var(--margin) * 2);
 	--height: 40vw;
-
-	transform: translate(0, 0);
 
 	width: var(--width);
 	margin: var(--margin);

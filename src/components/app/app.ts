@@ -2,7 +2,9 @@ import Manager, { IComponent, ComponentArgs } from "../common/manager.class";
 /**Componets */
 import DevicesController from "./controllers/devices.controller";
 import PowerController from "./controllers/power.controller";
+import MachineController from "./controllers/machine.controller";
 /**Views */
+import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
 import EnvetsHandler from "./events";
@@ -22,6 +24,8 @@ export default class App {
 		const components: IComponent[] = [
 			new PowerController(),
 			new DevicesController(),
+			new MachineController(),
+			new MachineView(),
 			new CircuitView(),
 			new DeviceView("Voltmeter"),
 			new DeviceView("Ampermeter")

@@ -1,0 +1,53 @@
+.machine {
+	transform: translateX(0);
+	display: flex;
+	justify-content: center;
+
+	img {
+		height: 70vmin;
+		width: auto;
+		z-index: -1;
+	}
+
+	[view="circuit"]:not(.inactive) ~ img {
+		opacity: 0;
+		width: 100vw;
+		height: 100vh;
+		transition: 1.2s;
+	}
+
+	.inactive > .circuit {
+		position: absolute;
+		left: 15vmin;
+		top: 21vmin;
+		margin: 0;
+
+		color: rgba(0, 0, 0, 0);
+		max-height: 100vmin;
+		max-width: 120vmin;
+		overflow: hidden;
+		animation: tst 3s;
+		transform-origin: 0 0;
+		transform: translate(0, 0) scale(0.15);
+
+		.wire {
+			--size: 4vmin;
+		}
+
+		.scale,
+		.arrow,
+		.buttons,
+		.label,
+		.precision {
+			opacity: 0;
+			transition: 2s;
+			transition-property: opacity;
+		}
+
+		pointer-events: none;
+	}
+
+	.circuit {
+		transition: 2s;
+	}
+}
