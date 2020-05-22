@@ -13,13 +13,16 @@ export default class Utils {
 
 		switch (type) {
 			case LogType.INFO: {
-				console.log(prefix + "%ci " + text, "font-weight:bold;");
+				console.log(
+					prefix + "%c\x1b[1mi\x1b[0m " + text,
+					"font-weight:bold;"
+				);
 				break;
 			}
 
 			case LogType.OK: {
 				console.log(
-					prefix + "%c\u2714 " + text,
+					prefix + "\x1b[32m\x1b[1m%c\u2713 " + text + "\x1b[0m",
 					"color:green;font-weight:bold;"
 				);
 				break;
@@ -27,15 +30,18 @@ export default class Utils {
 
 			case LogType.ERROR: {
 				console.error(
-					prefix + "%c\u2718 " + text,
+					prefix + "\x1b[31m\x1b[1m%c\u2718 " + text + "\x1b[0m",
 					"color:red;font-weight:bold;"
 				);
 				break;
 			}
 
 			case LogType.WARNING: {
-				console.log(
-					prefix + "%c! " + text,
+				console.warn(
+					prefix +
+						"\x1b[33m\x1b[1m%c!\x1b[0m \x1b[33m" +
+						text +
+						"\x1b[0m",
 					"color:goldenrod;font-weight:bold;"
 				);
 				break;
@@ -51,6 +57,30 @@ export default class Utils {
 
 			default:
 				throw new TypeError("Unknown log type!");
+		}
+	}
+
+	/**
+	 * Merges properties of two objects
+	 * @param to Destination object
+	 * @param from Source objecr
+	 */
+	public static mergeObjects(to: any, from: any): void {
+		for (const key in from) {
+			if (typeof from[key] === "object") {
+				if (!to[key]) to[key] = {};
+				this.mergeObjects(to[key], from[key]);
+			} else {
+				if (!to[key]) {
+					to[key] = from[key];
+				} else if (Array.isArray(to[key])) {
+					if (!to[key].includes(from[key])) {
+						to[key].push(from[key]);
+					}
+				} else if (to[key] != from[key]) {
+					to[key] = [to[key], from[key]];
+				}
+			}
 		}
 	}
 }

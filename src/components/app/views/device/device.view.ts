@@ -16,6 +16,9 @@ export default class Device extends View {
 	}
 
 	public render(template: Function | null = null, args: {} = {}): void {
-		super.render(template, { name: this.name, ...args });
+		super.render(template, {
+			name: this.name.toLocaleLowerCase(),
+			...args
+		});
 	}
 }

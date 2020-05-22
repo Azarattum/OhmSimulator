@@ -8,15 +8,25 @@ export default function Service<T extends string>() {
 	 * Abstract of the service class
 	 */
 	abstract class Service {
+		/**Component type */
+		public static type: string = "Services";
 		/**Callbacks storage */
 		private static callbacks: { [type: string]: Function[] } = {};
+
+		/**
+		 * Closes the service
+		 */
+		public static close(): void {
+			//Close the service
+			this.callbacks = {};
+		}
 
 		/**
 		 * Listens to a specified event in the service
 		 * @param type Event type
 		 * @param callback Callback function
 		 */
-		public static addEventListener(type: T, callback: Function): void {
+		public static on(type: T, callback: Function): void {
 			if (!(type in this.callbacks)) this.callbacks[type] = [];
 			this.callbacks[type].push(callback);
 		}
@@ -26,9 +36,9 @@ export default function Service<T extends string>() {
 		 * @param type Event type
 		 * @param args Arguments to pass to callbacks
 		 */
-		protected static call(type: T, ...args: any[]): void {
+		protected static emit(type: T, ...args: any[]): void {
 			if (this.callbacks[type]) {
-				this.callbacks[type].map(x => x.call(x, ...args));
+				this.callbacks[type].forEach(x => x.call(x, ...args));
 			}
 		}
 
@@ -43,17 +53,17 @@ export default function Service<T extends string>() {
 			name: string,
 			func: Function | null = null
 		): void {
-			if (!(window as any)[this.name]) {
-				(window as any)[this.name] = {};
+			if (!(globalThis as any)[this.name]) {
+				(globalThis as any)[this.name] = {};
 			}
 
 			if (func) {
-				(window as any)[this.name][name] = func;
+				(globalThis as any)[this.name][name] = func;
 			} else {
 				if (typeof (this as any)[name] != "function") {
 					throw new Error("The function to expose not found!");
 				}
-				(window as any)[this.name][name] = (...args: any[]) => {
+				(globalThis as any)[this.name][name] = (...args: any[]) => {
 					((this as any)[name] as Function).call(this, ...args);
 				};
 			}

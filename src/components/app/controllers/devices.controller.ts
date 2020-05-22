@@ -1,16 +1,16 @@
-import Service from "../../common/service.abstract";
+import Controller from "../../common/controller.abstract";
 
 /**
  * Device controller
  */
-export default class Devices extends Service<"">() {
-	private static voltage: number = 0;
-	private static resistance: number;
+export default class Devices extends Controller<"">() {
+	private voltage: number = 0;
+	private resistance: number = 1;
 
-	private static voltmeter: HTMLElement | null = null;
-	private static ampermeter: HTMLElement | null = null;
+	private voltmeter: HTMLElement | null = null;
+	private ampermeter: HTMLElement | null = null;
 
-	public static initialize(resistance: number): void {
+	public initialize(resistance: number): void {
 		this.resistance = resistance;
 		this.voltmeter = document.getElementById("voltmeter");
 		this.ampermeter = document.getElementById("ampermeter");
@@ -22,7 +22,7 @@ export default class Devices extends Service<"">() {
 	 * Updates devices values
 	 * @param voltage New voltage
 	 */
-	public static updateValues(voltage: number = this.voltage): void {
+	public updateValues(voltage: number = this.voltage): void {
 		if (this.voltmeter) {
 			const scalar =
 				Number.parseFloat(

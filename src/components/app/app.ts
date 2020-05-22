@@ -1,18 +1,18 @@
-import Manager, { IComponent } from "../common/manager.class";
-import View from "../common/view.abstract";
+import Manager, { IComponent, ComponentArgs } from "../common/manager.class";
 /**Componets */
-import Events from "./services/events.service";
 import DevicesController from "./controllers/devices.controller";
 import PowerController from "./controllers/power.controller";
 /**Views */
 import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
+import EnvetsHandler from "./events";
 
 /**
  * Main application class
  */
 export default class App {
 	private manger: Manager | null = null;
+	private events: EnvetsHandler | null = null;
 
 	/**
 	 * Initializes the app.
@@ -20,51 +20,50 @@ export default class App {
 	 */
 	public async initialize(): Promise<void> {
 		const components: IComponent[] = [
-			PowerController,
-			DevicesController,
-			Events
-		];
-		const views: View[] = [
+			new PowerController(),
+			new DevicesController(),
 			new CircuitView(),
-			new DeviceView("voltmeter"),
-			new DeviceView("ampermeter")
+			new DeviceView("Voltmeter"),
+			new DeviceView("Ampermeter")
 		];
 
-		this.manger = new Manager(components, views);
+		this.manger = new Manager(components);
+		this.events = new EnvetsHandler(components);
 
-		const args = await this.initializeArguments();
-		await this.manger.initialize(...args);
+		const args = await this.getComponentArguments();
+		await this.events.registerEvents();
+		await this.manger.initialize(args);
 	}
 
 	/**
 	 * Initializes arguments for the manager
 	 */
-	private initializeArguments(): any[] {
+	private async getComponentArguments(): Promise<ComponentArgs> {
 		if (!this.manger) {
 			throw new Error("Initialize manager first!");
 		}
 
-		return [
-			{
-				//Resistance
-				Devices: [132],
-				//Maximum voltage
-				Power: [30]
-			},
-			{
-				voltmeter: {
+		return {
+			//Resistance
+			Devices: [132],
+			//Maximum voltage
+			Power: [30],
+			Voltmeter: [
+				{
 					ranges: [0.5, 1, 2, 3],
 					step: 2,
 					label: "V",
 					precision: "1.5"
-				},
-				ampermeter: {
+				}
+			],
+			Ampermeter: [
+				{
 					ranges: [1, 2, 5, 20],
 					step: 20,
 					label: "mA",
 					precision: "2.0"
 				}
-			}
-		];
+			]
+		};
 	}
 }

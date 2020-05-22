@@ -1,5 +1,3 @@
-/**Page Styles */
-import "./index.scss";
 /**Main Script */
 import App from "./components/app/app";
 

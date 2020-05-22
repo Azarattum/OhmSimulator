@@ -1,18 +1,15 @@
-import Service from "../../common/service.abstract";
+import Controller from "../../common/controller.abstract";
 
 /**
  * Power controller
  */
-export default class Power extends Service<"voltageChanged">() {
-	public static voltage: number;
+export default class Power extends Controller<"voltageChanged">() {
+	public voltage: number = 0;
 
-	private static maximum: number;
-	private static step: number;
+	private maximum: number = 100;
+	private step: number = 1;
 
-	public static initialize(
-		maximum: number = 100,
-		precision: number = 10
-	): void {
+	public initialize(maximum: number = 100, precision: number = 10): void {
 		this.voltage = 0;
 		this.maximum = maximum;
 		this.step = maximum / precision;
@@ -23,7 +20,7 @@ export default class Power extends Service<"voltageChanged">() {
 	/**
 	 * Update power voltage
 	 */
-	public static updateVoltage(): void {
+	public updateVoltage(): void {
 		this.voltage += this.step;
 		if (this.voltage > this.maximum) {
 			this.voltage = 0;
@@ -34,21 +31,6 @@ export default class Power extends Service<"voltageChanged">() {
 			(this.voltage / this.maximum).toString()
 		);
 
-		this.call("voltageChanged", this.voltage);
-	}
-
-	/**
-	 * Associated container
-	 */
-	protected static get container(): HTMLElement {
-		const container = document.querySelector(
-			`[controller=${(this as any).name.toLowerCase()}]`
-		);
-
-		if (!container) {
-			throw new Error(`Container ${(this as any).name} not found!`);
-		}
-
-		return container as HTMLElement;
+		this.emit("voltageChanged", this.voltage);
 	}
 }

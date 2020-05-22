@@ -2,6 +2,7 @@
  * Represents a view component
  */
 export default abstract class View {
+	public type = "Views";
 	public readonly name: string;
 	protected template: Function | null;
 	private windowLoaded: boolean;
@@ -25,10 +26,21 @@ export default abstract class View {
 	}
 
 	/**
+	 * Initializes view component by rendering it
+	 * @param args View render arguments
+	 */
+	public async initialize(args: {}): Promise<void> {
+		this.render(null, args);
+	}
+
+	/**
 	 * Renders the content to the view's container
 	 * @param content View content
 	 */
-	public render(template: Function | null = null, args: {} = {}): void {
+	public render(
+		template: Function | null = null,
+		args: Record<string, any> = {}
+	): void {
 		if (!this.windowLoaded) {
 			this.template = template;
 			return;
@@ -39,15 +51,38 @@ export default abstract class View {
 		if (!args) {
 			args = {};
 		}
-		if (!template) return;
 
-		this.container.innerHTML = template(args);
+		this.container.forEach(x => {
+			if (!template) return;
+
+			//Wrap functional arguments
+			const xArgs = {};
+			for (const key in args) {
+				if (Object.prototype.hasOwnProperty.call(args, key)) {
+					const value = (args as any)[key];
+					if (typeof value == "function") {
+						(xArgs as any)[key] = (...args: any[]): any => {
+							return value(x, ...args);
+						};
+					} else {
+						(xArgs as any)[key] = value;
+					}
+				}
+			}
+			(xArgs as any)["data"] = this.data;
+
+			x.innerHTML = template(xArgs);
+		});
 		this.template = null;
 	}
 
+	/**
+	 * Toggles visibility of view's container
+	 * @param visible Container visibility
+	 */
 	public toggle(visible: boolean | null = null): void {
 		if (visible == null) {
-			if (this.container.style.display == "none") {
+			if (this.container[0].style.display == "none") {
 				visible = true;
 			} else {
 				visible = false;
@@ -55,17 +90,46 @@ export default abstract class View {
 		}
 
 		if (visible) {
-			this.container.style.display = "block";
+			this.container.forEach(x => {
+				x.style.display = "block";
+			});
 		} else {
-			this.container.style.display = "none";
+			this.container.forEach(x => {
+				x.style.display = "none";
+			});
 		}
 	}
 
 	/**
-	 * Associated container
+	 * Data proxy for placeholders
 	 */
-	protected get container(): HTMLElement {
-		const container = document.querySelector(
+	private get data(): Record<string, string> {
+		const handler = {
+			get: (object: { _: string }, property: any): any => {
+				if (
+					property == Symbol.toPrimitive ||
+					property == "toJSON" ||
+					property == "toString"
+				) {
+					return (): string =>
+						`<placeholder ${object._}><!--"placeholders __postfix_${object._}="--></placeholder>`;
+				}
+
+				const newObject = {
+					_: (object._ ? object._ + "." : "") + property
+				};
+				return new Proxy(newObject, handler);
+			}
+		};
+
+		return new Proxy({ _: "" }, handler);
+	}
+
+	/**
+	 * The container associated with current view
+	 */
+	private get container(): NodeListOf<HTMLElement> {
+		const container = document.querySelectorAll(
 			`[view=${this.name.toLowerCase()}]`
 		);
 
@@ -73,6 +137,6 @@ export default abstract class View {
 			throw new Error(`Container ${this.name} not found!`);
 		}
 
-		return container as HTMLElement;
+		return container as NodeListOf<HTMLElement>;
 	}
 }

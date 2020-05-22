@@ -1,8 +1,27 @@
-/* eslint-disable */
 const Path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
+
+//Register use of data binding templates for the index page
+const handler = {
+	get: (object, property) => {
+		if (
+			property == Symbol.toPrimitive ||
+			property == "toJSON" ||
+			property == "toString"
+		) {
+			return () => 
+				`<placeholder ${object._}><!--"placeholders __postfix_${object._}="--></placeholder>`;
+		}
+		const newObject = {
+			_: (object._ ? object._ + "." : "") + property
+		};
+		return new Proxy(newObject, handler);
+	}
+};
+const data = new Proxy({ _: "" }, handler);
 
 const prod = process.argv.indexOf("-p") !== -1;
 
@@ -12,8 +31,11 @@ module.exports = {
 	devtool: prod ? undefined : "eval-source-map",
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: "./src/index.pug"
+			template: "./src/index.pug",
+			minify: prod,
+			data: data
 		}),
+		prod ? new WorkboxPlugin.GenerateSW() : () => {},
 		prod ? new WebpackCleanupPlugin() : () => {}
 	],
 	module: {
@@ -61,8 +83,8 @@ module.exports = {
 	optimization: {
 		splitChunks: {
 			chunks: "all",
-			minSize: 30000,
-			maxSize: 0,
+			minSize: 60000,
+			maxSize: 240000,
 			minChunks: 1,
 			maxAsyncRequests: 6,
 			maxInitialRequests: 4,
@@ -94,5 +116,6 @@ module.exports = {
 					})
 			  ]
 			: []
-	}
+	},
+	target: "web"
 };
