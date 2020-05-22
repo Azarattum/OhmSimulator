@@ -1,3 +1,13 @@
 .machine(controller="machine")
 	.inactive(view="circuit")
 	img(src="/assets/images/machine.svg")
+	.slot(ondrop="Controller.dropResistor(event)" ondragover="Controller.allowDrop(event)")
+	input(type="checkbox" id="terminal-left" bind="data.terminals.left")
+	label(for="terminal-left").terminal.left
+	input(type="checkbox" id="terminal-right" bind="data.terminals.right")
+	label(for="terminal-right").terminal.right
+	.resistors
+		.resistor(draggable="true" ondragstart="Controller.dragResistor(event)" data-resistance="132")
+		.resistor(draggable="true" ondragstart="Controller.dragResistor(event)" data-resistance="242")
+		.resistor(draggable="true" ondragstart="Controller.dragResistor(event)" data-resistance="325")
+		.resistor(draggable="true" ondragstart="Controller.dragResistor(event)" data-resistance="464")

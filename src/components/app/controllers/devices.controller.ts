@@ -19,6 +19,14 @@ export default class Devices extends Controller<"">() {
 	}
 
 	/**
+	 * Sets a new resistance value
+	 * @param resistance New circuit resistance
+	 */
+	public setResistance(resistance: number): void {
+		this.resistance = resistance;
+	}
+
+	/**
 	 * Updates devices values
 	 * @param voltage New voltage
 	 */
