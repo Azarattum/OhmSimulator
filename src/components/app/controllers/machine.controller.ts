@@ -62,6 +62,7 @@ export default class Machine extends Controller<"resistorChanged">() {
 		if (!this.slot?.children.length) return;
 		if (this.data.terminals.left == "false") return;
 		if (this.data.terminals.right == "false") return;
+		if (this.data.voltage == "false") return;
 
 		const img = this.container.querySelector("img");
 		const width = img?.clientWidth;

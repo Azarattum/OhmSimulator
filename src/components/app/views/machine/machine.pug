@@ -13,14 +13,14 @@
 		.resistor(draggable="true" ondragstart="Controller.dragResistor(event)" data-resistance="464")
 	.toggles
 		label.toggle
-			input(type="checkbox")
-			span.left ∣
+			input(type="radio" name="voltage" bind="data.voltage")
+			span.left 30V
 			span.right &#x2B58;
 		label.toggle
-			input(type="checkbox")
-			span.left ∣
+			input(type="radio" name="voltage")
+			span.left 24V
 			span.right &#x2B58;
 		label.toggle
-			input(type="checkbox")
-			span.left ∣
+			input(type="radio" name="voltage")
+			span.left 220V
 			span.right &#x2B58;

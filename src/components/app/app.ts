@@ -1,4 +1,5 @@
 import Manager, { IComponent, ComponentArgs } from "../common/manager.class";
+import EnvetsHandler from "./events";
 /**Componets */
 import DevicesController from "./controllers/devices.controller";
 import PowerController from "./controllers/power.controller";
@@ -7,7 +8,7 @@ import MachineController from "./controllers/machine.controller";
 import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
-import EnvetsHandler from "./events";
+import FooterView from "./views/footer/footer.view";
 
 /**
  * Main application class
@@ -25,6 +26,7 @@ export default class App {
 			new PowerController(),
 			new DevicesController(),
 			new MachineController(),
+			new FooterView(),
 			new MachineView(),
 			new CircuitView(),
 			new DeviceView("Voltmeter"),
