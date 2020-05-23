@@ -12,7 +12,7 @@ const handler = {
 			property == "toJSON" ||
 			property == "toString"
 		) {
-			return () => 
+			return () =>
 				`<placeholder ${object._}><!--"placeholders __postfix_${object._}="--></placeholder>`;
 		}
 		const newObject = {
@@ -62,7 +62,17 @@ module.exports = {
 			},
 			{
 				test: /\.scss$/,
-				use: ["style-loader", "css-loader", "sass-loader"],
+				use: [
+					"style-loader",
+					{
+						loader: "css-loader",
+						options: {
+							url: false
+						}
+					},
+					"sass-loader"
+				],
+
 				include: Path.resolve(__dirname, "./src"),
 				exclude: /node_modules/
 			},

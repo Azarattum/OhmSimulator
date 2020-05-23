@@ -144,17 +144,12 @@
 		}
 	}
 
-	.resistor[data-resistance="132"] {
-		background-image: url("/assets/images/resistor_132.svg");
-	}
-	.resistor[data-resistance="242"] {
-		background-image: url("/assets/images/resistor_242.svg");
-	}
-	.resistor[data-resistance="325"] {
-		background-image: url("/assets/images/resistor_325.svg");
-	}
-	.resistor[data-resistance="464"] {
-		background-image: url("/assets/images/resistor_464.svg");
+	$resistances: 132, 242, 325, 464;
+	$assets: "assets/images";
+	@each $value in $resistances {
+		.resistor[data-resistance="#{$value}"] {
+			background-image: url("#{$assets}/resistor_#{$value}.svg");
+		}
 	}
 
 	& > input {
