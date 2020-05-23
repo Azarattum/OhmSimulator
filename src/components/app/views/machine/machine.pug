@@ -1,6 +1,6 @@
 .machine(controller="machine")
 	.inactive(view="circuit")
-	img(src="/assets/images/machine.svg")
+	img(src="assets/images/machine.svg")
 	.slot(ondrop="Controller.dropResistor(event)" ondragover="Controller.allowDrop(event)")
 	input(type="checkbox" id="terminal-left" bind="data.terminals.left")
 	label(for="terminal-left").terminal.left
