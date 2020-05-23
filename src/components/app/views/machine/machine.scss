@@ -40,7 +40,7 @@
 		overflow: hidden;
 		animation: tst 3s;
 		transform-origin: 0 0;
-		transform: translate(0, 0) scale(0.15);
+		transform: scale(0.15);
 
 		.wire {
 			--size: 4vmin;
@@ -67,6 +67,10 @@
 
 	.circuit {
 		transition: 1.5s;
+
+		&.active {
+			animation: highlight 2.2s infinite;
+		}
 	}
 
 	.slot {
@@ -87,14 +91,14 @@
 
 	& > input {
 		display: none;
-		&:checked + .terminal {
+		&:checked + .clamp {
 			transform: rotateZ(180deg);
 			background-color: #505050;
 			z-index: 3;
 		}
 	}
 
-	.terminal {
+	.clamp {
 		position: absolute;
 
 		bottom: calc(34% - 3px);
@@ -274,6 +278,68 @@
 			}
 		}
 	}
+
+	.hint {
+		position: absolute;
+		right: 28.05%;
+		bottom: 23%;
+		width: 12%;
+		height: 20%;
+
+		border-radius: 8px;
+		background-color: rgb(240, 225, 143);
+
+		z-index: 5;
+		transition: transform 0.3s;
+
+		cursor: pointer;
+
+		.item {
+			position: relative;
+			left: 1vmin;
+			font-size: 1vmin;
+			margin: 0.8vmin;
+			transition: color 0.2s;
+
+			&::before {
+				content: "✘";
+				position: absolute;
+				left: -1em;
+				top: -0.23em;
+				color: hsl(0, 66%, 31%);
+			}
+
+			&.false::before {
+				animation: uncheck 0.5s;
+			}
+
+			&.true {
+				color: rgb(27, 133, 27);
+
+				&::before {
+					animation: check 0.5s;
+					color: rgb(27, 133, 27);
+					content: "✓";
+				}
+			}
+		}
+
+		&:hover {
+			transform: scale(5) translateY(-30%);
+		}
+	}
+}
+
+@keyframes highlight {
+	0% {
+		box-shadow: 0px 0px 200px rgba(0, 0, 0, 0);
+	}
+	50% {
+		box-shadow: 0px 0px 200px black;
+	}
+	100% {
+		box-shadow: 0px 0px 200px rgba(0, 0, 0, 0);
+	}
 }
 
 @keyframes drop {
@@ -291,6 +357,24 @@
 	100% {
 		transform: scale(1);
 		filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
+	}
+}
+
+@keyframes check {
+	0% {
+		transform: rotateY(-90deg);
+	}
+	100% {
+		transform: rotateY(0deg);
+	}
+}
+
+@keyframes uncheck {
+	0% {
+		transform: rotateY(90deg);
+	}
+	100% {
+		transform: rotateY(0deg);
 	}
 }
 
