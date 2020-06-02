@@ -1,3 +1,8 @@
+label.variants
+    select
+        - for (var i = 1; i <= 30; ++i) {
+            option(value=i) Вариант #{i}
+        - }
 .content
     .elements
         .meter.voltmeter(view="voltmeter")

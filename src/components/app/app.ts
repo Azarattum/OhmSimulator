@@ -1,4 +1,5 @@
 import Manager, { IComponent, ComponentArgs } from "../common/manager.class";
+import Layout from "./models/layout.class";
 import EnvetsHandler from "./events";
 /**Componets */
 import DevicesController from "./controllers/devices.controller";
@@ -75,7 +76,8 @@ export default class App {
 					label: "mA",
 					precision: "2.0"
 				}
-			]
+			],
+			Table: [Layout]
 		};
 	}
 }
