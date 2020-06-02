@@ -17,6 +17,7 @@ export default class Device extends View {
 
 	public render(template: Function | null = null, args: {} = {}): void {
 		super.render(template, {
+			buttons: (x: HTMLElement) => x.getAttribute("buttons") == "true",
 			name: this.name.toLocaleLowerCase(),
 			...args
 		});

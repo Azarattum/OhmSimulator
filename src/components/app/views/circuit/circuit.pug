@@ -1,10 +1,10 @@
-.circuit(onclick="Machine.activate()")
+.circuit(onclick="Machine.activate()" controller="devices")
 	.element.power(
 		controller="power"
 		onclick="Power.updateVoltage()"
 	) &#x26a1;
-	.element.meter.voltmeter(view="voltmeter")
-	.element.meter.ampermeter(view="ampermeter")
+	.element.meter.voltmeter(view="voltmeter" buttons="true")
+	.element.meter.ampermeter(view="ampermeter" buttons="true")
 	.element.resistor &Omega;
 
 	.wire.top

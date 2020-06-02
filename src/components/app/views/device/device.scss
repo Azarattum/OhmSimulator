@@ -76,6 +76,17 @@
 
 	.precision {
 		position: absolute;
+		right: calc(12px + 1em);
+		top: calc(6.8 * var(--unit));
+
+		opacity: 0.6;
+		font-size: calc(0.8 * var(--unit));
+
+		z-index: 0;
+	}
+
+	.system {
+		position: absolute;
 		right: 12px;
 		top: calc(6.8 * var(--unit));
 

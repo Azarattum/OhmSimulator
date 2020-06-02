@@ -61,7 +61,7 @@ module.exports = {
 				exclude: /node_modules/
 			},
 			{
-				test: /\.scss$/,
+				test: /(\.scss|\.css)$/,
 				use: [
 					"style-loader",
 					{
@@ -73,8 +73,10 @@ module.exports = {
 					"sass-loader"
 				],
 
-				include: Path.resolve(__dirname, "./src"),
-				exclude: /node_modules/
+				include: [
+					Path.resolve(__dirname, "./src"),
+					Path.resolve(__dirname, "./node_modules")
+				]
 			},
 			{
 				test: /\.(vsh|fsh)$/,

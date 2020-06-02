@@ -1,44 +1,48 @@
 .device(
-    id=name
+    class=name
     style="--limit:"+(step*5)
     )
     .scale
         svg(viewbox="0 0 500 150")
-            path#curve(
+            path(
+                id="curve"+buttons()
                 fill="transparent"
                 d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
             )
-            path#curve2(
+            path(
+                id="curve2"+buttons()
                 fill="transparent"
                 transform="translate(-30, -30) scale(1.12)" 
                 d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
             )
 
             text(width="500").numbers
-                textpath(xlink:href="#curve2" xml:space="preserve")
+                textpath(xlink:href="#curve2"+buttons() xml:space="preserve")
                     each i in [0, 1, 2, 3, 4, 5]
                         - var j = i * step 
                         | #{j + " ".repeat(8 - j.toString().length - ((i==4)? (j + step).toString().length - 1: 0))}
 
             text(width="500").deviders
-                textpath(xlink:href="#curve")
+                textpath(xlink:href="#curve"+buttons())
                     | |....|....|....|....|....|....|....|....|....|....|
     .arrow
     .label=label
     if precision
         .precision &gamma; = #{precision}
+    .system ∩
 
-    .buttons
-        each range, index in ranges
-            input(
-                id=name+"-radio-"+index
-                type="radio"
-                name=name+"-range"
-                value=range
-                checked=(index==0)
-                onclick="Devices.updateValues()"
-            )
-            label(
-                for=name+"-radio-"+index
-                style="background:hsl("+(index / ranges.length * 255 + 17)+", 100%, 69%)" 
-            )=("x" + range)
+    if buttons()
+        .buttons
+            each range, index in ranges
+                input(
+                    id=name+"-radio-"+index
+                    type="radio"
+                    name=name+"-range"
+                    value=range
+                    checked=index==0
+                    onclick="Devices.updateValues()"
+                )
+                label(
+                    for=name+"-radio-"+index
+                    style="background:hsl("+(index / ranges.length * 255 + 17)+", 100%, 69%)" 
+                )=("x" + range)

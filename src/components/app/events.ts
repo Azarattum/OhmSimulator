@@ -2,6 +2,7 @@ import { IComponent } from "../common/manager.class";
 import Power from "./controllers/power.controller";
 import Devices from "./controllers/devices.controller";
 import Machine from "./controllers/machine.controller";
+import Tabs from "./controllers/tabs.controller";
 
 /**
  * Event handler for application components
@@ -10,6 +11,7 @@ export default class EnvetsHandler {
 	private powerController: Power;
 	private devicesController: Devices;
 	private machineController: Machine;
+	private tabsController: Tabs;
 
 	/**
 	 * Creates new envet handler for components
@@ -23,12 +25,16 @@ export default class EnvetsHandler {
 		this.powerController = component["Power"] as Power;
 		this.devicesController = component["Devices"] as Devices;
 		this.machineController = component["Machine"] as Machine;
+		this.tabsController = component["Tabs"] as Tabs;
 	}
 
 	/**
 	 * Registers all events for components
 	 */
 	public async registerEvents(): Promise<void> {
+		//Set defaul tab
+		this.tabsController.change("table");
+
 		//Voltage changed event
 		this.powerController.on("voltageChanged", (voltage: number) => {
 			this.devicesController.updateValues(voltage);

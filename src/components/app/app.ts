@@ -4,11 +4,14 @@ import EnvetsHandler from "./events";
 import DevicesController from "./controllers/devices.controller";
 import PowerController from "./controllers/power.controller";
 import MachineController from "./controllers/machine.controller";
+import TabsController from "./controllers/tabs.controller";
+import TableController from "./controllers/table.controller";
 /**Views */
 import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
 import FooterView from "./views/footer/footer.view";
+import TableView from "./views/table/table.view";
 
 /**
  * Main application class
@@ -26,9 +29,12 @@ export default class App {
 			new PowerController(),
 			new DevicesController(),
 			new MachineController(),
+			new TabsController(),
+			new TableController(),
 			new FooterView(),
 			new MachineView(),
 			new CircuitView(),
+			new TableView(),
 			new DeviceView("Voltmeter"),
 			new DeviceView("Ampermeter")
 		];

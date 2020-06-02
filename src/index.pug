@@ -11,5 +11,7 @@ html(lang="en")
         style
             include index.css
     body
-        div(view="machine")
+        div(controller="tabs")
+            div(tab="machine" view="machine")
+            div(tab="table" view="table" controller="table")
         div(view="footer")

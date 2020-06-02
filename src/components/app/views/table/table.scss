@@ -1,0 +1,87 @@
+[view="table"] {
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.elements {
+			display: flex;
+			width: 100vw;
+			justify-content: space-evenly;
+
+			.meter {
+				box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+				border-radius: 16px;
+
+				background-color: rgb(240, 240, 240);
+				width: 300px;
+				height: 220px;
+				padding-top: 20px;
+				--height: calc(240px * 3);
+
+				.label {
+					top: 55%;
+				}
+
+				.precision,
+				.label,
+				.arrow,
+				.system,
+				.scale {
+					cursor: help;
+				}
+
+				.precision:hover::after,
+				.label:hover::after,
+				.arrow:hover::before,
+				.system:hover::after,
+				.scale:hover::after {
+					position: absolute;
+					left: 50%;
+					bottom: 100%;
+					width: min-content;
+					transform: translateX(-50%);
+
+					font-size: 14px;
+					padding: 4px;
+					border-radius: 4px;
+					background-color: white;
+					box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+				}
+
+				.system:hover::after {
+					content: "Система измерительного прибора";
+				}
+				.precision:hover::after {
+					content: "Класс точности";
+				}
+				.scale:hover::after {
+					content: "Шкала";
+					opacity: 0.7;
+				}
+				.arrow:hover::before {
+					transform: translate(-50%, -150%);
+					content: "Стрелка";
+					opacity: 0.7;
+				}
+
+				&.voltmeter .label:hover::after {
+					content: "Вольтметр";
+				}
+				&.ampermeter .label:hover::after {
+					content: "Миллиамперметр";
+				}
+			}
+		}
+
+		.table {
+			margin: 64px;
+
+			.handsontable table thead th {
+				white-space: pre-line;
+				min-width: 80px;
+				max-width: calc(80vw / 8);
+			}
+		}
+	}
+}

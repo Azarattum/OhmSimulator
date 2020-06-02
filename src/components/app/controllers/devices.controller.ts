@@ -12,8 +12,8 @@ export default class Devices extends Controller<"">() {
 
 	public initialize(resistance: number): void {
 		this.resistance = resistance;
-		this.voltmeter = document.getElementById("voltmeter");
-		this.ampermeter = document.getElementById("ampermeter");
+		this.voltmeter = this.container.querySelector(".device.voltmeter");
+		this.ampermeter = this.container.querySelector(".device.ampermeter");
 
 		this.expose("updateValues");
 	}
