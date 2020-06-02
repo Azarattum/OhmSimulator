@@ -7,15 +7,18 @@ export default class Devices extends Controller<"">() {
 	private voltage: number = 0;
 	private resistance: number = 1;
 
-	private voltmeter: HTMLElement | null = null;
-	private ampermeter: HTMLElement | null = null;
-
 	public initialize(resistance: number): void {
 		this.resistance = resistance;
-		this.voltmeter = this.container.querySelector(".device.voltmeter");
-		this.ampermeter = this.container.querySelector(".device.ampermeter");
 
 		this.expose("updateValues");
+	}
+
+	private get voltmeter(): HTMLElement | null {
+		return this.container.querySelector(".device.voltmeter");
+	}
+
+	private get ampermeter(): HTMLElement | null {
+		return this.container.querySelector(".device.ampermeter");
 	}
 
 	/**
@@ -40,7 +43,8 @@ export default class Devices extends Controller<"">() {
 				) || 1;
 
 			let value = voltage / scalar;
-			if (value > 10) value = 10.3;
+			const limit = +this.voltmeter.style.getPropertyValue("--limit");
+			if (value > limit) value = limit * 1.03;
 
 			this.voltmeter.style.setProperty("--value", value.toString());
 		}
@@ -54,7 +58,8 @@ export default class Devices extends Controller<"">() {
 				) || 1;
 
 			let value = (voltage / this.resistance / scalar) * 1000;
-			if (value > 100) value = 103;
+			const limit = +this.ampermeter.style.getPropertyValue("--limit");
+			if (value > limit) value = limit * 1.03;
 
 			this.ampermeter.style.setProperty("--value", value.toString());
 		}

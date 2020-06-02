@@ -63,6 +63,9 @@ export default class EnvetsHandler {
 		this.variantController.on("variantChanged", (id: number) => {
 			const variant = Variants.get(id);
 
+			const elements = document.querySelector("[view='table'] .elements");
+			elements?.classList.toggle("swapped", variant.isSwapped);
+
 			//Rerender views
 			this.voltmeterView.render(null, {
 				ranges: [0.5, 1, 2, 3],

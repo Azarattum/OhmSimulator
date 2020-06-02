@@ -30,7 +30,7 @@ export default class Table extends Controller<"">() {
 			(value, callback) => {
 				const valid = this.layout?.meters[this.selectedMeter - 1];
 
-				callback(value == valid);
+				callback(!value || value == valid);
 			}
 		);
 
@@ -43,7 +43,7 @@ export default class Table extends Controller<"">() {
 						? this.variant?.ampermeterPrecision
 						: this.variant?.voltmeterPrecision;
 
-				callback(value == valid);
+				callback(!value || value == valid);
 			}
 		);
 
@@ -56,7 +56,7 @@ export default class Table extends Controller<"">() {
 						? (this.variant?.ampermeterStep || 0) * 5
 						: (this.variant?.voltmeterStep || 0) * 5;
 
-				callback(value == valid);
+				callback(!value || value == valid);
 			}
 		);
 
@@ -67,7 +67,7 @@ export default class Table extends Controller<"">() {
 					? ((this.variant?.ampermeterStep || 0) * 5) / 50
 					: ((this.variant?.voltmeterStep || 0) * 5) / 50;
 
-			callback(value == valid);
+			callback(!value || value == valid);
 		});
 
 		//Register sensitivity validator
@@ -79,7 +79,7 @@ export default class Table extends Controller<"">() {
 						? 1 / (((this.variant?.ampermeterStep || 0) * 5) / 50)
 						: 1 / (((this.variant?.voltmeterStep || 0) * 5) / 50);
 
-				callback(value == valid);
+				callback(!value || value == valid);
 			}
 		);
 
@@ -98,9 +98,11 @@ export default class Table extends Controller<"">() {
 								(this.variant?.voltmeterPrecision || 1)) /
 						  100;
 
-				callback(value == valid);
+				callback(!value || value == valid);
 			}
 		);
+
+		this.table?.validateRows([1, 3]);
 	}
 
 	private get selectedMeter(): Meter {
@@ -132,14 +134,14 @@ export default class Table extends Controller<"">() {
 	private createTable(container: Element, data: IData): Handsontable {
 		//Register type validator
 		Handsontable.validators.registerValidator("type", (value, callback) => {
-			callback(value == this.layout?.types[0]);
+			callback(!value || value == this.layout?.types[0]);
 		});
 
 		//Register deviders validator
 		Handsontable.validators.registerValidator(
 			"deviders",
 			(value, callback) => {
-				callback(value == 50);
+				callback(!value || value == 50);
 			}
 		);
 
