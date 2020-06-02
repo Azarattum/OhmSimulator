@@ -7,6 +7,7 @@ import PowerController from "./controllers/power.controller";
 import MachineController from "./controllers/machine.controller";
 import TabsController from "./controllers/tabs.controller";
 import TableController from "./controllers/table.controller";
+import VariantController from "./controllers/variant.controller";
 /**Views */
 import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
@@ -32,6 +33,7 @@ export default class App {
 			new MachineController(),
 			new TabsController(),
 			new TableController(),
+			new VariantController(),
 			new FooterView(),
 			new MachineView(),
 			new CircuitView(),
