@@ -4,6 +4,7 @@
 		top: 8px;
 		left: 50vw;
 		transform: translateX(-50%);
+		color: #555;
 
 		&:after {
 			content: "<>";
@@ -134,13 +135,46 @@
 		}
 
 		.table {
-			margin: 64px;
+			margin-top: 64px;
 
 			.handsontable table thead th {
 				white-space: pre-line;
 				min-width: 80px;
 				max-width: calc(80vw / 8);
 			}
+		}
+	}
+
+	.next {
+		position: relative;
+		top: 8px;
+		left: 50%;
+		transform: translateX(-50%);
+
+		font-size: 1.1em;
+		padding: 8px;
+		border: none;
+		outline: none;
+		color: #555;
+		font-weight: bold;
+
+		border-radius: 8px;
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+		transition: box-shadow 0.2s;
+
+		cursor: pointer;
+
+		&:not(:disabled):hover {
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+		}
+
+		&:not(:disabled):active {
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+		}
+
+		&:disabled {
+			color: #aaa;
+			cursor: not-allowed;
 		}
 	}
 }

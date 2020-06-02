@@ -10,6 +10,7 @@ export default class Table extends Controller<"">() {
 	private table: Handsontable | null = null;
 	private layout: IData | null = null;
 	private variant: IVariant | null = null;
+	private next: HTMLButtonElement | null = null;
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
@@ -19,100 +20,120 @@ export default class Table extends Controller<"">() {
 
 		this.layout = data;
 		this.table = this.createTable(table, data);
+		this.next = this.container.getElementsByClassName(
+			"next"
+		)[0] as HTMLButtonElement;
 	}
 
 	public setVariant(variant: IVariant): void {
 		this.variant = variant;
 
 		//Register device validator
-		Handsontable.validators.registerValidator(
-			"device",
-			(value, callback) => {
-				const valid = this.layout?.meters[this.selectedMeter - 1];
+		Handsontable.validators.registerValidator("device", (val, callback) => {
+			const { row, value } = val;
+			const valid = this.layout?.meters[this.getSelectedMeter(row) - 1];
 
-				callback(!value || value == valid);
-			}
-		);
+			callback(value == null || value === "" || value == valid);
+		});
 
 		//Register precision validator
 		Handsontable.validators.registerValidator(
 			"precision",
-			(value, callback) => {
+			(val, callback) => {
+				const { row, value } = val;
+
 				const valid =
-					this.selectedMeter == Meter.Ampermeter
+					this.getSelectedMeter(row) == Meter.Ampermeter
 						? this.variant?.ampermeterPrecision
 						: this.variant?.voltmeterPrecision;
 
-				callback(!value || value == valid);
+				callback(value == null || value === "" || value == valid);
 			}
 		);
 
 		//Register limit validator
-		Handsontable.validators.registerValidator(
-			"limit",
-			(value, callback) => {
-				const valid =
-					this.selectedMeter == Meter.Ampermeter
-						? (this.variant?.ampermeterStep || 0) * 5
-						: (this.variant?.voltmeterStep || 0) * 5;
+		Handsontable.validators.registerValidator("limit", (val, callback) => {
+			const { row, value } = val;
+			const valid =
+				this.getSelectedMeter(row) == Meter.Ampermeter
+					? (this.variant?.ampermeterStep || 0) * 5
+					: (this.variant?.voltmeterStep || 0) * 5;
 
-				callback(!value || value == valid);
-			}
-		);
+			callback(value == null || value === "" || value == valid);
+		});
 
 		//Register cost validator
-		Handsontable.validators.registerValidator("cost", (value, callback) => {
+		Handsontable.validators.registerValidator("cost", (val, callback) => {
+			const { row, value } = val;
 			const valid =
-				this.selectedMeter == Meter.Ampermeter
+				this.getSelectedMeter(row) == Meter.Ampermeter
 					? ((this.variant?.ampermeterStep || 0) * 5) / 50
 					: ((this.variant?.voltmeterStep || 0) * 5) / 50;
 
-			callback(!value || value == valid);
+			callback(
+				value == null ||
+					value === "" ||
+					(+value).toFixed(1) == (+valid).toFixed(1)
+			);
 		});
 
 		//Register sensitivity validator
 		Handsontable.validators.registerValidator(
 			"sensitivity",
-			(value, callback) => {
+			(val, callback) => {
+				const { row, value } = val;
 				const valid =
-					this.selectedMeter == Meter.Ampermeter
+					this.getSelectedMeter(row) == Meter.Ampermeter
 						? 1 / (((this.variant?.ampermeterStep || 0) * 5) / 50)
 						: 1 / (((this.variant?.voltmeterStep || 0) * 5) / 50);
 
-				callback(!value || value == valid);
+				callback(
+					value == null ||
+						value === "" ||
+						(+value).toFixed(1) == (+valid).toFixed(1)
+				);
 			}
 		);
 
 		//Register error validator
-		Handsontable.validators.registerValidator(
-			"error",
-			(value, callback) => {
-				const valid =
-					this.selectedMeter == Meter.Ampermeter
-						? ((this.variant?.ampermeterStep || 0) *
-								5 *
-								(this.variant?.ampermeterPrecision || 1)) /
-						  100
-						: ((this.variant?.voltmeterStep || 0) *
-								5 *
-								(this.variant?.voltmeterPrecision || 1)) /
-						  100;
+		Handsontable.validators.registerValidator("error", (val, callback) => {
+			const { row, value } = val;
+			const valid =
+				this.getSelectedMeter(row) == Meter.Ampermeter
+					? ((this.variant?.ampermeterStep || 0) *
+							5 *
+							(this.variant?.ampermeterPrecision || 1)) /
+					  100
+					: ((this.variant?.voltmeterStep || 0) *
+							5 *
+							(this.variant?.voltmeterPrecision || 1)) /
+					  100;
 
-				callback(!value || value == valid);
-			}
-		);
+			callback(
+				value == null ||
+					value === "" ||
+					(+value).toFixed(1) == (+valid).toFixed(1)
+			);
+		});
 
-		this.table?.validateRows([1, 3]);
+		this.updateValidation();
 	}
 
-	private get selectedMeter(): Meter {
-		const editor = this.table?.getActiveEditor();
-		if (!editor || !this.variant) {
-			return Meter.None;
-		}
-		const { row } = editor;
+	private updateValidation(): void {
+		this.table?.validateRows([1, 3], valid => {
+			if (!this.next) return;
+			this.next.disabled = true;
+			if (valid) {
+				const first = this.table?.getDataAtRow(1).every(x => x);
+				const second = this.table?.getDataAtRow(3).every(x => x);
 
-		if (!this.variant.isSwapped) {
+				this.next.disabled = !(first && second);
+			}
+		});
+	}
+
+	private getSelectedMeter(row: number): Meter {
+		if (!this.variant?.isSwapped) {
 			if (row == 1) {
 				return Meter.Voltmeter;
 			}
@@ -133,15 +154,19 @@ export default class Table extends Controller<"">() {
 
 	private createTable(container: Element, data: IData): Handsontable {
 		//Register type validator
-		Handsontable.validators.registerValidator("type", (value, callback) => {
-			callback(!value || value == this.layout?.types[0]);
+		Handsontable.validators.registerValidator("type", (val, callback) => {
+			const { value } = val;
+			callback(
+				value == null || value === "" || value == this.layout?.types[0]
+			);
 		});
 
 		//Register deviders validator
 		Handsontable.validators.registerValidator(
 			"deviders",
-			(value, callback) => {
-				callback(!value || value == 50);
+			(val, callback) => {
+				const { value } = val;
+				callback(value == null || value === "" || value == 50);
 			}
 		);
 
@@ -152,6 +177,10 @@ export default class Table extends Controller<"">() {
 			data: data.data,
 			wordWrap: true,
 			licenseKey: "non-commercial-and-evaluation",
+			afterChange: this.updateValidation.bind(this),
+			beforeValidate: (value, row, col): any => {
+				return { row, value };
+			},
 			allowInvalid: true,
 			columns: [
 				{
