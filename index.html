@@ -15,4 +15,50 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--color-text);
 }
-</style></head><body><div controller="tabs"><div tab="machine" view="machine"></div><div tab="table" view="table" controller="table"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
+
+body > .hints {
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	top: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 999;
+}
+
+body > .hints > .hint {
+	max-width: 70vw;
+	word-wrap: break-word;
+
+	padding: 16px;
+	border-radius: 16px;
+	margin-bottom: 8px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+	animation: hint 3s;
+	opacity: 0;
+	font-size: 1.5em;
+	color: white;
+
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+@keyframes hint {
+	0% {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		max-height: 0;
+		opacity: 0;
+	}
+	30% {
+		padding: 16px;
+		max-height: 100vh;
+		opacity: 1;
+	}
+	70% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+</style></head><body><div class="hints" controller="hints"><div class="hint" iterate="data.hints"><div class="text"><placeholder hints><!--"placeholders __postfix_hints="--></placeholder></div></div></div><div controller="tabs"><div tab="machine" view="machine"></div><div tab="table" view="table" controller="table"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
