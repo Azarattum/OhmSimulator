@@ -8,6 +8,7 @@ import MachineController from "./controllers/machine.controller";
 import TabsController from "./controllers/tabs.controller";
 import TableController from "./controllers/table.controller";
 import VariantController from "./controllers/variant.controller";
+import HintsController from "./controllers/hints.controller";
 /**Views */
 import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
@@ -34,6 +35,7 @@ export default class App {
 			new TabsController(),
 			new TableController(),
 			new VariantController(),
+			new HintsController(),
 			new FooterView(),
 			new MachineView(),
 			new CircuitView(),

@@ -15,3 +15,49 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--color-text);
 }
+
+.hints {
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	top: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 999;
+}
+
+.hint {
+	max-width: 70vw;
+	word-wrap: break-word;
+
+	padding: 16px;
+	border-radius: 16px;
+	margin-bottom: 8px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+	animation: hint 3s;
+	opacity: 0;
+	font-size: 1.5em;
+	color: white;
+
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+@keyframes hint {
+	0% {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		max-height: 0;
+		opacity: 0;
+	}
+	30% {
+		padding: 16px;
+		max-height: 100vh;
+		opacity: 1;
+	}
+	70% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

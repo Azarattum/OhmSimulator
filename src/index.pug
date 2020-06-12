@@ -11,6 +11,9 @@ html(lang="en")
         style
             include index.css
     body
+        .hints(controller="hints")
+            .hint(iterate="data.hints")
+                .text!=data.hints
         div(controller="tabs")
             div(tab="machine" view="machine")
             div(tab="table" view="table" controller="table")
