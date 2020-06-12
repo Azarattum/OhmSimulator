@@ -111,6 +111,7 @@
 
 				.system:hover::after {
 					content: "Система измерительного прибора";
+					transform: rotate(-180deg);
 				}
 				.precision:hover::after {
 					content: "Класс точности";

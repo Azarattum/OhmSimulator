@@ -76,7 +76,7 @@
 
 	.precision {
 		position: absolute;
-		right: calc(12px + 1em);
+		right: calc(18px + 1em);
 		top: calc(6.8 * var(--unit));
 
 		opacity: 0.6;
@@ -89,6 +89,7 @@
 		position: absolute;
 		right: 12px;
 		top: calc(6.8 * var(--unit));
+		transform: rotate(-180deg);
 
 		opacity: 0.6;
 		font-size: calc(0.8 * var(--unit));
