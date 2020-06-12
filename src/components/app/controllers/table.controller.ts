@@ -29,6 +29,25 @@ export default class Table extends Controller<"mistaken">() {
 	public setVariant(variant: IVariant): void {
 		this.variant = variant;
 
+		//Register deviders validator
+		Handsontable.validators.registerValidator(
+			"deviders",
+			(val, callback) => {
+				const { row, value } = val;
+				const valid =
+					this.getSelectedMeter(row) == Meter.Voltmeter
+						? ((this.variant?.compact || 0) + 2) % 3 == 0
+							? 25
+							: 50
+						: (this.variant?.compact || 0) % 5 == 0
+						? 25
+						: 50;
+
+				callback(value == null || value === "" || value == valid);
+				return valid;
+			}
+		);
+
 		//Register device validator
 		Handsontable.validators.registerValidator("device", (val, callback) => {
 			const { row, value } = val;
@@ -44,12 +63,16 @@ export default class Table extends Controller<"mistaken">() {
 			(val, callback) => {
 				const { row, value } = val;
 
-				const valid =
-					this.getSelectedMeter(row) == Meter.Ampermeter
-						? this.variant?.ampermeterPrecision
-						: this.variant?.voltmeterPrecision;
+				const valid = (this.getSelectedMeter(row) == Meter.Ampermeter
+					? this.variant?.ampermeterPrecision
+					: this.variant?.voltmeterPrecision
+				)?.toFixed(1);
 
-				callback(value == null || value === "" || value == valid);
+				callback(
+					value == null ||
+						value === "" ||
+						(+value).toFixed(1) === valid
+				);
 				return valid;
 			}
 		);
@@ -69,10 +92,19 @@ export default class Table extends Controller<"mistaken">() {
 		//Register cost validator
 		Handsontable.validators.registerValidator("cost", (val, callback) => {
 			const { row, value } = val;
+			const deviders =
+				this.getSelectedMeter(row) == Meter.Voltmeter
+					? ((this.variant?.compact || 0) + 2) % 3 == 0
+						? 25
+						: 50
+					: (this.variant?.compact || 0) % 5 == 0
+					? 25
+					: 50;
+
 			const valid =
 				this.getSelectedMeter(row) == Meter.Ampermeter
-					? ((this.variant?.ampermeterStep || 0) * 5) / 50
-					: ((this.variant?.voltmeterStep || 0) * 5) / 50;
+					? ((this.variant?.ampermeterStep || 0) * 5) / deviders
+					: ((this.variant?.voltmeterStep || 0) * 5) / deviders;
 
 			callback(
 				value == null ||
@@ -169,6 +201,8 @@ export default class Table extends Controller<"mistaken">() {
 		if (!this.table) return;
 
 		const validator = this.table.getCellValidator(row, col) as Function;
+		if (value == "") return;
+		if (Number.isFinite(+value)) value = (+value).toFixed(1);
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		const correct = validator({ row, value }, () => {});
@@ -190,16 +224,6 @@ export default class Table extends Controller<"mistaken">() {
 			);
 			return this.layout?.types[0];
 		});
-
-		//Register deviders validator
-		Handsontable.validators.registerValidator(
-			"deviders",
-			(val, callback) => {
-				const { value } = val;
-				callback(value == null || value === "" || value == 50);
-				return 50;
-			}
-		);
 
 		return new Handsontable(container, {
 			className: "htCenter htMiddle",
@@ -225,7 +249,7 @@ export default class Table extends Controller<"mistaken">() {
 					validator: "type"
 				},
 				{
-					type: "numeric",
+					type: "text",
 					validator: "precision"
 				},
 				{

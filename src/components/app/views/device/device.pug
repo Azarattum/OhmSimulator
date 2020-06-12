@@ -22,9 +22,14 @@
                         - var j = i * step 
                         | #{j + " ".repeat(8 - j.toString().length - ((i==4)? (j + step).toString().length - 1: 0))}
 
-            text(width="500").deviders
-                textpath(xlink:href="#curve"+buttons())
-                    | |....|....|....|....|....|....|....|....|....|....|
+            if compact
+                text(width="500").deviders
+                    textpath(xlink:href="#curve"+buttons())
+                        | | . . . . | . . . . | . . . . | . . . . | . . . . |
+            else
+                text(width="500").deviders
+                    textpath(xlink:href="#curve"+buttons())
+                        | |....|....|....|....|....|....|....|....|....|....|
     .arrow
     .label=label
     if precision

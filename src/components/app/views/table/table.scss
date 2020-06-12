@@ -79,6 +79,10 @@
 				padding-top: 20px;
 				--height: calc(240px * 3);
 
+				.arrow {
+					top: calc(3.9 * var(--unit));
+				}
+
 				.label {
 					top: 55%;
 				}

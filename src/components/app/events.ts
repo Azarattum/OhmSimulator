@@ -74,13 +74,15 @@ export default class EnvetsHandler {
 				ranges: [0.5, 1, 2, 3],
 				step: variant.voltmeterStep,
 				label: "V",
-				precision: variant.voltmeterPrecision.toFixed(1)
+				precision: variant.voltmeterPrecision.toFixed(1),
+				compact: (variant.compact + 2) % 3 == 0
 			});
 			this.ampermeterView.render(null, {
 				ranges: [1, 2, 5, 20],
 				step: variant.ampermeterStep,
 				label: "mA",
-				precision: variant.ampermeterPrecision.toFixed(1)
+				precision: variant.ampermeterPrecision.toFixed(1),
+				compact: variant.compact % 5 == 0
 			});
 
 			//Update table validator

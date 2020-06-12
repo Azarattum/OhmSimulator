@@ -20,7 +20,8 @@ export default class Variants {
 			voltmeterPrecision: this.precisions[(id * 2) % 3],
 			ampermeterStep: this.ampermeterSteps[id % 5],
 			voltmeterStep: this.voltmeterSteps[id % 4],
-			isSwapped: id % 2 == 0
+			isSwapped: id % 2 == 0,
+			compact: id
 		};
 	}
 }
@@ -33,4 +34,5 @@ export interface IVariant {
 	ampermeterPrecision: number;
 
 	isSwapped: boolean;
+	compact: number;
 }
