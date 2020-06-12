@@ -201,7 +201,7 @@ export default class Table extends Controller<"mistaken">() {
 		if (!this.table) return;
 
 		const validator = this.table.getCellValidator(row, col) as Function;
-		if (value == "") return;
+		if (value === "") return;
 		if (Number.isFinite(+value)) value = (+value).toFixed(1);
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
