@@ -6,11 +6,12 @@ import { IVariant } from "../models/variants.class";
 /**
  * Table controller
  */
-export default class Table extends Controller<"">() {
+export default class Table extends Controller<"mistaken">() {
 	private table: Handsontable | null = null;
 	private layout: IData | null = null;
 	private variant: IVariant | null = null;
 	private next: HTMLButtonElement | null = null;
+	private mistakes: Map<number, number> = new Map();
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
@@ -34,6 +35,7 @@ export default class Table extends Controller<"">() {
 			const valid = this.layout?.meters[this.getSelectedMeter(row) - 1];
 
 			callback(value == null || value === "" || value == valid);
+			return valid;
 		});
 
 		//Register precision validator
@@ -48,6 +50,7 @@ export default class Table extends Controller<"">() {
 						: this.variant?.voltmeterPrecision;
 
 				callback(value == null || value === "" || value == valid);
+				return valid;
 			}
 		);
 
@@ -60,6 +63,7 @@ export default class Table extends Controller<"">() {
 					: (this.variant?.voltmeterStep || 0) * 5;
 
 			callback(value == null || value === "" || value == valid);
+			return valid;
 		});
 
 		//Register cost validator
@@ -75,6 +79,7 @@ export default class Table extends Controller<"">() {
 					value === "" ||
 					(+value).toFixed(1) == (+valid).toFixed(1)
 			);
+			return (+valid).toFixed(1);
 		});
 
 		//Register sensitivity validator
@@ -92,6 +97,7 @@ export default class Table extends Controller<"">() {
 						value === "" ||
 						(+value).toFixed(1) == (+valid).toFixed(1)
 				);
+				return (+valid).toFixed(1);
 			}
 		);
 
@@ -114,12 +120,13 @@ export default class Table extends Controller<"">() {
 					value === "" ||
 					(+value).toFixed(1) == (+valid).toFixed(1)
 			);
+			return (+valid).toFixed(1);
 		});
 
-		this.updateValidation();
+		this.updateValidation(null);
 	}
 
-	private updateValidation(): void {
+	private updateValidation(changes: Handsontable.CellChange[] | null): void {
 		this.table?.validateRows([1, 3], valid => {
 			if (!this.next) return;
 			this.next.disabled = true;
@@ -130,6 +137,12 @@ export default class Table extends Controller<"">() {
 				this.next.disabled = !(first && second);
 			}
 		});
+
+		if (changes) {
+			for (const change of changes) {
+				this.registerMistake(change[0], +change[1], change[3]);
+			}
+		}
 	}
 
 	private getSelectedMeter(row: number): Meter {
@@ -152,6 +165,22 @@ export default class Table extends Controller<"">() {
 		return Meter.None;
 	}
 
+	private registerMistake(row: number, col: number, value: string): void {
+		if (!this.table) return;
+
+		const validator = this.table.getCellValidator(row, col) as Function;
+		if (!(validator instanceof Function)) return;
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		const correct = validator({ row, value }, () => {});
+
+		if (correct == value) return;
+		const index = row * this.table.countCols() + col;
+		let current = this.mistakes.get(index) || 0;
+		this.mistakes.set(index, ++current);
+
+		this.emit("mistaken", current >= 3 ? correct : null);
+	}
+
 	private createTable(container: Element, data: IData): Handsontable {
 		//Register type validator
 		Handsontable.validators.registerValidator("type", (val, callback) => {
@@ -159,6 +188,7 @@ export default class Table extends Controller<"">() {
 			callback(
 				value == null || value === "" || value == this.layout?.types[0]
 			);
+			return this.layout?.types[0];
 		});
 
 		//Register deviders validator
@@ -167,6 +197,7 @@ export default class Table extends Controller<"">() {
 			(val, callback) => {
 				const { value } = val;
 				callback(value == null || value === "" || value == 50);
+				return 50;
 			}
 		);
 

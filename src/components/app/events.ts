@@ -7,6 +7,7 @@ import Variant from "./controllers/variant.controller";
 import Device from "./views/device/device.view";
 import Variants from "./models/variants.class";
 import Table from "./controllers/table.controller";
+import Hints from "./controllers/hints.controller";
 
 /**
  * Event handler for application components
@@ -18,6 +19,7 @@ export default class EnvetsHandler {
 	private powerController: Power;
 	private tableController: Table;
 	private tabsController: Tabs;
+	private hintsController: Hints;
 
 	private voltmeterView: Device;
 	private ampermeterView: Device;
@@ -37,6 +39,7 @@ export default class EnvetsHandler {
 		this.tabsController = component["Tabs"] as Tabs;
 		this.variantController = component["Variant"] as Variant;
 		this.tableController = component["Table"] as Table;
+		this.hintsController = component["Hints"] as Hints;
 
 		this.voltmeterView = component["Voltmeter"] as Device;
 		this.ampermeterView = component["Ampermeter"] as Device;
@@ -82,6 +85,18 @@ export default class EnvetsHandler {
 
 			//Update table validator
 			this.tableController.setVariant(variant);
+		});
+
+		this.tableController.on("mistaken", (correct: string | null) => {
+			if (correct == null) {
+				this.hintsController.showHint(
+					"Вы ошиблись, попробуйте ещё раз... :("
+				);
+			} else {
+				this.hintsController.showHint(
+					`Правильное значение: "${correct}". ;)`
+				);
+			}
 		});
 	}
 }
