@@ -9,23 +9,14 @@ export default class Layout {
 			"Класс точности (γ)",
 			"Число делений (N)",
 			"Предел шкалы (A)",
-			"Цена деления прибора (C)",
-			"Чувствительность (S)",
-			"Абсолютная погрешность (Δ)"
+			"Цена деления прибора (C=A/N)",
+			"Чувствительность (S=1/C)",
+			"Абсолютная погрешность (Δ=γA/100)"
 		];
 	}
 
 	public static get subHeaders(): string[] {
-		return [
-			"Формула,\nЕдиница измерения",
-			"",
-			"",
-			"",
-			"В\nмА",
-			"C=A/N\nВ/дел\nмА/дел",
-			"S=1/C\nдел/В\nдел/мА",
-			"Δ=γA/100\nВ\nмА"
-		];
+		return ["Единица измерения", "-", "ед.", "ед."];
 	}
 
 	public static get data(): string[][] {
@@ -35,6 +26,18 @@ export default class Layout {
 			this.subHeaders,
 			["", "", "", "", "", "", ""]
 		];
+	}
+
+	public static get units(): string[] {
+		return ["В", "мА"];
+	}
+
+	public static get costUnits(): string[] {
+		return this.units.map(x => x + "/дел");
+	}
+
+	public static get precisionUnits(): string[] {
+		return this.units.map(x => "дел/" + x);
 	}
 
 	public static get meters(): string[] {

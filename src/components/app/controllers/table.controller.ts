@@ -57,6 +57,17 @@ export default class Table extends Controller<"mistaken">() {
 			return valid;
 		});
 
+		//Register unit validator
+		Handsontable.validators.registerValidator("unit", (val, callback) => {
+			const { row, col, value } = val;
+			const source = this.table?.getCellMeta(row, col).source as string[];
+			let valid = this.layout?.units[this.getSelectedMeter(row) - 1];
+			valid = source.find(x => x.includes(valid || "_")) || "";
+
+			callback(value == null || value === "" || value == valid);
+			return valid;
+		});
+
 		//Register precision validator
 		Handsontable.validators.registerValidator(
 			"precision",
@@ -68,11 +79,7 @@ export default class Table extends Controller<"mistaken">() {
 					: this.variant?.voltmeterPrecision
 				)?.toFixed(1);
 
-				callback(
-					value == null ||
-						value === "" ||
-						(+value).toFixed(1) === valid
-				);
+				callback(value == null || value === "" || value === valid);
 				return valid;
 			}
 		);
@@ -159,14 +166,17 @@ export default class Table extends Controller<"mistaken">() {
 	}
 
 	private updateValidation(changes: Handsontable.CellChange[] | null): void {
-		this.table?.validateRows([1, 3], valid => {
+		this.table?.validateRows([0, 1, 2, 3], valid => {
 			if (!this.next) return;
 			this.next.disabled = true;
 			if (valid) {
-				const first = this.table?.getDataAtRow(1).every(x => x);
-				const second = this.table?.getDataAtRow(3).every(x => x);
+				let filled = true;
+				for (let i = 0; i < 4; i++) {
+					filled =
+						filled && !!this.table?.getDataAtRow(i).every(x => x);
+				}
 
-				this.next.disabled = !(first && second);
+				this.next.disabled = !filled;
 			}
 		});
 
@@ -179,17 +189,17 @@ export default class Table extends Controller<"mistaken">() {
 
 	private getSelectedMeter(row: number): Meter {
 		if (!this.variant?.isSwapped) {
-			if (row == 1) {
+			if (row == 1 || row == 0) {
 				return Meter.Voltmeter;
 			}
-			if (row == 3) {
+			if (row == 3 || row == 2) {
 				return Meter.Ampermeter;
 			}
 		} else {
-			if (row == 3) {
+			if (row == 3 || row == 2) {
 				return Meter.Voltmeter;
 			}
-			if (row == 1) {
+			if (row == 1 || row == 0) {
 				return Meter.Ampermeter;
 			}
 		}
@@ -202,10 +212,10 @@ export default class Table extends Controller<"mistaken">() {
 
 		const validator = this.table.getCellValidator(row, col) as Function;
 		if (value === "") return;
-		if (Number.isFinite(+value)) value = (+value).toFixed(1);
+		if (Number.isFinite(+value) && col != 2) value = (+value).toFixed(1);
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		const correct = validator({ row, value }, () => {});
+		const correct = validator({ row, col, value }, () => {});
 
 		if (correct == value) return;
 		const index = row * this.table.countCols() + col;
@@ -225,7 +235,7 @@ export default class Table extends Controller<"mistaken">() {
 			return this.layout?.types[0];
 		});
 
-		return new Handsontable(container, {
+		const table = new Handsontable(container, {
 			className: "htCenter htMiddle",
 			headerTooltips: true,
 			colHeaders: data.headers,
@@ -234,7 +244,7 @@ export default class Table extends Controller<"mistaken">() {
 			licenseKey: "non-commercial-and-evaluation",
 			afterChange: this.updateValidation.bind(this),
 			beforeValidate: (value, row, col): any => {
-				return { row, value };
+				return { row, col, value };
 			},
 			allowInvalid: true,
 			columns: [
@@ -274,17 +284,33 @@ export default class Table extends Controller<"mistaken">() {
 				}
 			],
 			cells: (row, col, prop): object => {
-				const cellProperties = {
-					readOnly: false
-				};
+				const cellProperties: any = {};
 
 				if (row == 0 || row == 2) {
-					cellProperties.readOnly = true;
+					if (col == 4 || col == 7) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.units;
+						cellProperties.validator = "unit";
+					} else if (col == 5) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.costUnits;
+						cellProperties.validator = "unit";
+					} else if (col == 6) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.precisionUnits;
+						cellProperties.validator = "unit";
+					} else {
+						cellProperties.type = "text";
+						cellProperties.readOnly = true;
+						cellProperties.validator = null;
+					}
 				}
 
 				return cellProperties;
 			}
 		});
+
+		return table;
 	}
 }
 
@@ -300,4 +326,7 @@ interface IData {
 	data: string[][];
 	meters: string[];
 	types: string[];
+	units: string[];
+	costUnits: string[];
+	precisionUnits: string[];
 }

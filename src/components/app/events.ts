@@ -92,7 +92,7 @@ export default class EnvetsHandler {
 		this.tableController.on("mistaken", (correct: string | null) => {
 			if (correct == null) {
 				this.hintsController.showHint(
-					"Вы ошиблись, попробуйте ещё раз... :("
+					"Вы ошиблись. Попробуйте ещё раз... :("
 				);
 			} else {
 				this.hintsController.showHint(

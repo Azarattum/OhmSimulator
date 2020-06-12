@@ -144,6 +144,7 @@
 
 			.handsontable table thead th {
 				white-space: pre-line;
+				word-break: break-word;
 				min-width: 80px;
 				max-width: calc(80vw / 8);
 			}
