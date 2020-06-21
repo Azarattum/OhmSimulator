@@ -100,5 +100,10 @@ export default class EnvetsHandler {
 				);
 			}
 		});
+
+		this.tableController.on("punished", () => {
+			this.hintsController.showHint("Много ошибок. Значения обновлены!");
+			this.variantController.refreshVariant();
+		});
 	}
 }

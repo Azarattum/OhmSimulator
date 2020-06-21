@@ -6,12 +6,13 @@ import { IVariant } from "../models/variants.class";
 /**
  * Table controller
  */
-export default class Table extends Controller<"mistaken">() {
+export default class Table extends Controller<"mistaken" | "punished">() {
 	private table: Handsontable | null = null;
 	private layout: IData | null = null;
 	private variant: IVariant | null = null;
 	private next: HTMLButtonElement | null = null;
 	private mistakes: Map<number, number> = new Map();
+	private errors: number = 0;
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
@@ -27,6 +28,8 @@ export default class Table extends Controller<"mistaken">() {
 	}
 
 	public setVariant(variant: IVariant): void {
+		this.errors = 0;
+		this.mistakes = new Map();
 		const afterExample = +(this.variant?.compact || 0) === 0;
 		this.variant = variant;
 
@@ -266,6 +269,12 @@ export default class Table extends Controller<"mistaken">() {
 		this.mistakes.set(index, ++current);
 
 		this.emit("mistaken", current >= 3 ? correct : null);
+		if (current == 3) {
+			this.errors++;
+		}
+		if (this.errors == 2) {
+			this.emit("punished");
+		}
 	}
 
 	private createTable(container: Element, data: IData): Handsontable {
