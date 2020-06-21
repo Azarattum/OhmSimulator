@@ -6,7 +6,7 @@ import Controller from "../../common/controller.abstract";
 export default class Variant extends Controller<"variantChanged">() {
 	public initialize(): void {
 		//Set default variant
-		this.setVariant(1);
+		this.setVariant(0);
 
 		this.expose("setVariant");
 	}

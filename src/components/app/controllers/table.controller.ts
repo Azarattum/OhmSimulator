@@ -27,6 +27,7 @@ export default class Table extends Controller<"mistaken">() {
 	}
 
 	public setVariant(variant: IVariant): void {
+		const afterExample = +(this.variant?.compact || 0) === 0;
 		this.variant = variant;
 
 		//Register deviders validator
@@ -174,6 +175,37 @@ export default class Table extends Controller<"mistaken">() {
 		});
 
 		this.updateValidation(null);
+
+		//Auto fill the example
+		const rows = this.table?.countRows() || 0;
+		const cols = this.table?.countCols() || 0;
+		if (+variant.compact === 0) {
+			for (let row = 0; row < rows; row++) {
+				for (let col = 0; col < cols; col++) {
+					const validator = this.table?.getCellValidator(
+						row,
+						col
+					) as Function;
+					if (!(validator instanceof Function)) continue;
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					const value = validator({ row, col }, () => {});
+
+					this.table?.setDataAtCell(row, col, value);
+				}
+			}
+		} else if (afterExample) {
+			for (let row = 0; row < rows; row++) {
+				for (let col = 0; col < cols; col++) {
+					const validator = this.table?.getCellValidator(
+						row,
+						col
+					) as Function;
+					if (!(validator instanceof Function)) continue;
+
+					this.table?.setDataAtCell(row, col, "");
+				}
+			}
+		}
 	}
 
 	private updateValidation(changes: Handsontable.CellChange[] | null): void {
@@ -181,7 +213,7 @@ export default class Table extends Controller<"mistaken">() {
 			if (!this.next) return;
 			this.next.disabled = true;
 			if (valid) {
-				let filled = true;
+				let filled = +(this.variant?.compact || 0) !== 0;
 				for (let i = 0; i < 4; i++) {
 					filled =
 						filled && !!this.table?.getDataAtRow(i).every(x => x);
@@ -267,7 +299,8 @@ export default class Table extends Controller<"mistaken">() {
 				{
 					type: "dropdown",
 					source: data.types,
-					validator: "type"
+					validator: "type",
+					width: 196
 				},
 				{
 					type: "text",
