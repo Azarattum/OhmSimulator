@@ -126,10 +126,21 @@ export default class Table extends Controller<"mistaken">() {
 			"sensitivity",
 			(val, callback) => {
 				const { row, value } = val;
+				const deviders =
+					this.getSelectedMeter(row) == Meter.Voltmeter
+						? ((this.variant?.compact || 0) + 2) % 3 == 0
+							? 25
+							: 50
+						: (this.variant?.compact || 0) % 5 == 0
+						? 25
+						: 50;
+
 				const valid =
 					this.getSelectedMeter(row) == Meter.Ampermeter
-						? 1 / (((this.variant?.ampermeterStep || 0) * 5) / 50)
-						: 1 / (((this.variant?.voltmeterStep || 0) * 5) / 50);
+						? 1 /
+						  (((this.variant?.ampermeterStep || 0) * 5) / deviders)
+						: 1 /
+						  (((this.variant?.voltmeterStep || 0) * 5) / deviders);
 
 				callback(
 					value == null ||
