@@ -7,9 +7,6 @@ export default class Variant extends Controller<"variantChanged">() {
 	public id: number = 0;
 
 	public initialize(): void {
-		//Set default variant
-		this.setVariant(this.id);
-
 		this.expose("setVariant");
 	}
 

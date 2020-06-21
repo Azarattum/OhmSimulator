@@ -49,8 +49,24 @@ export default class EnvetsHandler {
 	 * Registers all events for components
 	 */
 	public async registerEvents(): Promise<void> {
-		//Set defaul tab
-		this.tabsController.change("table");
+		//Tab changed event
+		this.tabsController.on("tabchanged", (tab: string) => {
+			if (tab == "greeting") {
+				setTimeout(async () => {
+					this.hintsController.showHint(
+						"Следуйте инструкциям на экране."
+					);
+				}, 100);
+			} else if (tab == "table") {
+				//Set default variant
+				this.variantController.setVariant(0);
+				setTimeout(async () => {
+					this.hintsController.showHint(
+						"Выберите вариант и заполните таблицу."
+					);
+				}, 100);
+			}
+		});
 
 		//Voltage changed event
 		this.powerController.on("voltageChanged", (voltage: number) => {
@@ -105,5 +121,8 @@ export default class EnvetsHandler {
 			this.hintsController.showHint("Много ошибок. Значения обновлены!");
 			this.variantController.refreshVariant();
 		});
+
+		//Set defaul tab
+		this.tabsController.change("greeting");
 	}
 }

@@ -1,0 +1,48 @@
+[view="greeting"] {
+	max-width: 80vw;
+	text-align: center;
+	display: flex;
+	align-items: center;
+
+	.title {
+		font-size: 1.8em;
+		margin-bottom: 0px;
+	}
+
+	.subtitle {
+		margin-top: 8px;
+		font-size: 1.2em;
+		opacity: 0.8;
+	}
+
+	.next {
+		position: relative;
+		top: 8px;
+
+		font-size: 1.1em;
+		padding: 8px;
+		border: none;
+		outline: none;
+		color: #555;
+		font-weight: bold;
+
+		border-radius: 8px;
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+		transition: box-shadow 0.2s;
+
+		cursor: pointer;
+
+		&:not(:disabled):hover {
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+		}
+
+		&:not(:disabled):active {
+			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+		}
+
+		&:disabled {
+			color: #aaa;
+			cursor: not-allowed;
+		}
+	}
+}

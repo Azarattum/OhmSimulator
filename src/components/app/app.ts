@@ -15,6 +15,7 @@ import CircuitView from "./views/circuit/circuit.view";
 import DeviceView from "./views/device/device.view";
 import FooterView from "./views/footer/footer.view";
 import TableView from "./views/table/table.view";
+import GreetingView from "./views/greeting/greeting.view";
 
 /**
  * Main application class
@@ -40,6 +41,7 @@ export default class App {
 			new MachineView(),
 			new CircuitView(),
 			new TableView(),
+			new GreetingView(),
 			new DeviceView("Voltmeter"),
 			new DeviceView("Ampermeter")
 		];
