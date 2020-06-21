@@ -177,8 +177,6 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 			return (+valid).toFixed(1);
 		});
 
-		this.updateValidation(null);
-
 		//Auto fill the example
 		const rows = this.table?.countRows() || 0;
 		const cols = this.table?.countCols() || 0;
@@ -208,10 +206,14 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 					this.table?.setDataAtCell(row, col, "");
 				}
 			}
+		} else {
+			this.updateValidation(null);
 		}
 	}
 
 	private updateValidation(changes: Handsontable.CellChange[] | null): void {
+		if (+(this.variant?.compact || 0) === 0) return;
+
 		this.table?.validateRows([0, 1, 2, 3], valid => {
 			if (!this.next) return;
 			this.next.disabled = true;
