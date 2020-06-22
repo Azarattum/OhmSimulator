@@ -4,6 +4,12 @@
 	display: flex;
 	align-items: center;
 
+	img {
+		margin-top: -10vw;
+		max-width: 50vw;
+		max-height: 20vw;
+	}
+
 	.title {
 		font-size: 1.8em;
 		margin-bottom: 0px;
