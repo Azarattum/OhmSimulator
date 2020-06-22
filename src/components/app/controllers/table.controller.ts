@@ -175,9 +175,9 @@ export default class Table extends Controller<
 			callback(
 				value == null ||
 					value === "" ||
-					(+value).toFixed(1) == (+valid).toFixed(1)
+					(+value).toFixed(2) == (+valid).toFixed(2)
 			);
-			return (+valid).toFixed(1);
+			return (+valid).toFixed(2);
 		});
 
 		//Auto fill the example
@@ -280,7 +280,13 @@ export default class Table extends Controller<
 
 		const validator = this.table.getCellValidator(row, col) as Function;
 		if (value === "") return;
-		if (Number.isFinite(+value) && col != 2) value = (+value).toFixed(1);
+		if (Number.isFinite(+value)) {
+			if (col == 7) {
+				value = (+value).toFixed(2);
+			} else if (col != 2) {
+				value = (+value).toFixed(1);
+			}
+		}
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		const correct = validator({ row, col, value }, () => {});
