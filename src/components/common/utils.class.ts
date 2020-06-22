@@ -60,6 +60,14 @@ export default class Utils {
 		}
 	}
 
+	public static format(string: string, ...args: string[]): string {
+		for (const i in args) {
+			string = string.replace(`{${i}}`, args[i]);
+		}
+
+		return string;
+	}
+
 	/**
 	 * Merges properties of two objects
 	 * @param to Destination object

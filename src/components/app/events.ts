@@ -8,6 +8,8 @@ import Device from "./views/device/device.view";
 import Variants from "./models/variants.class";
 import Table from "./controllers/table.controller";
 import Hints from "./controllers/hints.controller";
+import Messages from "./models/messages.class";
+import Utils from "../common/utils.class";
 
 /**
  * Event handler for application components
@@ -53,17 +55,13 @@ export default class EnvetsHandler {
 		this.tabsController.on("tabchanged", (tab: string) => {
 			if (tab == "greeting") {
 				setTimeout(async () => {
-					this.hintsController.showHint(
-						"Следуйте инструкциям на экране."
-					);
+					this.hintsController.showHint(Messages.greet);
 				}, 100);
 			} else if (tab == "table") {
 				//Set default variant
 				this.variantController.setVariant(0);
 				setTimeout(async () => {
-					this.hintsController.showHint(
-						"Выберите вариант и заполните таблицу."
-					);
+					this.hintsController.showHint(Messages.table);
 				}, 100);
 			}
 		});
@@ -107,18 +105,16 @@ export default class EnvetsHandler {
 
 		this.tableController.on("mistaken", (correct: string | null) => {
 			if (correct == null) {
-				this.hintsController.showHint(
-					"Вы ошиблись. Попробуйте ещё раз... :("
-				);
+				this.hintsController.showHint(Messages.mistake);
 			} else {
 				this.hintsController.showHint(
-					`Правильное значение: "${correct}". ;)`
+					Utils.format(Messages.correction, correct)
 				);
 			}
 		});
 
 		this.tableController.on("punished", () => {
-			this.hintsController.showHint("Много ошибок. Значения обновлены!");
+			this.hintsController.showHint(Messages.refresh);
 			this.variantController.refreshVariant();
 		});
 

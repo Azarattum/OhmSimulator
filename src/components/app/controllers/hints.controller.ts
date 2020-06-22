@@ -27,6 +27,6 @@ export default class Hints extends Controller<"">() {
 
 		setTimeout(() => {
 			this.container.removeChild(node);
-		}, 3001);
+		}, 4001);
 	}
 }
