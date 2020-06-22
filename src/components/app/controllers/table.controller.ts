@@ -6,13 +6,16 @@ import { IVariant } from "../models/variants.class";
 /**
  * Table controller
  */
-export default class Table extends Controller<"mistaken" | "punished">() {
+export default class Table extends Controller<
+	"mistaken" | "punished" | "done"
+>() {
 	private table: Handsontable | null = null;
 	private layout: IData | null = null;
 	private variant: IVariant | null = null;
 	private next: HTMLButtonElement | null = null;
 	private mistakes: Map<number, number> = new Map();
 	private errors: number = 0;
+	private updates: number = 0;
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
@@ -211,6 +214,20 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 		}
 	}
 
+	public getResult(): Result {
+		let score = 5;
+		if (this.updates > 0) {
+			score -= this.updates;
+			if (this.errors > 0) {
+				score -= this.errors;
+			}
+		}
+
+		if (score >= 5) return Result.Exellent;
+		if (score == 4) return Result.Good;
+		return Result.OK;
+	}
+
 	private updateValidation(changes: Handsontable.CellChange[] | null): void {
 		if (+(this.variant?.compact || 0) === 0) return;
 
@@ -225,6 +242,9 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 				}
 
 				this.next.disabled = !filled;
+				if (filled) {
+					this.emit("done", this.getResult());
+				}
 			}
 		});
 
@@ -275,6 +295,7 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 			this.errors++;
 		}
 		if (this.errors == 2) {
+			this.updates++;
 			this.emit("punished");
 		}
 	}
@@ -367,6 +388,12 @@ export default class Table extends Controller<"mistaken" | "punished">() {
 
 		return table;
 	}
+}
+
+export enum Result {
+	OK,
+	Good,
+	Exellent
 }
 
 enum Meter {

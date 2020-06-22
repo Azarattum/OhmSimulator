@@ -6,7 +6,7 @@ import Tabs from "./controllers/tabs.controller";
 import Variant from "./controllers/variant.controller";
 import Device from "./views/device/device.view";
 import Variants from "./models/variants.class";
-import Table from "./controllers/table.controller";
+import Table, { Result } from "./controllers/table.controller";
 import Hints from "./controllers/hints.controller";
 import Messages from "./models/messages.class";
 import Utils from "../common/utils.class";
@@ -116,6 +116,19 @@ export default class EnvetsHandler {
 		this.tableController.on("punished", () => {
 			this.hintsController.showHint(Messages.refresh);
 			this.variantController.refreshVariant();
+		});
+
+		this.tableController.on("done", (result: Result) => {
+			let message = Messages.done;
+			if (result == Result.Exellent) {
+				message = Utils.format(message, Messages.exellent);
+			} else if (result == Result.Good) {
+				message = Utils.format(message, Messages.good);
+			} else if (result == Result.OK) {
+				message = Utils.format(message, Messages.ok);
+			}
+
+			this.hintsController.showHint(message);
 		});
 
 		//Set defaul tab
