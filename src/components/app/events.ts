@@ -114,7 +114,7 @@ export default class EnvetsHandler {
 		});
 
 		this.tableController.on("punished", () => {
-			this.hintsController.showHint(Messages.refresh);
+			this.hintsController.showHint(Messages.refresh, true);
 			this.variantController.refreshVariant();
 		});
 

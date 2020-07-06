@@ -7,7 +7,8 @@ const Messages = {
 	done: "Таблица заполнена {0}!",
 	exellent: "отлично",
 	good: "хорошо",
-	ok: "удовлетворительно"
+	ok: "удовлетворительно",
+	close: "Нажмите, чтобы скрыть"
 };
 
 export default Messages;

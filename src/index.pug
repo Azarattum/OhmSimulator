@@ -13,7 +13,8 @@ html(lang="en")
     body
         .hints(controller="hints")
             .hint(iterate="data.hints")
-                .text!=data.hints
+                .text
+                .close
         div(controller="tabs")
             div(tab="greeting" view="greeting")
             div(tab="machine" view="machine")

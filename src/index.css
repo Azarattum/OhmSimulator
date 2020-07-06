@@ -35,11 +35,50 @@ body > .hints > .hint {
 	margin-bottom: 8px;
 	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
 	animation: hint 4s;
-	opacity: 0;
 	font-size: 1.5em;
 	color: white;
 
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hint:not(.no-hide) {
+	opacity: 0;
+}
+.hint:not(.no-hide) > .close {
+	display: none;
+}
+
+.hint > .close {
+	position: absolute;
+	font-size: 0.4em;
+	opacity: 0.8;
+	right: 8px;
+	animation: blink 1s 1s;
+}
+
+.hint.no-hide {
+	animation: hint-in 0.8s !important;
+	transition: opacity 0.6s;
+	opacity: 1;
+
+	cursor: pointer;
+}
+
+.hint.hidden {
+	opacity: 0;
+}
+
+@keyframes blink {
+	0% {
+		color: currentColor;
+	}
+	50% {
+		color: red;
+		opacity: 1;
+	}
+	100% {
+		color: currentColor;
+	}
 }
 
 @keyframes hint {
@@ -59,5 +98,19 @@ body > .hints > .hint {
 	}
 	100% {
 		opacity: 0;
+	}
+}
+
+@keyframes hint-in {
+	0% {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		max-height: 0;
+		opacity: 0;
+	}
+	100% {
+		padding: 16px;
+		max-height: 100vh;
+		opacity: 1;
 	}
 }
