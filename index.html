@@ -35,11 +35,50 @@ body > .hints > .hint {
 	margin-bottom: 8px;
 	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
 	animation: hint 4s;
-	opacity: 0;
 	font-size: 1.5em;
 	color: white;
 
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hint:not(.no-hide) {
+	opacity: 0;
+}
+.hint:not(.no-hide) > .close {
+	display: none;
+}
+
+.hint > .close {
+	position: absolute;
+	font-size: 0.4em;
+	opacity: 0.8;
+	right: 8px;
+	animation: blink 1s 1s;
+}
+
+.hint.no-hide {
+	animation: hint-in 0.8s !important;
+	transition: opacity 0.6s;
+	opacity: 1;
+
+	cursor: pointer;
+}
+
+.hint.hidden {
+	opacity: 0;
+}
+
+@keyframes blink {
+	0% {
+		color: currentColor;
+	}
+	50% {
+		color: red;
+		opacity: 1;
+	}
+	100% {
+		color: currentColor;
+	}
 }
 
 @keyframes hint {
@@ -61,4 +100,18 @@ body > .hints > .hint {
 		opacity: 0;
 	}
 }
-</style></head><body><div class="hints" controller="hints"><div class="hint" iterate="data.hints"><div class="text"><placeholder hints><!--"placeholders __postfix_hints="--></placeholder></div></div></div><div controller="tabs"><div tab="greeting" view="greeting"></div><div tab="machine" view="machine"></div><div tab="table" view="table" controller="table"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
+
+@keyframes hint-in {
+	0% {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		max-height: 0;
+		opacity: 0;
+	}
+	100% {
+		padding: 16px;
+		max-height: 100vh;
+		opacity: 1;
+	}
+}
+</style></head><body><div class="hints" controller="hints"><div class="hint" iterate="data.hints"><div class="text"></div><div class="close"></div></div></div><div controller="tabs"><div tab="greeting" view="greeting"></div><div tab="machine" view="machine"></div><div tab="table" view="table" controller="table"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
