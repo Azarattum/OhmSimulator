@@ -16,6 +16,7 @@ import DeviceView from "./views/device/device.view";
 import FooterView from "./views/footer/footer.view";
 import TableView from "./views/table/table.view";
 import GreetingView from "./views/greeting/greeting.view";
+import HelpView from "./views/help/help.view";
 
 /**
  * Main application class
@@ -42,6 +43,7 @@ export default class App {
 			new CircuitView(),
 			new TableView(),
 			new GreetingView(),
+			new HelpView(),
 			new DeviceView("Voltmeter"),
 			new DeviceView("Ampermeter")
 		];

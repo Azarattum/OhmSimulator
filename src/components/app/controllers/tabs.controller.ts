@@ -53,9 +53,12 @@ export default class Tabs extends Controller<"tabchanged">() {
 			}
 
 			this.container.querySelectorAll("[tab]").forEach(x => {
+				if (!(x as any).display)
+					(x as any).display = getComputedStyle(x).display;
 				(x as HTMLElement).style.display = "none";
 			});
-			(selected as HTMLElement).style.display = "block";
+			(selected as HTMLElement).style.display =
+				(selected as any).display || "block";
 			name = selected.getAttribute("tab");
 		}
 
