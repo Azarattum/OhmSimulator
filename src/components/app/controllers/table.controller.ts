@@ -123,9 +123,10 @@ export default class Table extends Controller<
 			callback(
 				value == null ||
 					value === "" ||
-					(+value).toFixed(1) == (+valid).toFixed(1)
+					(+value).toFixed(2) == (+valid).toFixed(2)
 			);
-			return (+valid).toFixed(1);
+			//Return result with trimmed zeroes at the end
+			return (+valid).toFixed(2).replace(/[.]?0+$/, "");
 		});
 
 		//Register sensitivity validator
@@ -152,9 +153,10 @@ export default class Table extends Controller<
 				callback(
 					value == null ||
 						value === "" ||
-						(+value).toFixed(1) == (+valid).toFixed(1)
+						(+value).toFixed(2) == (+valid).toFixed(2)
 				);
-				return (+valid).toFixed(1);
+				//Return result with trimmed zeroes at the end
+				return (+valid).toFixed(2).replace(/[.]?0+$/, "");
 			}
 		);
 
@@ -177,7 +179,8 @@ export default class Table extends Controller<
 					value === "" ||
 					(+value).toFixed(2) == (+valid).toFixed(2)
 			);
-			return (+valid).toFixed(2);
+			//Return result with trimmed zeroes at the end
+			return (+valid).toFixed(2).replace(/[.]?0+$/, "");
 		});
 
 		//Auto fill the example
@@ -280,12 +283,8 @@ export default class Table extends Controller<
 
 		const validator = this.table.getCellValidator(row, col) as Function;
 		if (value === "") return;
-		if (Number.isFinite(+value)) {
-			if (col == 7) {
-				value = (+value).toFixed(2);
-			} else if (col != 2) {
-				value = (+value).toFixed(1);
-			}
+		if (Number.isFinite(+value) && col != 2) {
+			value = (+value).toFixed(2);
 		}
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
