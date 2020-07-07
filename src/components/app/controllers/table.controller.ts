@@ -284,7 +284,7 @@ export default class Table extends Controller<
 		const validator = this.table.getCellValidator(row, col) as Function;
 		if (value === "") return;
 		if (Number.isFinite(+value) && col != 2) {
-			value = (+value).toFixed(2);
+			value = (+value).toFixed(2).replace(/[.]?0+$/, "");
 		}
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
