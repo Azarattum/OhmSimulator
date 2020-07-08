@@ -1,4 +1,5 @@
-[view="help"] {
+[view="help"],
+[view="help2"] {
     padding-bottom: 64px;
     max-width: 80vw;
     display: flex;
@@ -6,6 +7,14 @@
 
     h2 {
         text-align: center;
+    }
+
+    img {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 80%;
+        max-height: 50vh;
     }
 
     .card {
@@ -16,39 +25,41 @@
         max-width: 50vw;
     }
 
-    button {
-        position: relative;
-        margin-top: 8px;
-        margin-left: 16px;
-        margin-right: 16px;
-        width: 150px;
-        left: 50%;
-        transform: translateX(-50%);
+    .buttons {
+        display: flex;
+        justify-content: center;
 
-        font-size: 1.1em;
-        padding: 8px;
-        border: none;
-        outline: none;
-        color: #555;
-        font-weight: bold;
+        button {
+            margin-top: 8px;
+            margin-left: 16px;
+            margin-right: 16px;
+            width: 150px;
 
-        border-radius: 8px;
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
-        transition: box-shadow 0.2s;
+            font-size: 1.1em;
+            padding: 8px;
+            border: none;
+            outline: none;
+            color: #555;
+            font-weight: bold;
 
-        cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.2s;
 
-        &:not(:disabled):hover {
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-        }
+            cursor: pointer;
 
-        &:not(:disabled):active {
-            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
-        }
+            &:not(:disabled):hover {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+            }
 
-        &:disabled {
-            color: #aaa;
-            cursor: not-allowed;
+            &:not(:disabled):active {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+            }
+
+            &:disabled {
+                color: #aaa;
+                cursor: not-allowed;
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ import FooterView from "./views/footer/footer.view";
 import TableView from "./views/table/table.view";
 import GreetingView from "./views/greeting/greeting.view";
 import HelpView from "./views/help/help.view";
+import Help2View from "./views/help2/help2.view";
 
 /**
  * Main application class
@@ -42,6 +43,7 @@ export default class App {
 			TableView,
 			GreetingView,
 			HelpView,
+			Help2View,
 			DeviceView
 		];
 
