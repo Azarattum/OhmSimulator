@@ -125,10 +125,9 @@ export default class TableCtrl extends Controller<
 			callback(
 				value == null ||
 					value === "" ||
-					(+value).toFixed(2) == (+valid).toFixed(2)
+					this.formatNumber(+value) == this.formatNumber(+valid)
 			);
-			//Return result with trimmed zeroes at the end
-			return (+valid).toFixed(2).replace(/[.]?0+$/, "");
+			return this.formatNumber(+valid);
 		});
 
 		//Register sensitivity validator
@@ -155,10 +154,10 @@ export default class TableCtrl extends Controller<
 				callback(
 					value == null ||
 						value === "" ||
-						(+value).toFixed(2) == (+valid).toFixed(2)
+						this.formatNumber(+value) == this.formatNumber(+valid)
 				);
-				//Return result with trimmed zeroes at the end
-				return (+valid).toFixed(2).replace(/[.]?0+$/, "");
+
+				return this.formatNumber(+valid);
 			}
 		);
 
@@ -179,10 +178,9 @@ export default class TableCtrl extends Controller<
 			callback(
 				value == null ||
 					value === "" ||
-					(+value).toFixed(2) == (+valid).toFixed(2)
+					this.formatNumber(+value) == this.formatNumber(+valid)
 			);
-			//Return result with trimmed zeroes at the end
-			return (+valid).toFixed(2).replace(/[.]?0+$/, "");
+			return this.formatNumber(+valid);
 		});
 
 		//Auto fill the example
@@ -286,7 +284,7 @@ export default class TableCtrl extends Controller<
 		const validator = this.table.getCellValidator(row, col) as Function;
 		if (value === "") return;
 		if (Number.isFinite(+value) && col != 2) {
-			value = (+value).toFixed(2).replace(/[.]?0+$/, "");
+			value = this.formatNumber(+value);
 		}
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -400,6 +398,11 @@ export default class TableCtrl extends Controller<
 		});
 
 		return table;
+	}
+
+	private formatNumber(number: number): string {
+		const exp = new RegExp("^-?\\d+(?:.\\d{0,2})?");
+		return (number.toString().match(exp) || [""])[0].replace(/[.]?0+$/, "");
 	}
 }
 

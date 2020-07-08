@@ -107,6 +107,9 @@ export default class EventsHandler implements IEventsHandler {
 			if (correct == null) {
 				this.hintsController.showHint(Messages.mistake);
 			} else {
+				if (Number.isFinite(+correct)) {
+					correct = correct.toString().replace(".", ",");
+				}
 				this.hintsController.showHint(
 					Utils.format(Messages.correction, correct)
 				);

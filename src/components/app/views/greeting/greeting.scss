@@ -1,61 +1,60 @@
 [view="greeting"] {
-	max-width: 80vw;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    max-width: 80vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-	img {
-		margin-top: -10vw;
-		max-width: 50vw;
-		max-height: 20vw;
-	}
+    img {
+        max-width: 50vw;
+        max-height: 20vw;
+    }
 
-	.title {
-		font-size: 1.8em;
-		margin-bottom: 0px;
-	}
+    .title {
+        font-size: 1.8em;
+        margin-bottom: 0px;
+    }
 
-	.subtitle {
-		margin-top: 8px;
-		font-size: 1.2em;
-		opacity: 0.8;
-	}
+    .subtitle {
+        margin-top: 8px;
+        font-size: 1.2em;
+        opacity: 0.8;
+    }
 
-	.buttons {
-		button {
-			position: relative;
-			top: 8px;
-			margin-left: 16px;
-			margin-right: 16px;
-			margin-bottom: 16px;
-			width: 150px;
+    .buttons {
+        button {
+            position: relative;
+            top: 8px;
+            margin-left: 16px;
+            margin-right: 16px;
+            margin-bottom: 16px;
+            width: 150px;
 
-			font-size: 1.1em;
-			padding: 8px;
-			border: none;
-			outline: none;
-			color: #555;
-			font-weight: bold;
+            font-size: 1.1em;
+            padding: 8px;
+            border: none;
+            outline: none;
+            color: #555;
+            font-weight: bold;
 
-			border-radius: 8px;
-			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
-			transition: box-shadow 0.2s;
+            border-radius: 8px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.2s;
 
-			cursor: pointer;
+            cursor: pointer;
 
-			&:not(:disabled):hover {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-			}
+            &:not(:disabled):hover {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+            }
 
-			&:not(:disabled):active {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
-			}
+            &:not(:disabled):active {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+            }
 
-			&:disabled {
-				color: #aaa;
-				cursor: not-allowed;
-			}
-		}
-	}
+            &:disabled {
+                color: #aaa;
+                cursor: not-allowed;
+            }
+        }
+    }
 }
