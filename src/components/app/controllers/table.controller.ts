@@ -84,7 +84,9 @@ export default class TableCtrl extends Controller<
 				const valid = (this.getSelectedMeter(row) == Meter.Ampermeter
 					? this.variant?.ampermeterPrecision
 					: this.variant?.voltmeterPrecision
-				)?.toFixed(1);
+				)
+					?.toFixed(1)
+					.replace(".", ",");
 
 				callback(value == null || value === "" || value === valid);
 				return valid;
@@ -325,6 +327,12 @@ export default class TableCtrl extends Controller<
 			afterChange: this.updateValidation.bind(this),
 			beforeValidate: (value, row, col): any => {
 				return { row, col, value };
+			},
+			beforeValueRender: (value): any => {
+				if (Number.isFinite(value)) {
+					value = value.toString().replace(".", ",");
+				}
+				return value;
 			},
 			allowInvalid: true,
 			columns: [
