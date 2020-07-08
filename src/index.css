@@ -41,14 +41,14 @@ body > .hints > .hint {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.hint:not(.no-hide) {
+body > .hints > .hint:not(.no-hide) {
 	opacity: 0;
 }
-.hint:not(.no-hide) > .close {
+body > .hints > .hint:not(.no-hide) > .close {
 	display: none;
 }
 
-.hint > .close {
+body > .hints > .hint > .close {
 	position: absolute;
 	font-size: 0.4em;
 	opacity: 0.8;
@@ -56,7 +56,7 @@ body > .hints > .hint {
 	animation: blink 1s 1s;
 }
 
-.hint.no-hide {
+body > .hints > .hint.no-hide {
 	animation: hint-in 0.8s !important;
 	transition: opacity 0.6s;
 	opacity: 1;
@@ -64,7 +64,7 @@ body > .hints > .hint {
 	cursor: pointer;
 }
 
-.hint.hidden {
+body > .hints > .hint.hidden {
 	opacity: 0;
 }
 

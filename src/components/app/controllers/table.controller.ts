@@ -6,7 +6,7 @@ import { IVariant } from "../models/variants.class";
 /**
  * Table controller
  */
-export default class Table extends Controller<
+export default class TableCtrl extends Controller<
 	"mistaken" | "punished" | "done"
 >() {
 	private table: Handsontable | null = null;

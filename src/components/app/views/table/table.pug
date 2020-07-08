@@ -10,8 +10,24 @@ label.variants
 
 .content
     .elements
-        .meter.voltmeter(view="voltmeter")
-        .meter.ampermeter(view="ampermeter")
+        .meter.voltmeter(
+            view="device"
+            data-buttons="false"
+            data-name="voltmeter"
+            data-label="V"
+            data-step="2"
+            data-ranges="[0.5, 1, 2, 3]"
+            data-precision="1.5"
+        )
+        .meter.ampermeter(
+            view="device"
+            data-buttons="false"
+            data-name="ampermeter"
+            data-label="mA"
+            data-step="20"
+            data-ranges="[1, 2, 5, 20]"
+            data-precision="2.0"
+        )
     .table
 
 button.next(onclick="Tabs.change('machine')" disabled) Продолжить

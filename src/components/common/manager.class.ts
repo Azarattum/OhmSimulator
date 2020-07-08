@@ -1,55 +1,110 @@
 import Utils, { LogType } from "./utils.class";
+import Exposer from "./exposer.class";
 
 /**
- * Component manager for IInitializables
+ * Components manager
  */
 export default class Manager {
 	/**Whether to log out initialization status */
 	public logging: boolean = true;
+	/**Whether manager is initialized now */
+	public isInitialized = false;
 	/**Managed components */
 	public readonly components: IComponent[];
+	/**Handler for componet events */
+	private events: IEventsHandlerType | null;
 
 	/**
 	 * Creates a component manager
 	 * @param components Components to manage
 	 */
-	public constructor(components: IComponent[]) {
+	public constructor(
+		components: IComponentType[],
+		{ events, scope }: IManagerOptions = {}
+	) {
+		const exposer = new Exposer(scope || globalThis);
 		const typesOrder = ["Services", "Views", "Controllers"];
-		this.components = components.sort((a, b) =>
+		components.sort((a, b) =>
 			typesOrder.indexOf(a.type) >= typesOrder.indexOf(b.type) ? 1 : -1
 		);
+
+		this.components = [];
+		for (const component of components) {
+			if (component.relations && component.relations.length) {
+				for (const relation of component.relations) {
+					this.components.push(new component(exposer, relation));
+				}
+			} else {
+				this.components.push(new component(exposer));
+			}
+		}
+
+		this.events = events || null;
 	}
 
 	/**
 	 * Initializes all components
 	 */
-	public async initialize(componentArgs: ComponentArgs = []): Promise<void> {
+	public async initialize(componentArgs: IComponentArgs = {}): Promise<void> {
 		let exceptions = 0;
 		if (this.logging) Utils.log("Initializtion started...");
 
-		let type = "";
-		//Initialize all components
+		//Load promise components
 		for (const i in this.components) {
-			const component = this.components[i];
-			if (this.logging && type != component.type) {
-				Utils.log(component.type, LogType.DIVIDER);
-				type = component.type;
+			if (!(this.components[i] instanceof Promise)) continue;
+
+			const loaded = await this.components[i];
+			this.components[i] = loaded;
+		}
+
+		//Register events
+		try {
+			if (this.events) {
+				const named: { [name: string]: IComponent[] } = {};
+				this.components.forEach(x => {
+					if (!named[x.name]) {
+						named[x.name] = [];
+					}
+					named[x.name].push(x);
+				});
+
+				const events = new this.events(named);
+				await events.registerEvents();
+			}
+		} catch (exception) {
+			//Log exception
+			if (this.logging) {
+				Utils.log(
+					`Events register exception:\n\t` +
+						`${exception.stack.replace(/\n/g, "\n\t")}`,
+					LogType.ERROR
+				);
+			}
+			exceptions++;
+		}
+
+		let lastType = "";
+		//Initialize all components
+		for (const component of this.components) {
+			const type = (component.constructor as IComponentType).type;
+
+			if (this.logging && type != lastType) {
+				Utils.log(type, LogType.DIVIDER);
+				lastType = type;
 			}
 
 			try {
-				const args = Array.isArray(componentArgs)
-					? componentArgs[i]
-					: componentArgs[component.name];
-
-				if (args && component.initialize) {
+				const args = componentArgs[component.name] || [];
+				if (component.initialize) {
 					await component.initialize(...args);
-				} else if (component.initialize) {
-					await component.initialize();
 				}
+
+				//Log success
 				if (this.logging) {
 					Utils.log(`${component.name} initialized!`, LogType.OK);
 				}
 			} catch (exception) {
+				//Log exception
 				if (this.logging) {
 					Utils.log(
 						`${component.name} initialization exception:\n\t` +
@@ -60,6 +115,8 @@ export default class Manager {
 				exceptions++;
 			}
 		}
+
+		this.isInitialized = true;
 
 		//Log result
 		if (!this.logging) return;
@@ -78,17 +135,20 @@ export default class Manager {
 	 * Closes all managed components
 	 */
 	public close(): void {
+		if (!this.isInitialized) return;
 		if (this.logging) {
 			Utils.log("", LogType.DIVIDER);
 			Utils.log("Closing all components...");
 		}
 
 		let exceptions = 0;
+		const promises = [];
 		for (const component of this.components) {
 			try {
 				if (component.close) {
-					component.close();
+					promises.push(component.close());
 				}
+
 				if (this.logging) {
 					Utils.log(`${component.name} closed!`, LogType.OK);
 				}
@@ -104,41 +164,85 @@ export default class Manager {
 			}
 		}
 
+		this.isInitialized = false;
+
 		//Log result
 		if (!this.logging) return;
 		Utils.log("", LogType.DIVIDER);
-		if (exceptions) {
-			Utils.log(
-				`Stopped with ${exceptions} exceptions!`,
-				LogType.WARNING
-			);
-		} else {
-			Utils.log("Successfyly stopped!", LogType.OK);
-		}
+		Promise.all(promises).then(() => {
+			if (exceptions) {
+				Utils.log(
+					`Stopped with ${exceptions} exceptions!`,
+					LogType.WARNING
+				);
+			} else {
+				Utils.log("Successfyly stopped!", LogType.OK);
+			}
+		});
 	}
 
 	/**
-	 * Returs a managed component by its name
+	 * Returs a managed components by the name
 	 * @param name Component's name
 	 */
-	public getComponent(name: string): IComponent | null {
-		return (
-			this.components.find(
-				component => component.name.toLowerCase() == name.toLowerCase()
-			) || null
+	public getComponents(name: string): IComponent[] {
+		return this.components.filter(
+			component => component.name.toLowerCase() == name.toLowerCase()
 		);
 	}
 }
 
 /**
- * Interface of an initializable class
+ * Manger options interface
+ */
+interface IManagerOptions {
+	events?: IEventsHandlerType;
+	scope?: Record<string, any>;
+}
+
+/**
+ * Interface of handler for component events constructor
+ */
+export interface IEventsHandlerType {
+	/**Creates event handler */
+	new (components: { [name: string]: IComponent[] }): IEventsHandler;
+}
+
+/**
+ * Interface of handler for component events
+ */
+export interface IEventsHandler {
+	/**Registers events */
+	registerEvents(): Promise<void>;
+}
+
+/**
+ * Interface of component constructor
+ */
+export interface IComponentType {
+	/**Component constructor */
+	new (exposer: Exposer, relation?: object): IComponent;
+
+	/**Component relations */
+	relations?: object[];
+
+	/**Component type */
+	type: string;
+}
+
+/**
+ * Arguments for components initialization
+ */
+export interface IComponentArgs {
+	[name: string]: any[];
+}
+
+/**
+ * Interface of component class
  */
 export interface IComponent {
 	/**Initializable name */
 	name: string;
-
-	/**Component type */
-	type: string;
 
 	/**Initializable entry */
 	initialize?(...args: any[]): void;
@@ -146,6 +250,3 @@ export interface IComponent {
 	/**Component destructor */
 	close?(): void;
 }
-
-/**Arguments for components initialization */
-export type ComponentArgs = any[][] | { [component: string]: any[] };

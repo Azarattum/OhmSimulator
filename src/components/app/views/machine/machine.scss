@@ -1,331 +1,333 @@
-.machine {
-	transform: translateX(0);
-	display: flex;
-	justify-content: center;
-
-	img {
-		height: 70vmin;
-		width: auto;
-		z-index: -1;
-	}
-
-	[view="circuit"] {
-		&:not(.inactive) {
-			& ~ img {
-				opacity: 0;
-				width: 100vw;
-				height: 100vh;
-				transition: 1.2s;
-			}
-			& ~ div,
-			& ~ label {
-				opacity: 0;
-				transition: 1.2s;
-			}
-			.circuit > div {
-				animation: borders 2s;
-			}
-		}
-	}
-
-	.inactive > .circuit {
-		position: absolute;
-		left: 15vmin;
-		top: 21vmin;
-		margin: 0;
-
-		color: rgba(0, 0, 0, 0);
-		max-height: 100vmin;
-		max-width: 120vmin;
-		overflow: hidden;
-		animation: tst 3s;
-		transform-origin: 0 0;
-		transform: scale(0.15);
-
-		.wire {
-			--size: 4vmin;
-		}
-
-		.scale,
-		.arrow,
-		.buttons,
-		.label,
-		.precision {
-			opacity: 0;
-			transition: 2s;
-			transition-property: opacity;
-		}
-
-		& > div {
-			box-shadow: 0px 0px 0px;
-			border: solid 20px var(--color-text);
-			pointer-events: none;
-		}
-
-		cursor: pointer;
-	}
-
-	.circuit {
-		transition: 1.5s;
-
-		&.active {
-			animation: highlight 2.2s infinite;
-		}
-	}
-
-	.slot {
-		position: absolute;
-		left: 24.5%;
-		bottom: 27%;
-		width: 7%;
-		height: 18%;
-
-		transform: rotateZ(90deg);
-
-		.resistor {
-			animation: drop 0.4s ease-out;
-			filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
-			pointer-events: none;
-		}
-	}
-
-	& > input {
-		display: none;
-		&:checked + .clamp {
-			transform: rotateZ(180deg);
-			background-color: #505050;
-			z-index: 3;
-		}
-	}
-
-	.clamp {
-		position: absolute;
-
-		bottom: calc(34% - 3px);
-		width: 2%;
-		height: 4%;
-
-		border-radius: 50%;
-
-		border: solid 3px var(--color-text);
-		z-index: -1;
-		cursor: pointer;
-		transition: 0.2s;
-
-		&.left {
-			left: calc(20% - 3px);
-		}
-		&.right {
-			left: calc(34% - 3px);
-		}
-	}
-
-	.resistor {
-		width: 100%;
-		height: 100%;
-
-		filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.5));
-		background-size: contain;
-		background-position: center;
-		background-repeat: repeat-y;
-		cursor: grab;
-	}
-
-	.resistors {
-		position: absolute;
+[view="machine"] {
+	.machine {
+		transform: translateX(0);
 		display: flex;
-		flex-direction: row;
-		left: 20%;
-		bottom: 5%;
-		height: 18%;
-		width: 35%;
+		justify-content: center;
 
-		.resistor {
-			margin-right: 5%;
-			margin-left: 5%;
+		img {
+			height: 70vmin;
+			width: auto;
+			z-index: -1;
+		}
+
+		[view="circuit"] {
+			&:not(.inactive) {
+				& ~ img {
+					opacity: 0;
+					width: 100vw;
+					height: 100vh;
+					transition: 1.2s;
+				}
+				& ~ div,
+				& ~ label {
+					opacity: 0;
+					transition: 1.2s;
+				}
+				.circuit > div {
+					animation: borders 2s;
+				}
+			}
+		}
+
+		.inactive > .circuit {
+			position: absolute;
+			left: 15vmin;
+			top: 21vmin;
+			margin: 0;
+
+			color: rgba(0, 0, 0, 0);
+			max-height: 100vmin;
+			max-width: 120vmin;
+			overflow: hidden;
+			animation: tst 3s;
+			transform-origin: 0 0;
+			transform: scale(0.15);
+
+			.wire {
+				--size: 4vmin;
+			}
+
+			.scale,
+			.arrow,
+			.buttons,
+			.label,
+			.precision {
+				opacity: 0;
+				transition: 2s;
+				transition-property: opacity;
+			}
+
+			& > div {
+				box-shadow: 0px 0px 0px;
+				border: solid 20px var(--color-text);
+				pointer-events: none;
+			}
+
+			cursor: pointer;
+		}
+
+		.circuit {
+			transition: 1.5s;
+
+			&.active {
+				animation: highlight 2.2s infinite;
+			}
+		}
+
+		.slot {
+			position: absolute;
+			left: 24.5%;
+			bottom: 27%;
+			width: 7%;
+			height: 18%;
+
+			transform: rotateZ(90deg);
+
+			.resistor {
+				animation: drop 0.4s ease-out;
+				filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
+				pointer-events: none;
+			}
+		}
+
+		& > input {
+			display: none;
+			&:checked + .clamp {
+				transform: rotateZ(180deg);
+				background-color: #505050;
+				z-index: 3;
+			}
+		}
+
+		.clamp {
+			position: absolute;
+
+			bottom: calc(34% - 3px);
+			width: 2%;
+			height: 4%;
+
+			border-radius: 50%;
+
+			border: solid 3px var(--color-text);
+			z-index: -1;
+			cursor: pointer;
 			transition: 0.2s;
 
-			&:hover {
-				transform: scale(0.9);
+			&.left {
+				left: calc(20% - 3px);
+			}
+			&.right {
+				left: calc(34% - 3px);
 			}
 		}
-	}
 
-	$resistances: 132, 242, 325, 464;
-	$assets: "assets/images";
-	@each $value in $resistances {
-		.resistor[data-resistance="#{$value}"] {
-			background-image: url("#{$assets}/resistor_#{$value}.svg");
+		.resistor {
+			width: 100%;
+			height: 100%;
+
+			filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.5));
+			background-size: contain;
+			background-position: center;
+			background-repeat: repeat-y;
+			cursor: grab;
 		}
-	}
 
-	.toggles {
-		position: absolute;
-		right: 4.1%;
-		bottom: 5.7%;
-		display: flex;
-		flex-direction: column;
+		.resistors {
+			position: absolute;
+			display: flex;
+			flex-direction: row;
+			left: 20%;
+			bottom: 5%;
+			height: 18%;
+			width: 35%;
 
-		.toggle {
-			display: inline-block;
-			position: relative;
-			width: 7em;
-			height: 4em;
-
-			font-size: 2vmin;
-			font-weight: bold;
-			text-align: center;
-			text-transform: uppercase;
-			color: #888;
-			border-bottom: 0.5em solid #fff;
-
-			user-select: none;
-			overflow: hidden;
-
-			&::before {
-				content: "";
-				position: absolute;
-				top: 1em;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background-color: #999;
-				border: 0.5em solid #fff;
-				border-bottom: 0;
-			}
-
-			& > input {
-				opacity: 0;
-				width: 0;
-				height: 0;
-
-				&:checked + .left {
-					background-color: #0084d0;
-					color: #fff;
-					bottom: 0px;
-					left: 0.5em;
-					height: 2.5em;
-					width: 3em;
-					transform: rotate(0deg) skewX(0deg);
-
-					&::before {
-						background-color: transparent;
-						width: 3.0833em;
-					}
-				}
-
-				&:checked + .left + .right {
-					background-color: #ddd;
-					color: #888;
-					bottom: 0.4em;
-					right: 0.8em;
-					height: 2.4em;
-					width: 2.75em;
-					transform: rotate(-15deg) skewX(-15deg);
-
-					&::before {
-						background-color: #ccc;
-					}
-				}
-			}
-
-			.left,
-			.right {
-				cursor: pointer;
-				position: absolute;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				height: 2.5em;
-				width: 3em;
+			.resistor {
+				margin-right: 5%;
+				margin-left: 5%;
 				transition: 0.2s;
+
+				&:hover {
+					transform: scale(0.9);
+				}
+			}
+		}
+
+		$resistances: 132, 242, 325, 464;
+		$assets: "assets/images";
+		@each $value in $resistances {
+			.resistor[data-resistance="#{$value}"] {
+				background-image: url("#{$assets}/resistor_#{$value}.svg");
+			}
+		}
+
+		.toggles {
+			position: absolute;
+			right: 4.1%;
+			bottom: 5.7%;
+			display: flex;
+			flex-direction: column;
+
+			.toggle {
+				display: inline-block;
+				position: relative;
+				width: 7em;
+				height: 4em;
+
+				font-size: 2vmin;
+				font-weight: bold;
+				text-align: center;
+				text-transform: uppercase;
+				color: #888;
+				border-bottom: 0.5em solid #fff;
+
+				user-select: none;
+				overflow: hidden;
 
 				&::before {
 					content: "";
 					position: absolute;
-					width: 0.4em;
-					height: 2.45em;
-					bottom: -0.45em;
-					background-color: #ccc;
-					transform: skewY(-65deg);
+					top: 1em;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background-color: #999;
+					border: 0.5em solid #fff;
+					border-bottom: 0;
 				}
-			}
 
-			.left {
-				height: 2.4em;
-				width: 2.75em;
-				left: 0.85em;
-				bottom: 0.4em;
-				background-color: #ddd;
-				transform: rotate(15deg) skewX(15deg);
+				& > input {
+					opacity: 0;
+					width: 0;
+					height: 0;
 
-				&::before {
-					left: -0.4em;
+					&:checked + .left {
+						background-color: #0084d0;
+						color: #fff;
+						bottom: 0px;
+						left: 0.5em;
+						height: 2.5em;
+						width: 3em;
+						transform: rotate(0deg) skewX(0deg);
+
+						&::before {
+							background-color: transparent;
+							width: 3.0833em;
+						}
+					}
+
+					&:checked + .left + .right {
+						background-color: #ddd;
+						color: #888;
+						bottom: 0.4em;
+						right: 0.8em;
+						height: 2.4em;
+						width: 2.75em;
+						transform: rotate(-15deg) skewX(-15deg);
+
+						&::before {
+							background-color: #ccc;
+						}
+					}
 				}
-			}
 
-			.right {
-				right: 0.5em;
-				bottom: 0;
-				background-color: #bd5757;
-				color: #fff;
+				.left,
+				.right {
+					cursor: pointer;
+					position: absolute;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 2.5em;
+					width: 3em;
+					transition: 0.2s;
 
-				&::before {
-					right: -0.375em;
-					background-color: transparent;
-					transform: skewY(65deg);
+					&::before {
+						content: "";
+						position: absolute;
+						width: 0.4em;
+						height: 2.45em;
+						bottom: -0.45em;
+						background-color: #ccc;
+						transform: skewY(-65deg);
+					}
+				}
+
+				.left {
+					height: 2.4em;
+					width: 2.75em;
+					left: 0.85em;
+					bottom: 0.4em;
+					background-color: #ddd;
+					transform: rotate(15deg) skewX(15deg);
+
+					&::before {
+						left: -0.4em;
+					}
+				}
+
+				.right {
+					right: 0.5em;
+					bottom: 0;
+					background-color: #bd5757;
+					color: #fff;
+
+					&::before {
+						right: -0.375em;
+						background-color: transparent;
+						transform: skewY(65deg);
+					}
 				}
 			}
 		}
-	}
 
-	.hint {
-		position: absolute;
-		right: 28.05%;
-		bottom: 23%;
-		width: 12%;
-		height: 20%;
+		.hint {
+			position: absolute;
+			right: 28.05%;
+			bottom: 23%;
+			width: 12%;
+			height: 20%;
 
-		border-radius: 8px;
-		background-color: rgb(240, 225, 143);
+			border-radius: 8px;
+			background-color: rgb(240, 225, 143);
 
-		z-index: 5;
-		transition: transform 0.3s;
+			z-index: 5;
+			transition: transform 0.3s;
 
-		cursor: pointer;
+			cursor: pointer;
 
-		.item {
-			position: relative;
-			left: 1vmin;
-			font-size: 1vmin;
-			margin: 0.8vmin;
-			transition: color 0.2s;
-
-			&::before {
-				content: "✘";
-				position: absolute;
-				left: -1em;
-				top: -0.23em;
-				color: hsl(0, 66%, 31%);
-			}
-
-			&.false::before {
-				animation: uncheck 0.5s;
-			}
-
-			&.true {
-				color: rgb(27, 133, 27);
+			.item {
+				position: relative;
+				left: 1vmin;
+				font-size: 1vmin;
+				margin: 0.8vmin;
+				transition: color 0.2s;
 
 				&::before {
-					animation: check 0.5s;
+					content: "✘";
+					position: absolute;
+					left: -1em;
+					top: -0.23em;
+					color: hsl(0, 66%, 31%);
+				}
+
+				&.false::before {
+					animation: uncheck 0.5s;
+				}
+
+				&.true {
 					color: rgb(27, 133, 27);
-					content: "✓";
+
+					&::before {
+						animation: check 0.5s;
+						color: rgb(27, 133, 27);
+						content: "✓";
+					}
 				}
 			}
-		}
 
-		&:hover {
-			transform: scale(5) translateY(-30%);
+			&:hover {
+				transform: scale(5) translateY(-30%);
+			}
 		}
 	}
 }

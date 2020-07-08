@@ -1,4 +1,4 @@
-import Manager, { IComponent, ComponentArgs } from "../common/manager.class";
+import Manager, { IComponentType } from "../common/manager.class";
 import Layout from "./models/layout.class";
 import EnvetsHandler from "./events";
 /**Componets */
@@ -22,70 +22,54 @@ import HelpView from "./views/help/help.view";
  * Main application class
  */
 export default class App {
-	private manger: Manager | null = null;
-	private events: EnvetsHandler | null = null;
+	private manager: Manager;
+
+	/**
+	 * Application constructor
+	 */
+	public constructor() {
+		const components: IComponentType[] = [
+			PowerController,
+			DevicesController,
+			MachineController,
+			TabsController,
+			TableController,
+			VariantController,
+			HintsController,
+			FooterView,
+			MachineView,
+			CircuitView,
+			TableView,
+			GreetingView,
+			HelpView,
+			DeviceView
+		];
+
+		this.manager = new Manager(components, {
+			events: EnvetsHandler,
+			scope: globalThis
+		});
+	}
 
 	/**
 	 * Initializes the app.
 	 * Note that the page should be already loaded
 	 */
 	public async initialize(): Promise<void> {
-		const components: IComponent[] = [
-			new PowerController(),
-			new DevicesController(),
-			new MachineController(),
-			new TabsController(),
-			new TableController(),
-			new VariantController(),
-			new HintsController(),
-			new FooterView(),
-			new MachineView(),
-			new CircuitView(),
-			new TableView(),
-			new GreetingView(),
-			new HelpView(),
-			new DeviceView("Voltmeter"),
-			new DeviceView("Ampermeter")
-		];
-
-		this.manger = new Manager(components);
-		this.events = new EnvetsHandler(components);
-
-		const args = await this.getComponentArguments();
-		await this.events.registerEvents();
-		await this.manger.initialize(args);
-	}
-
-	/**
-	 * Initializes arguments for the manager
-	 */
-	private async getComponentArguments(): Promise<ComponentArgs> {
-		if (!this.manger) {
-			throw new Error("Initialize manager first!");
-		}
-
-		return {
+		const config = {
 			//Resistance
 			Devices: [132],
 			//Maximum voltage
 			Power: [30],
-			Voltmeter: [
-				{
-					ranges: [0.5, 1, 2, 3],
-					step: 2,
-					label: "V",
-					precision: "1.5"
-				}
-			],
-			Ampermeter: [
-				{
-					ranges: [1, 2, 5, 20],
-					step: 20,
-					label: "mA",
-					precision: "2.0"
-				}
-			],
-			Table: [Layout]
+			TableCtrl: [Layout]
 		};
+		await this.manager.initialize(config);
+	}
+
+	/**
+	 * Closes the application
+	 */
+	public close(): void {
+		this.manager.close();
 	}
 }

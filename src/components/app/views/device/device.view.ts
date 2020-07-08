@@ -1,25 +1,6 @@
-import "./device.scss";
-import Template from "./device.pug";
 import View from "../../../common/view.abstract";
+import Template from "./device.pug";
+import "./device.scss";
 
-/**
- * Device view
- */
-export default class Device extends View {
-	public name: string;
-
-	public constructor(name: string) {
-		super(name);
-		this.name = name;
-
-		this.template = Template;
-	}
-
-	public render(template: Function | null = null, args: {} = {}): void {
-		super.render(template, {
-			buttons: (x: HTMLElement) => x.getAttribute("buttons") == "true",
-			name: this.name.toLocaleLowerCase(),
-			...args
-		});
-	}
-}
+/**Device view */
+export default class Device extends View(Template) {}

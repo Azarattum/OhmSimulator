@@ -3,8 +3,24 @@
 		controller="power"
 		onclick="Power.updateVoltage()"
 	) &#x26a1;
-	.element.meter.voltmeter(view="voltmeter" buttons="true")
-	.element.meter.ampermeter(view="ampermeter" buttons="true")
+	.element.meter.voltmeter(
+		view="device"
+		data-buttons="true"
+		data-name="voltmeter"
+		data-label="V"
+		data-step="2"
+		data-ranges="[0.5, 1, 2, 3]"
+		data-precision="1.5"
+	)
+	.element.meter.ampermeter(
+		view="device"
+		data-buttons="true"
+		data-name="ampermeter"
+		data-label="mA"
+		data-step="20"
+		data-ranges="[1, 2, 5, 20]"
+		data-precision="2.0"
+	)
 	.element.resistor &Omega;
 
 	.wire.top

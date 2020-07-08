@@ -1,14 +1,6 @@
-import "./greeting.scss";
-import Template from "./greeting.pug";
 import View from "../../../common/view.abstract";
+import Template from "./greeting.pug";
+import "./greeting.scss";
 
-/**
- * Greeting view
- */
-export default class Greeting extends View {
-	public constructor() {
-		super("Greeting");
-
-		this.template = Template;
-	}
-}
+/** Greeting view*/
+export default class Greeting extends View(Template) {}

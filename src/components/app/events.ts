@@ -1,56 +1,56 @@
-import { IComponent } from "../common/manager.class";
-import Power from "./controllers/power.controller";
+import { IComponent, IEventsHandler } from "../common/manager.class";
 import Devices from "./controllers/devices.controller";
 import Machine from "./controllers/machine.controller";
-import Tabs from "./controllers/tabs.controller";
 import Variant from "./controllers/variant.controller";
-import Device from "./views/device/device.view";
-import Variants from "./models/variants.class";
-import Table, { Result } from "./controllers/table.controller";
+import Power from "./controllers/power.controller";
+import TableCtrl, { Result } from "./controllers/table.controller";
+import Tabs from "./controllers/tabs.controller";
 import Hints from "./controllers/hints.controller";
+import Device from "./views/device/device.view";
 import Messages from "./models/messages.class";
+import Variants from "./models/variants.class";
 import Utils from "../common/utils.class";
 
 /**
  * Event handler for application components
  */
-export default class EnvetsHandler {
+export default class EventsHandler implements IEventsHandler {
 	private devicesController: Devices;
 	private machineController: Machine;
 	private variantController: Variant;
 	private powerController: Power;
-	private tableController: Table;
+	private tableController: TableCtrl;
 	private tabsController: Tabs;
 	private hintsController: Hints;
 
-	private voltmeterView: Device;
-	private ampermeterView: Device;
+	private deviceViewes: Device[];
 
 	/**
 	 * Creates new envet handler for components
 	 * @param components Components to handle interactions with
 	 */
-	public constructor(components: IComponent[]) {
-		const component: { [name: string]: IComponent } = {};
-		components.forEach(x => (component[x.name] = x));
-
+	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
+	public constructor(components: { [name: string]: IComponent[] }) {
 		//Defining all components
-		this.powerController = component["Power"] as Power;
-		this.devicesController = component["Devices"] as Devices;
-		this.machineController = component["Machine"] as Machine;
-		this.tabsController = component["Tabs"] as Tabs;
-		this.variantController = component["Variant"] as Variant;
-		this.tableController = component["Table"] as Table;
-		this.hintsController = component["Hints"] as Hints;
+		this.powerController = components["Power"][0] as Power;
+		this.devicesController = components["Devices"][0] as Devices;
+		this.tabsController = components["Tabs"][0] as Tabs;
+		this.variantController = components["Variant"][0] as Variant;
+		this.hintsController = components["Hints"][0] as Hints;
 
-		this.voltmeterView = component["Voltmeter"] as Device;
-		this.ampermeterView = component["Ampermeter"] as Device;
+		this.machineController = components["Machine"].find(
+			x => (x.constructor as any).type == "Controllers"
+		) as Machine;
+		this.tableController = components["TableCtrl"][0] as TableCtrl;
+
+		this.deviceViewes = components["Device"] as Device[];
 	}
 
 	/**
 	 * Registers all events for components
 	 */
 	public async registerEvents(): Promise<void> {
+		///Register your events here
 		//Tab changed event
 		this.tabsController.on("tabchanged", (tab: string) => {
 			if (tab == "greeting") {
@@ -84,19 +84,19 @@ export default class EnvetsHandler {
 			elements?.classList.toggle("swapped", variant.isSwapped);
 
 			//Rerender views
-			this.voltmeterView.render(null, {
-				ranges: [0.5, 1, 2, 3],
-				step: variant.voltmeterStep,
-				label: "V",
-				precision: variant.voltmeterPrecision.toFixed(1),
-				compact: (variant.compact + 2) % 3 == 0
-			});
-			this.ampermeterView.render(null, {
-				ranges: [1, 2, 5, 20],
-				step: variant.ampermeterStep,
-				label: "mA",
-				precision: variant.ampermeterPrecision.toFixed(1),
-				compact: variant.compact % 5 == 0
+			this.deviceViewes.forEach(device => {
+				const data = device.container?.dataset;
+				if (!data) return;
+				if (data.name == "voltmeter") {
+					data.step = variant.voltmeterStep.toString();
+					data.precision = variant.voltmeterPrecision.toFixed(1);
+					data.compact = ((variant.compact + 2) % 3 == 0).toString();
+				} else {
+					data.step = variant.ampermeterStep.toString();
+					data.precision = variant.ampermeterPrecision.toFixed(1);
+					data.compact = (variant.compact % 5 == 0).toString();
+				}
+				device.render();
 			});
 
 			//Update table validator

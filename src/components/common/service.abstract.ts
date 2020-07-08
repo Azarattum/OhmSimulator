@@ -1,4 +1,6 @@
 /* eslint @typescript-eslint/explicit-function-return-type: 0 */
+import { IComponent } from "./manager.class";
+import Utils from "./utils.class";
 
 /**
  * Event-driven service generic type builder
@@ -7,28 +9,29 @@ export default function Service<T extends string>() {
 	/**
 	 * Abstract of the service class
 	 */
-	abstract class Service {
+	abstract class Service implements IComponent {
 		/**Component type */
 		public static type: string = "Services";
-		/**Callbacks storage */
-		private static callbacks: { [type: string]: Function[] } = {};
+		/**Service universal unique id */
+		public readonly uuid: string;
+		/**Service name */
+		public readonly name: string;
+		/**Event resolution callback */
+		private resolve: Function | null;
+		/**Events queue */
+		private events: { type: string; args: any[] }[];
+		/**Map to all exposed functions */
+		private exposed: Map<string, Function>;
 
 		/**
-		 * Closes the service
+		 * Creates service class
 		 */
-		public static close(): void {
-			//Close the service
-			this.callbacks = {};
-		}
-
-		/**
-		 * Listens to a specified event in the service
-		 * @param type Event type
-		 * @param callback Callback function
-		 */
-		public static on(type: T, callback: Function): void {
-			if (!(type in this.callbacks)) this.callbacks[type] = [];
-			this.callbacks[type].push(callback);
+		public constructor() {
+			this.uuid = Utils.generateID();
+			this.name = this.constructor.name;
+			this.exposed = new Map();
+			this.resolve = null;
+			this.events = [];
 		}
 
 		/**
@@ -36,10 +39,41 @@ export default function Service<T extends string>() {
 		 * @param type Event type
 		 * @param args Arguments to pass to callbacks
 		 */
-		protected static emit(type: T, ...args: any[]): void {
-			if (this.callbacks[type]) {
-				this.callbacks[type].forEach(x => x.call(x, ...args));
+		protected emit(type: T, ...args: any[]): void {
+			if (this.resolve) {
+				this.resolve({ type, args });
+				this.resolve = null;
+				return;
 			}
+
+			this.events.push({ type, args });
+		}
+
+		/**
+		 * Returns a promise of the next emitted event.
+		 * Used by proxy wrapper, should not be used anywhere else!
+		 */
+		private async listen(): Promise<any> {
+			const event = new Promise(resolve => {
+				if (this.events.length) {
+					resolve(this.events.shift());
+					return;
+				}
+				this.resolve = resolve;
+			});
+
+			return event;
+		}
+
+		/**
+		 * Calls function by its id from exposed list.
+		 * Used by proxy wrapper, should not be used anywhere else!
+		 * @param id Exposed function unique id
+		 * @param args Call arguments
+		 */
+		private async call(id: string, ...args: any[]): Promise<any> {
+			const func = this.exposed.get(id);
+			if (func) return func(...args);
 		}
 
 		/**
@@ -49,24 +83,42 @@ export default function Service<T extends string>() {
 		 * @param name Name of the exposed function (in the scope of service)
 		 * @param func Exposed function
 		 */
-		protected static expose(
-			name: string,
-			func: Function | null = null
-		): void {
-			if (!(globalThis as any)[this.name]) {
-				(globalThis as any)[this.name] = {};
-			}
+		protected expose(name: string, func: Function | null = null): void {
+			const exposed =
+				func || ((this as any)[name] as Function).bind(this);
+			const id =
+				name +
+				"_" +
+				new Array(4)
+					.fill(0)
+					.map(() =>
+						Math.floor(
+							Math.random() * Number.MAX_SAFE_INTEGER
+						).toString(16)
+					)
+					.join("-");
 
-			if (func) {
-				(globalThis as any)[this.name][name] = func;
-			} else {
-				if (typeof (this as any)[name] != "function") {
-					throw new Error("The function to expose not found!");
-				}
-				(globalThis as any)[this.name][name] = (...args: any[]) => {
-					((this as any)[name] as Function).call(this, ...args);
-				};
-			}
+			this.exposed.set(id, exposed);
+			this.emit("__exposed" as any, name, id);
+		}
+
+		/**
+		 * Listens to a specified event in the service
+		 * @param type Event type
+		 * @param callback Callback function
+		 */
+		public on(type: T, callback: Function): void {
+			//Functionality will be taken by wrapper
+		}
+
+		/**
+		 * Closes the service
+		 */
+		public async close() {
+			this.exposed.clear();
+			this.resolve = null;
+			this.events = [];
+			self?.close();
 		}
 	}
 

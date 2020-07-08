@@ -1,24 +1,16 @@
-import View from "../../common/view.abstract";
 import Controller from "../../common/controller.abstract";
 
 /**
  * Service for controlling application views as tabs
  */
 export default class Tabs extends Controller<"tabchanged">() {
-	private tabs: View[] = [];
-
-	/**
-	 * Creates template controller
-	 */
-	public constructor(name: string = "Tabs") {
-		super(name);
-	}
+	private tabs: IView[] = [];
 
 	/**
 	 * Initializes tabs service
 	 * @param tabs Tabs views to control
 	 */
-	public initialize(tabs: View[]): void {
+	public initialize(tabs: IView[]): void {
 		this.tabs = tabs;
 
 		this.expose("change");
@@ -53,8 +45,9 @@ export default class Tabs extends Controller<"tabchanged">() {
 			}
 
 			this.container.querySelectorAll("[tab]").forEach(x => {
-				if (!(x as any).display)
+				if (!(x as any).display) {
 					(x as any).display = getComputedStyle(x).display;
+				}
 				(x as HTMLElement).style.display = "none";
 			});
 			(selected as HTMLElement).style.display =
@@ -64,4 +57,12 @@ export default class Tabs extends Controller<"tabchanged">() {
 
 		this.emit("tabchanged", name);
 	}
+}
+
+/**
+ * Togglable view interface
+ */
+interface IView {
+	name: string;
+	toggle(value?: boolean): void;
 }

@@ -60,36 +60,31 @@ export default class Utils {
 		}
 	}
 
+	/**
+	 * Formates string using placeholders.
+	 * Example: `hello {0}!` to `hello world!`, where `world` is your argument
+	 * @param string Format string
+	 * @param args Values to be inserted
+	 */
 	public static format(string: string, ...args: string[]): string {
 		for (const i in args) {
-			string = string.replace(`{${i}}`, args[i]);
+			const pattern = new RegExp(`[{]${i}[}]`, "g");
+			string = string.replace(pattern, args[i]);
 		}
 
 		return string;
 	}
 
 	/**
-	 * Merges properties of two objects
-	 * @param to Destination object
-	 * @param from Source objecr
+	 * Randomly generates universal unique id
 	 */
-	public static mergeObjects(to: any, from: any): void {
-		for (const key in from) {
-			if (typeof from[key] === "object") {
-				if (!to[key]) to[key] = {};
-				this.mergeObjects(to[key], from[key]);
-			} else {
-				if (!to[key]) {
-					to[key] = from[key];
-				} else if (Array.isArray(to[key])) {
-					if (!to[key].includes(from[key])) {
-						to[key].push(from[key]);
-					}
-				} else if (to[key] != from[key]) {
-					to[key] = [to[key], from[key]];
-				}
-			}
-		}
+	public static generateID(): string {
+		return new Array(4)
+			.fill(0)
+			.map(() =>
+				Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(16)
+			)
+			.join("-");
 	}
 }
 
