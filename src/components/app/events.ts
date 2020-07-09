@@ -10,6 +10,7 @@ import Device from "./views/device/device.view";
 import Messages from "./models/messages.class";
 import Variants from "./models/variants.class";
 import Utils from "../common/utils.class";
+import Table2Ctrl from "./controllers/table2.controller";
 
 /**
  * Event handler for application components
@@ -19,8 +20,9 @@ export default class EventsHandler implements IEventsHandler {
 	private machineController: Machine;
 	private variantController: Variant;
 	private powerController: Power;
-	private tableController: TableCtrl;
 	private exampleController: TableCtrl;
+	private tableController: TableCtrl;
+	private table2Controller: Table2Ctrl;
 	private tabsController: Tabs;
 	private hintsController: Hints;
 
@@ -30,7 +32,6 @@ export default class EventsHandler implements IEventsHandler {
 	 * Creates new envet handler for components
 	 * @param components Components to handle interactions with
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-useless-constructor
 	public constructor(components: { [name: string]: IComponent[] }) {
 		//Defining all components
 		this.powerController = components["Power"][0] as Power;
@@ -38,6 +39,7 @@ export default class EventsHandler implements IEventsHandler {
 		this.tabsController = components["Tabs"][0] as Tabs;
 		this.variantController = components["Variant"][0] as Variant;
 		this.hintsController = components["Hints"][0] as Hints;
+		this.table2Controller = components["Table2Ctrl"][0] as Table2Ctrl;
 
 		this.machineController = components["Machine"].find(
 			x => (x.constructor as any).type == "Controllers"
@@ -76,6 +78,16 @@ export default class EventsHandler implements IEventsHandler {
 				setTimeout(async () => {
 					this.hintsController.showHint(Messages.table);
 				}, 100);
+			} else if (tab == "complex") {
+				if (this.tableController.variant) {
+					this.table2Controller.setVariant(
+						this.tableController.variant
+					);
+				}
+
+				setTimeout(async () => {
+					this.hintsController.showHint(Messages.complex);
+				}, 100);
 			}
 		});
 
@@ -93,10 +105,13 @@ export default class EventsHandler implements IEventsHandler {
 		this.variantController.on("variantChanged", (id: number) => {
 			const variant = Variants.get(id);
 
-			const elements = document.querySelector(
-				"[view='table'][tab='table'] .elements"
+			const elements = document.querySelectorAll(
+				"[view='table'][tab='table'] .elements," +
+					"[view='table'][tab='complex'] .elements"
 			);
-			elements?.classList.toggle("swapped", variant.isSwapped);
+			elements.forEach(x =>
+				x.classList.toggle("swapped", variant.isSwapped)
+			);
 
 			//Rerender views
 			this.deviceViewes.forEach(device => {
@@ -108,19 +123,29 @@ export default class EventsHandler implements IEventsHandler {
 					data.step = variant.voltmeterStep.toString();
 					data.precision = variant.voltmeterPrecision.toFixed(1);
 					data.compact = ((variant.compact + 2) % 3 == 0).toString();
+					if (data.fixed != null) {
+						data.fixed = variant.voltmeterMultiplierId.toString();
+					}
 				} else {
 					data.step = variant.ampermeterStep.toString();
 					data.precision = variant.ampermeterPrecision.toFixed(1);
 					data.compact = (variant.compact % 5 == 0).toString();
+					if (data.fixed != null) {
+						data.fixed = variant.ampermeterMultiplierId.toString();
+					}
 				}
 				device.render();
 			});
 
 			//Update table validator
-			this.tableController.setVariant(variant);
+			if (this.tabsController.current == "table") {
+				this.tableController.setVariant(variant);
+			} else if (this.tabsController.current == "complex") {
+				this.table2Controller.setVariant(variant);
+			}
 		});
 
-		this.tableController.on("mistaken", (correct: string | null) => {
+		const mistaken = (correct: string | null): void => {
 			if (correct == null) {
 				this.hintsController.showHint(Messages.mistake);
 			} else {
@@ -131,14 +156,14 @@ export default class EventsHandler implements IEventsHandler {
 					Utils.format(Messages.correction, correct)
 				);
 			}
-		});
+		};
 
-		this.tableController.on("punished", () => {
+		const punished = (): void => {
 			this.hintsController.showHint(Messages.refresh, true);
 			this.variantController.refreshVariant();
-		});
+		};
 
-		this.tableController.on("done", (result: Result) => {
+		const done = (result: Result): void => {
 			let message = Messages.done;
 			if (result == Result.Exellent) {
 				message = Utils.format(message, Messages.exellent);
@@ -149,7 +174,15 @@ export default class EventsHandler implements IEventsHandler {
 			}
 
 			this.hintsController.showHint(message);
-		});
+		};
+
+		this.tableController.on("mistaken", mistaken);
+		this.tableController.on("punished", punished);
+		this.tableController.on("done", done);
+
+		this.table2Controller.on("mistaken", mistaken);
+		this.table2Controller.on("punished", punished);
+		this.table2Controller.on("done", done);
 
 		//Set defaul tab
 		this.tabsController.change("greeting");

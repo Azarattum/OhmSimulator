@@ -7,6 +7,7 @@ import PowerController from "./controllers/power.controller";
 import MachineController from "./controllers/machine.controller";
 import TabsController from "./controllers/tabs.controller";
 import TableController from "./controllers/table.controller";
+import Table2Controller from "./controllers/table2.controller";
 import VariantController from "./controllers/variant.controller";
 import HintsController from "./controllers/hints.controller";
 /**Views */
@@ -35,6 +36,7 @@ export default class App {
 			MachineController,
 			TabsController,
 			TableController,
+			Table2Controller,
 			VariantController,
 			HintsController,
 			FooterView,
@@ -63,7 +65,8 @@ export default class App {
 			Devices: [132],
 			//Maximum voltage
 			Power: [30],
-			TableCtrl: [Layout]
+			TableCtrl: [Layout],
+			Table2Ctrl: [Layout]
 		};
 		await this.manager.initialize(config);
 	}

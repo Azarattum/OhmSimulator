@@ -7,10 +7,11 @@ import Exposer from "../../common/exposer.class";
 /**
  * Table controller
  */
-export default class TableCtrl extends Controller<
+export default class Table2Ctrl extends Controller<
 	"mistaken" | "punished" | "done"
 >() {
 	private table: Handsontable | null = null;
+	private table2: Handsontable | null = null;
 	private layout: IData | null = null;
 	private next: HTMLButtonElement | null = null;
 	private mistakes: Map<number, number> = new Map();
@@ -18,20 +19,23 @@ export default class TableCtrl extends Controller<
 	private updates: number = 0;
 	public variant: IVariant | null = null;
 	public isExample: boolean = false;
+	public isComplex: boolean = false;
 
 	public constructor(exposer: Exposer, relation?: any) {
 		super(exposer, relation);
 		this.isExample = this.container.dataset.example === "true";
+		this.isComplex = this.container.dataset.complex === "true";
 	}
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
-		if (!table) {
+		const table2 = this.container.getElementsByClassName("table2")[0];
+		if (!table || !table2) {
 			throw new Error("Table container not found!");
 		}
 
 		this.layout = data;
-		this.table = this.createTable(table, data);
+		[this.table, this.table2] = this.createTables(table, table2, data);
 		this.next = this.container.getElementsByClassName(
 			"next"
 		)[0] as HTMLButtonElement;
@@ -82,6 +86,18 @@ export default class TableCtrl extends Controller<
 			return valid;
 		});
 
+		//Register second unit validator
+		Handsontable.validators.registerValidator("unit2", (val, callback) => {
+			const { row, col, value } = val;
+			const source = this.table2?.getCellMeta(row, col)
+				.source as string[];
+			let valid = this.layout?.units[this.getSelectedMeter(row) - 1];
+			valid = source.find(x => x.includes(valid || "_")) || "";
+
+			callback(value == null || value === "" || value == valid);
+			return valid;
+		});
+
 		//Register precision validator
 		Handsontable.validators.registerValidator(
 			"precision",
@@ -112,6 +128,37 @@ export default class TableCtrl extends Controller<
 			return valid;
 		});
 
+		//Register limit validator
+		Handsontable.validators.registerValidator(
+			"multiplier",
+			(val, callback) => {
+				const { row, value } = val;
+				const valid =
+					this.getSelectedMeter(row) == Meter.Ampermeter
+						? this.variant?.ampermeterMultiplier || 0
+						: this.variant?.voltmeterMultiplier || 0;
+
+				callback(value == null || value === "" || value == valid);
+				return valid;
+			}
+		);
+
+		//Register limit validator
+		Handsontable.validators.registerValidator("max", (val, callback) => {
+			const { row, value } = val;
+			const valid =
+				this.getSelectedMeter(row) == Meter.Ampermeter
+					? (this.variant?.ampermeterStep || 0) *
+					  5 *
+					  (this.variant?.ampermeterMultiplier || 0)
+					: (this.variant?.voltmeterStep || 0) *
+					  5 *
+					  (this.variant?.voltmeterMultiplier || 0);
+
+			callback(value == null || value === "" || value == valid);
+			return valid;
+		});
+
 		//Register cost validator
 		Handsontable.validators.registerValidator("cost", (val, callback) => {
 			const { row, value } = val;
@@ -126,8 +173,14 @@ export default class TableCtrl extends Controller<
 
 			const valid =
 				this.getSelectedMeter(row) == Meter.Ampermeter
-					? ((this.variant?.ampermeterStep || 0) * 5) / deviders
-					: ((this.variant?.voltmeterStep || 0) * 5) / deviders;
+					? ((this.variant?.ampermeterStep || 0) *
+							5 *
+							(this.variant?.ampermeterMultiplier || 0)) /
+					  deviders
+					: ((this.variant?.voltmeterStep || 0) *
+							5 *
+							(this.variant?.voltmeterMultiplier || 0)) /
+					  deviders;
 
 			callback(
 				value == null ||
@@ -154,9 +207,15 @@ export default class TableCtrl extends Controller<
 				const valid =
 					this.getSelectedMeter(row) == Meter.Ampermeter
 						? 1 /
-						  (((this.variant?.ampermeterStep || 0) * 5) / deviders)
+						  (((this.variant?.ampermeterStep || 0) *
+								5 *
+								(this.variant?.ampermeterMultiplier || 0)) /
+								deviders)
 						: 1 /
-						  (((this.variant?.voltmeterStep || 0) * 5) / deviders);
+						  (((this.variant?.voltmeterStep || 0) *
+								5 *
+								(this.variant?.voltmeterMultiplier || 0)) /
+								deviders);
 
 				callback(
 					value == null ||
@@ -175,10 +234,12 @@ export default class TableCtrl extends Controller<
 				this.getSelectedMeter(row) == Meter.Ampermeter
 					? ((this.variant?.ampermeterStep || 0) *
 							5 *
+							(this.variant?.ampermeterMultiplier || 0) *
 							(this.variant?.ampermeterPrecision || 1)) /
 					  100
 					: ((this.variant?.voltmeterStep || 0) *
 							5 *
+							(this.variant?.voltmeterMultiplier || 0) *
 							(this.variant?.voltmeterPrecision || 1)) /
 					  100;
 
@@ -220,7 +281,8 @@ export default class TableCtrl extends Controller<
 				}
 			}
 		} else {
-			this.updateValidation(null);
+			this.updateValidation(null, 1);
+			this.updateValidation(null, 2);
 		}
 	}
 
@@ -238,30 +300,39 @@ export default class TableCtrl extends Controller<
 		return Result.OK;
 	}
 
-	private updateValidation(changes: Handsontable.CellChange[] | null): void {
+	private updateValidation(
+		changes: Handsontable.CellChange[] | null,
+		table: number
+	): void {
 		if (this.isExample) return;
 		if (+(this.variant?.compact || 0) === 0) return;
 
 		this.table?.validateRows([0, 1, 2, 3], valid => {
-			if (!this.next) return;
-			this.next.disabled = true;
-			if (valid) {
-				let filled = +(this.variant?.compact || 0) !== 0;
-				for (let i = 0; i < 4; i++) {
-					filled =
-						filled && !!this.table?.getDataAtRow(i).every(x => x);
-				}
+			this.table2?.validateRows([0, 1, 2, 3], valid2 => {
+				if (!this.next) return;
+				this.next.disabled = true;
+				if (valid && valid2) {
+					let filled = +(this.variant?.compact || 0) !== 0;
+					for (let i = 0; i < 4; i++) {
+						filled =
+							filled &&
+							!!this.table?.getDataAtRow(i).every(x => x);
+						filled =
+							filled &&
+							!!this.table2?.getDataAtRow(i).every(x => x);
+					}
 
-				this.next.disabled = !filled;
-				if (filled) {
-					this.emit("done", this.getResult());
+					this.next.disabled = !filled;
+					if (filled) {
+						this.emit("done", this.getResult());
+					}
 				}
-			}
+			});
 		});
 
 		if (changes) {
 			for (const change of changes) {
-				this.registerMistake(change[0], +change[1], change[3]);
+				this.registerMistake(change[0], +change[1], change[3], table);
 			}
 		}
 	}
@@ -286,10 +357,17 @@ export default class TableCtrl extends Controller<
 		return Meter.None;
 	}
 
-	private registerMistake(row: number, col: number, value: string): void {
-		if (!this.table) return;
+	private registerMistake(
+		row: number,
+		col: number,
+		value: string,
+		table: number
+	): void {
+		if (!this.table || !this.table2) return;
 
-		const validator = this.table.getCellValidator(row, col) as Function;
+		const validator = (table == 1
+			? this.table.getCellValidator(row, col)
+			: this.table2?.getCellValidator(row, col)) as Function;
 		if (value === "") return;
 		if (Number.isFinite(+value) && col != 2) {
 			value = this.formatNumber(+value);
@@ -299,7 +377,10 @@ export default class TableCtrl extends Controller<
 		const correct = validator({ row, col, value }, () => {});
 
 		if (correct == value) return;
-		const index = row * this.table.countCols() + col;
+		const index =
+			row * (this.table.countCols() + this.table2.countCols()) +
+			col +
+			(table == 2 ? 1000 : 0);
 		let current = this.mistakes.get(index) || 0;
 		this.mistakes.set(index, ++current);
 
@@ -313,7 +394,11 @@ export default class TableCtrl extends Controller<
 		}
 	}
 
-	private createTable(container: Element, data: IData): Handsontable {
+	private createTables(
+		container: Element,
+		container2: Element,
+		data: IData
+	): [Handsontable, Handsontable] {
 		//Register type validator
 		Handsontable.validators.registerValidator("type", (val, callback) => {
 			const { value } = val;
@@ -323,52 +408,11 @@ export default class TableCtrl extends Controller<
 			return this.layout?.types[0];
 		});
 
-		const columns: any[] = [
-			{
-				type: "dropdown",
-				source: data.meters,
-				validator: "device"
-			},
-			{
-				type: "dropdown",
-				source: data.types,
-				validator: "type",
-				width: 196
-			},
-			{
-				type: "text",
-				validator: "precision"
-			},
-			{
-				type: "numeric",
-				validator: "deviders"
-			},
-			{
-				type: "numeric",
-				validator: "limit"
-			},
-			{
-				type: "numeric",
-				validator: "cost"
-			},
-			{
-				type: "numeric",
-				validator: "sensitivity"
-			},
-			{
-				type: "numeric",
-				validator: "error"
-			}
-		];
-
-		const table = new Handsontable(container, {
+		const settings: Handsontable.GridSettings = {
 			className: "htCenter htMiddle",
 			headerTooltips: true,
-			colHeaders: data.headers,
-			data: data.data,
 			wordWrap: true,
 			licenseKey: "non-commercial-and-evaluation",
-			afterChange: this.updateValidation.bind(this),
 			beforeValidate: (value, row, col): any => {
 				return { row, col, value };
 			},
@@ -378,23 +422,48 @@ export default class TableCtrl extends Controller<
 				}
 				return value;
 			},
-			allowInvalid: true,
-			columns: columns,
+			allowInvalid: true
+		};
+
+		const table = new Handsontable(container, {
+			...settings,
+			afterChange: (changes): void => {
+				this.updateValidation(changes, 1);
+			},
+			data: data.complexData[0],
+			colHeaders: data.complexHeaders.slice(0, 5),
+			columns: [
+				{
+					type: "dropdown",
+					source: data.meters,
+					validator: "device"
+				},
+				{
+					type: "dropdown",
+					source: data.types,
+					validator: "type",
+					width: 196
+				},
+				{
+					type: "text",
+					validator: "precision"
+				},
+				{
+					type: "numeric",
+					validator: "deviders"
+				},
+				{
+					type: "numeric",
+					validator: "limit"
+				}
+			],
 			cells: (row, col, prop): object => {
 				const cellProperties: any = {};
 
 				if (row == 0 || row == 2) {
-					if (col == 4 || col == 7) {
+					if (col == 4) {
 						cellProperties.type = "dropdown";
 						cellProperties.source = data.units;
-						cellProperties.validator = "unit";
-					} else if (col == 5) {
-						cellProperties.type = "dropdown";
-						cellProperties.source = data.costUnits;
-						cellProperties.validator = "unit";
-					} else if (col == 6) {
-						cellProperties.type = "dropdown";
-						cellProperties.source = data.precisionUnits;
 						cellProperties.validator = "unit";
 					} else {
 						cellProperties.type = "text";
@@ -410,7 +479,66 @@ export default class TableCtrl extends Controller<
 			}
 		});
 
-		return table;
+		const table2 = new Handsontable(container2, {
+			...settings,
+			data: data.complexData[1],
+			afterChange: (changes): void => {
+				this.updateValidation(changes, 2);
+			},
+			colHeaders: data.complexHeaders.slice(5, 10),
+			columns: [
+				{
+					type: "numeric",
+					validator: "multiplier"
+				},
+				{
+					type: "numeric",
+					validator: "max"
+				},
+				{
+					type: "numeric",
+					validator: "cost"
+				},
+				{
+					type: "numeric",
+					validator: "sensitivity"
+				},
+				{
+					type: "numeric",
+					validator: "error"
+				}
+			],
+			cells: (row, col, prop): object => {
+				const cellProperties: any = {};
+
+				if (row == 0 || row == 2) {
+					if (col == 4 || col == 1) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.units;
+						cellProperties.validator = "unit2";
+					} else if (col == 2) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.costUnits;
+						cellProperties.validator = "unit2";
+					} else if (col == 3) {
+						cellProperties.type = "dropdown";
+						cellProperties.source = data.precisionUnits;
+						cellProperties.validator = "unit2";
+					} else {
+						cellProperties.type = "text";
+						cellProperties.readOnly = true;
+						cellProperties.validator = null;
+					}
+				}
+				if (this.isExample) {
+					cellProperties.editor = false;
+				}
+
+				return cellProperties;
+			}
+		});
+
+		return [table, table2];
 	}
 
 	private formatNumber(number: number): string {
@@ -436,9 +564,11 @@ enum Meter {
 }
 
 interface IData {
+	complexHeaders: string[];
 	headers: string[];
 	subHeaders: string[];
 	data: string[][];
+	complexData: string[][][];
 	meters: string[];
 	types: string[];
 	units: string[];

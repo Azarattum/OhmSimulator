@@ -39,7 +39,9 @@
                     textpath(xlink:href="#curve"+uuid)
                         | |....|....|....|....|....|....|....|....|....|....|
     .arrow
-    .label=label
+    div(
+        class=buttons ? "label with-buttons" : "label"
+    )=label
     if precision
         .precision #{precision.replace(".",",")}
     .system ⩂
@@ -50,10 +52,11 @@
                 input(
                     id=name+"-radio-"+index+"-"+uuid
                     type="radio"
-                    name=name+"-range"
+                    name=name+"-range" + ((fixed != null) ? "-fixed" : "")
                     value=range
-                    checked=index==0
-                    onclick="Devices.updateValues()"
+                    checked=(index==(fixed || 0))
+                    disabled=(fixed != null)
+                    onclick=(fixed != null)? "" : "Devices.updateValues()"
                 )
                 label(
                     for=name+"-radio-"+index+"-"+uuid

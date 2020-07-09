@@ -9,10 +9,18 @@ export default class Layout {
 			"Класс точности (γ)",
 			"Число делений (N)",
 			"Предел шкалы (A&#8344;)",
-			"Цена деления прибора (C=A/N)",
+			"Цена деления прибора (C=A&#8344;/N)",
 			"Чувствительность (S=1/C)",
 			"Абсолютная погрешность (ΔA=γA&#8344;/100)"
 		];
+	}
+
+	public static get complexHeaders(): string[] {
+		const headers = this.headers;
+		headers[4] = headers[4].replace("&#8344;", "шк");
+		headers.splice(5, 0, "Множитель (Мн)");
+		headers.splice(6, 0, "Предел измерения (A&#8344;)");
+		return headers;
 	}
 
 	public static get subHeaders(): string[] {
@@ -25,6 +33,23 @@ export default class Layout {
 			["", "", "", "", "", "", ""],
 			this.subHeaders,
 			["", "", "", "", "", "", ""]
+		];
+	}
+
+	public static get complexData(): string[][][] {
+		return [
+			[
+				[...this.subHeaders, ""],
+				["", "", "", "", ""],
+				[...this.subHeaders, ""],
+				["", "", "", "", ""]
+			],
+			[
+				["-", "", "", "", ""],
+				["", "", "", "", ""],
+				["-", "", "", "", ""],
+				["", "", "", "", ""]
+			]
 		];
 	}
 

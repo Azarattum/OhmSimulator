@@ -70,7 +70,7 @@
         .label {
             position: absolute;
             left: 50%;
-            top: 30%;
+
             transform: translateX(-50%);
 
             opacity: 0.6;
@@ -78,6 +78,14 @@
             font-size: calc(2 * var(--unit));
 
             z-index: 0;
+
+            &.with-buttons {
+                top: 30%;
+            }
+
+            &:not(.with-buttons) {
+                top: 55%;
+            }
         }
 
         .precision {

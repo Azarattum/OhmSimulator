@@ -6,6 +6,7 @@ import Controller from "../../common/controller.abstract";
 export default class Tabs extends Controller<"tabchanged">() {
 	private tabs: IView[] = [];
 	public visits: Map<string, number> = new Map();
+	public current: string = "";
 
 	/**
 	 * Initializes tabs service
@@ -59,6 +60,7 @@ export default class Tabs extends Controller<"tabchanged">() {
 		if (!name) return;
 		const visits = this.visits.get(name) || 0;
 		this.visits.set(name, visits + 1);
+		this.current = name;
 		this.emit("tabchanged", name);
 	}
 }

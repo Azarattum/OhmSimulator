@@ -66,6 +66,7 @@
             display: flex;
             width: 100vw;
             justify-content: space-evenly;
+            margin-bottom: 32px;
 
             &.swapped {
                 flex-direction: row-reverse;
@@ -83,10 +84,6 @@
 
                 .arrow {
                     top: calc(3.9 * var(--unit));
-                }
-
-                .label {
-                    top: 55%;
                 }
 
                 .precision,
@@ -146,11 +143,11 @@
             }
         }
 
-        .table {
-            margin-top: 64px;
-            overflow: hidden;
+        &>.table,
+        &>.table2 {
+            margin-top: 32px;
 
-            .handsontable .wtHolder {
+            &>.handsontable>.wtHolder {
                 display: flex;
                 justify-content: center;
             }
