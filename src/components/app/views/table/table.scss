@@ -60,6 +60,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        max-width: 100vw;
 
         .elements {
             display: flex;
@@ -147,6 +148,12 @@
 
         .table {
             margin-top: 64px;
+            overflow: hidden;
+
+            .handsontable .wtHolder {
+                display: flex;
+                justify-content: center;
+            }
 
             .handsontable table thead th {
                 white-space: pre-line;

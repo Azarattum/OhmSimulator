@@ -329,6 +329,9 @@ export default class TableCtrl extends Controller<
 			colHeaders: data.headers,
 			data: data.data,
 			wordWrap: true,
+			width: "90%",
+
+			height: "auto",
 			licenseKey: "non-commercial-and-evaluation",
 			afterChange: this.updateValidation.bind(this),
 			beforeValidate: (value, row, col): any => {
