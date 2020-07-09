@@ -2,6 +2,7 @@ import "handsontable/dist/handsontable.full.css";
 import Handsontable from "handsontable";
 import Controller from "../../common/controller.abstract";
 import { IVariant } from "../models/variants.class";
+import Exposer from "../../common/exposer.class";
 
 /**
  * Table controller
@@ -16,6 +17,12 @@ export default class TableCtrl extends Controller<
 	private mistakes: Map<number, number> = new Map();
 	private errors: number = 0;
 	private updates: number = 0;
+	public isExample: boolean = false;
+
+	public constructor(exposer: Exposer, relation?: any) {
+		super(exposer, relation);
+		this.isExample = this.container.dataset.example === "true";
+	}
 
 	public initialize(data: IData): void {
 		const table = this.container.getElementsByClassName("table")[0];
@@ -232,6 +239,7 @@ export default class TableCtrl extends Controller<
 	}
 
 	private updateValidation(changes: Handsontable.CellChange[] | null): void {
+		if (this.isExample) return;
 		if (+(this.variant?.compact || 0) === 0) return;
 
 		this.table?.validateRows([0, 1, 2, 3], valid => {
@@ -392,6 +400,9 @@ export default class TableCtrl extends Controller<
 						cellProperties.validator = null;
 					}
 				}
+				if (this.isExample) {
+					cellProperties.editor = false;
+				}
 
 				return cellProperties;
 			}
@@ -402,7 +413,11 @@ export default class TableCtrl extends Controller<
 
 	private formatNumber(number: number): string {
 		const exp = new RegExp("^-?\\d+(?:.\\d{0,2})?");
-		return (number.toString().match(exp) || [""])[0].replace(/[.]?0+$/, "");
+		let formatted = (number.toString().match(exp) || [""])[0];
+		if (formatted.includes(".")) {
+			formatted = formatted.replace(/[.]?0+$/, "");
+		}
+		return formatted;
 	}
 }
 

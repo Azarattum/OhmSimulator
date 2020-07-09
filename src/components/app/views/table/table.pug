@@ -1,33 +1,43 @@
-label.variants
-    select(
-        controller="variant"
-        onchange="Controller.setVariant(this.value)"
-    )
-        option(value=0) Пример
-        - for (var i = 1; i <= 30; ++i) {
-            option(value=i) Вариант #{i}
-        - }
+if example !== "true"
+    label.variants
+        select(
+            controller="variant"
+            onchange="Controller.setVariant(this.value)"
+        )
+            option(selected disabled) Ваш Вариант?
+            - for (var i = 1; i <= 30; ++i) {
+                option(value=i) Вариант #{i}
+            - }
 
 .content
-    .elements
+    .elements.swapped
         .meter.voltmeter(
             view="device"
+            data-example=example
             data-buttons="false"
             data-name="voltmeter"
             data-label="V"
             data-step="2"
             data-ranges="[0.5, 1, 2, 3]"
-            data-precision="1.5"
+            data-precision="1.0"
+            data-compact="false"
         )
         .meter.ampermeter(
             view="device"
+            data-example=example
             data-buttons="false"
             data-name="ampermeter"
             data-label="mA"
-            data-step="20"
+            data-step="5"
             data-ranges="[1, 2, 5, 20]"
-            data-precision="2.0"
+            data-precision="1.0"
+            data-compact="true"
         )
     .table
 
-button.next(onclick="Tabs.change('machine')" disabled) Продолжить
+.buttons
+    if example === "true"
+        button.next(onclick="Tabs.change('table')") Продолжить
+    else
+        button(onclick="Tabs.change('example')") Назад
+        button.next(onclick="Tabs.change('machine')" disabled) Продолжить

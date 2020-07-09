@@ -20,6 +20,7 @@ export default class EventsHandler implements IEventsHandler {
 	private variantController: Variant;
 	private powerController: Power;
 	private tableController: TableCtrl;
+	private exampleController: TableCtrl;
 	private tabsController: Tabs;
 	private hintsController: Hints;
 
@@ -41,7 +42,12 @@ export default class EventsHandler implements IEventsHandler {
 		this.machineController = components["Machine"].find(
 			x => (x.constructor as any).type == "Controllers"
 		) as Machine;
-		this.tableController = components["TableCtrl"][0] as TableCtrl;
+		this.tableController = components["TableCtrl"].find(
+			x => !(x as TableCtrl).isExample
+		) as TableCtrl;
+		this.exampleController = components["TableCtrl"].find(
+			x => (x as TableCtrl).isExample
+		) as TableCtrl;
 
 		this.deviceViewes = components["Device"] as Device[];
 	}
@@ -50,16 +56,23 @@ export default class EventsHandler implements IEventsHandler {
 	 * Registers all events for components
 	 */
 	public async registerEvents(): Promise<void> {
-		///Register your events here
 		//Tab changed event
 		this.tabsController.on("tabchanged", (tab: string) => {
+			if ((this.tabsController.visits.get(tab) || 0) > 1) {
+				return;
+			}
+
 			if (tab == "greeting") {
 				setTimeout(async () => {
 					this.hintsController.showHint(Messages.greet);
 				}, 100);
+			} else if (tab == "example") {
+				//Set example
+				this.exampleController.setVariant(Variants.get(0));
+				setTimeout(async () => {
+					this.hintsController.showHint(Messages.example);
+				}, 100);
 			} else if (tab == "table") {
-				//Set default variant
-				this.variantController.setVariant(0);
 				setTimeout(async () => {
 					this.hintsController.showHint(Messages.table);
 				}, 100);
@@ -80,13 +93,17 @@ export default class EventsHandler implements IEventsHandler {
 		this.variantController.on("variantChanged", (id: number) => {
 			const variant = Variants.get(id);
 
-			const elements = document.querySelector("[view='table'] .elements");
+			const elements = document.querySelector(
+				"[view='table'][tab='table'] .elements"
+			);
 			elements?.classList.toggle("swapped", variant.isSwapped);
 
 			//Rerender views
 			this.deviceViewes.forEach(device => {
 				const data = device.container?.dataset;
 				if (!data) return;
+				if (data.example === "true") return;
+
 				if (data.name == "voltmeter") {
 					data.step = variant.voltmeterStep.toString();
 					data.precision = variant.voltmeterPrecision.toFixed(1);
