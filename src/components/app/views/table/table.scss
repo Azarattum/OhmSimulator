@@ -90,15 +90,26 @@
                 .label,
                 .arrow,
                 .system,
-                .scale {
+                .scale,
+                label {
                     cursor: help;
+                }
+
+                label {
+                    transform: translateX(0);
+                    z-index: 1;
+                }
+
+                .system {
+                    z-index: 2;
                 }
 
                 .precision:hover::after,
                 .label:hover::after,
                 .arrow:hover::before,
                 .system:hover::after,
-                .scale:hover::after {
+                .scale:hover::after,
+                label:hover::after {
                     position: absolute;
                     left: 50%;
                     bottom: 100%;
@@ -106,6 +117,7 @@
                     transform: translateX(-50%);
 
                     font-size: 14px;
+                    font-weight: normal;
                     padding: 4px;
                     border-radius: 4px;
                     background-color: white;
@@ -120,6 +132,14 @@
 
                 .precision:hover::after {
                     content: "Класс точности";
+                }
+
+                label:hover::after {
+                    content: "Кнопка множителя";
+                }
+
+                input:checked+label:hover::after {
+                    content: "Выбранный множитель" !important;
                 }
 
                 .scale:hover::after {
