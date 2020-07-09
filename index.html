@@ -1,8 +1,5 @@
 <!DOCTYPE html><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" id="bar"><title>Ohm Simulator</title><style>/* Core styles */
 body {
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	min-height: 100vh;
 
 	--color-text: rgb(63, 60, 66);
@@ -14,6 +11,14 @@ body {
 	font-size: 16px;
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--color-text);
+}
+
+.page {
+	min-height: calc(100vh - 96px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 32px;
 }
 
 body > .hints {
@@ -41,14 +46,14 @@ body > .hints > .hint {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.hint:not(.no-hide) {
+body > .hints > .hint:not(.no-hide) {
 	opacity: 0;
 }
-.hint:not(.no-hide) > .close {
+body > .hints > .hint:not(.no-hide) > .close {
 	display: none;
 }
 
-.hint > .close {
+body > .hints > .hint > .close {
 	position: absolute;
 	font-size: 0.4em;
 	opacity: 0.8;
@@ -56,7 +61,7 @@ body > .hints > .hint {
 	animation: blink 1s 1s;
 }
 
-.hint.no-hide {
+body > .hints > .hint.no-hide {
 	animation: hint-in 0.8s !important;
 	transition: opacity 0.6s;
 	opacity: 1;
@@ -64,7 +69,7 @@ body > .hints > .hint {
 	cursor: pointer;
 }
 
-.hint.hidden {
+body > .hints > .hint.hidden {
 	opacity: 0;
 }
 
@@ -114,4 +119,4 @@ body > .hints > .hint {
 		opacity: 1;
 	}
 }
-</style></head><body><div class="hints" controller="hints"><div class="hint" iterate="data.hints"><div class="text"></div><div class="close"></div></div></div><div controller="tabs"><div tab="greeting" view="greeting"></div><div tab="machine" view="machine"></div><div tab="table" view="table" controller="table"></div><div tab="help" view="help"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
+</style></head><body><div class="hints" controller="hints"><div class="hint" iterate="data.hints"><div class="text"></div><div class="close"></div></div></div><div class="page" controller="tabs"><div tab="greeting" view="greeting"></div><div tab="machine" view="machine"></div><div tab="example" view="table" controller="tablectrl" data-example="true"></div><div tab="table" view="table" controller="tablectrl"></div><div tab="help" view="help"></div><div tab="help2" view="help2"></div></div><div view="footer"></div><script type="text/javascript" src="23.bundle.js"></script><script type="text/javascript" src="26.bundle.js"></script><script type="text/javascript" src="3.bundle.js"></script><script type="text/javascript" src="22.bundle.js"></script><script type="text/javascript" src="9.bundle.js"></script><script type="text/javascript" src="29.bundle.js"></script><script type="text/javascript" src="10.bundle.js"></script><script type="text/javascript" src="11.bundle.js"></script><script type="text/javascript" src="21.bundle.js"></script><script type="text/javascript" src="7.bundle.js"></script><script type="text/javascript" src="17.bundle.js"></script><script type="text/javascript" src="1.bundle.js"></script><script type="text/javascript" src="16.bundle.js"></script><script type="text/javascript" src="12.bundle.js"></script><script type="text/javascript" src="20.bundle.js"></script><script type="text/javascript" src="14.bundle.js"></script><script type="text/javascript" src="4.bundle.js"></script><script type="text/javascript" src="24.bundle.js"></script><script type="text/javascript" src="15.bundle.js"></script><script type="text/javascript" src="2.bundle.js"></script><script type="text/javascript" src="8.bundle.js"></script><script type="text/javascript" src="27.bundle.js"></script><script type="text/javascript" src="13.bundle.js"></script><script type="text/javascript" src="19.bundle.js"></script><script type="text/javascript" src="6.bundle.js"></script><script type="text/javascript" src="5.bundle.js"></script><script type="text/javascript" src="25.bundle.js"></script><script type="text/javascript" src="18.bundle.js"></script><script type="text/javascript" src="28.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body></html>
