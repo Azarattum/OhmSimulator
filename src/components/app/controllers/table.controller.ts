@@ -74,9 +74,11 @@ export default class TableCtrl extends Controller<
 		//Register unit validator
 		Handsontable.validators.registerValidator("unit", (val, callback) => {
 			const { row, col, value } = val;
-			const source = this.table?.getCellMeta(row, col).source as string[];
+			const source = this.table?.getCellMeta(row, col).source as
+				| string[]
+				| undefined;
 			let valid = this.layout?.units[this.getSelectedMeter(row) - 1];
-			valid = source.find(x => x.includes(valid || "_")) || "";
+			valid = source?.find(x => x.includes(valid || "_")) || "";
 
 			callback(value == null || value === "" || value == valid);
 			return valid;
