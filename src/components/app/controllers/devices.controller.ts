@@ -9,6 +9,7 @@ export default class Devices extends Controller<"">() {
 
 	public initialize(resistance: number): void {
 		this.resistance = resistance;
+		this.bind();
 
 		this.expose("updateValues");
 	}
@@ -34,6 +35,17 @@ export default class Devices extends Controller<"">() {
 	 * @param voltage New voltage
 	 */
 	public updateValues(voltage: number = this.voltage): void {
+		this.voltage = voltage;
+		if (
+			this.data.voltage1 === "false" &&
+			this.data.voltage2 === "false" &&
+			this.data.voltage3 === "false"
+		) {
+			this.voltmeter?.style.setProperty("--value", "0");
+			this.ampermeter?.style.setProperty("--value", "0");
+			return;
+		}
+
 		if (this.voltmeter) {
 			const scalar =
 				Number.parseFloat(
@@ -63,7 +75,5 @@ export default class Devices extends Controller<"">() {
 
 			this.ampermeter.style.setProperty("--value", value.toString());
 		}
-
-		this.voltage = voltage;
 	}
 }

@@ -137,6 +137,9 @@ export default class EventsHandler implements IEventsHandler {
 				device.render();
 			});
 
+			//Update resistance
+			this.devicesController.setResistance(variant.resistance);
+
 			//Update table validator
 			if (this.tabsController.current == "table") {
 				this.tableController.setVariant(variant);

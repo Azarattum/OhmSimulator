@@ -1,0 +1,50 @@
+.header Измерительный стенд для тестирования
+.content
+	.setup(controller="devices")
+		.element.meter.voltmeter(
+			view="device"
+			data-buttons="true"
+			data-name="voltmeter"
+			data-label="V"
+			data-step="2"
+			data-ranges="[0.5, 1, 2, 3]"
+			data-precision="1.5"
+		)
+		.element.meter.ampermeter(
+			view="device"
+			data-buttons="true"
+			data-name="ampermeter"
+			data-label="mA"
+			data-step="20"
+			data-ranges="[1, 2, 5, 20]"
+			data-precision="2.0"
+		)
+		.power(
+			controller="power"
+			onclick="Controller.updateVoltage()"
+		)
+		.toggles
+			label.toggle
+				input(
+					type="radio" name="voltage"
+					bind="data.voltage1"
+					onclick="setTimeout(() => {Devices.updateValues()}, 0);Power.updateMax(30);"
+				)
+				span.left 30V
+				span.right &#x2B58;
+			label.toggle
+				input(
+					type="radio" name="voltage"
+					bind="data.voltage2"
+					onclick="setTimeout(() => {Devices.updateValues()}, 0);Power.updateMax(24);"
+				)
+				span.left 24V
+				span.right &#x2B58;
+			label.toggle
+				input(
+					type="radio" name="voltage"
+					bind="data.voltage3"
+					onclick="setTimeout(() => {Devices.updateValues()}, 0);Power.updateMax(220);"
+				)
+				span.left 220V
+				span.right &#x2B58;

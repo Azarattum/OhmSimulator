@@ -15,6 +15,17 @@ export default class Power extends Controller<"voltageChanged">() {
 		this.step = maximum / precision;
 
 		this.expose("updateVoltage");
+		this.expose("updateMax");
+	}
+
+	/**
+	 * Updates maximum voltage
+	 * @param maximum Maximum voltage
+	 */
+	public updateMax(maximum: number): void {
+		this.maximum = maximum;
+		this.voltage = -this.step;
+		this.updateVoltage();
 	}
 
 	/**

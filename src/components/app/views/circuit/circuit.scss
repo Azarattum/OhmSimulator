@@ -1,151 +1,145 @@
 @font-face {
-	font-family: "NotoEmoji-Regular";
-	src: url("assets/fonts/NotoEmoji-Regular.ttf") format("truetype");
-	unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;
+    font-family: "NotoEmoji-Regular";
+    src: url("assets/fonts/NotoEmoji-Regular.ttf") format("truetype");
+    unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;
 }
 
 [view="circuit"] {
-	.circuit {
-		position: absolute;
-		left: 0;
-		top: 0;
-		--margin: 64px;
-		--width: calc(100vw - var(--margin) * 2);
-		--height: 40vw;
+    .circuit {
+        position: absolute;
+        left: 0;
+        top: 0;
+        --margin: 64px;
+        --width: calc(100vw - var(--margin) * 2);
+        --height: 40vw;
 
-		width: var(--width);
-		margin: var(--margin);
+        width: var(--width);
+        margin: var(--margin);
 
-		.element {
-			box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
-			border-radius: 16px;
+        .element {
+            box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
 
-			background-color: rgb(240, 240, 240);
-			font-size: 5vw;
-			text-align: center;
-		}
+            background-color: rgb(240, 240, 240);
+            font-size: 5vw;
+            text-align: center;
+        }
 
-		.meter {
-			position: absolute;
-			display: flex;
-			align-items: center;
+        .meter {
+            position: absolute;
+            display: flex;
+            align-items: center;
 
-			width: calc(var(--width) / 6);
-			height: calc(var(--height) / 3);
+            width: calc(var(--width) / 6);
+            height: calc(var(--height) / 3);
 
-			transition: 0.2s;
-			transition-property: transform;
-			cursor: pointer;
+            transition: 0.2s;
+            transition-property: transform;
+            cursor: pointer;
 
-			&:hover {
-				transform: scale(1.6);
+            &:hover {
+                transform: scale(1.6);
 
-				z-index: 100;
-			}
-		}
+                z-index: 100;
+            }
+        }
 
-		.wire {
-			--size: 8px;
+        .wire {
+            --size: 8px;
 
-			position: absolute;
+            position: absolute;
 
-			background-color: rgb(80, 80, 80);
-			z-index: -1;
-		}
+            background-color: rgb(80, 80, 80);
+            z-index: -1;
+        }
 
-		.power {
-			--level: 0;
-			width: calc(var(--width) / 6);
-			height: var(--height);
+        .power {
+            --level: 0;
+            width: calc(var(--width) / 6);
+            height: var(--height);
 
-			line-height: var(--height);
-			font-family: "NotoEmoji-Regular";
+            line-height: var(--height);
+            font-family: "NotoEmoji-Regular";
 
-			transition: 0.2s;
-			transition-property: box-shadow;
-			overflow: hidden;
-			user-select: none;
-			cursor: pointer;
+            transition: 0.2s;
+            transition-property: box-shadow;
+            overflow: hidden;
+            user-select: none;
+            cursor: pointer;
 
-			&:active {
-				box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.6);
-			}
+            &:active {
+                box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.6);
+            }
 
-			&:before {
-				content: "⚡";
-				display: block;
-				position: absolute;
-				bottom: 0;
-				left: 0;
+            &:before {
+                content: "⚡";
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
 
-				width: calc(var(--width) / 6);
-				height: calc(var(--height) * var(--level));
-				line-height: calc(var(--height) + 9px);
+                width: calc(var(--width) / 6);
+                height: calc(var(--height) * var(--level));
+                line-height: calc(var(--height) + 9px);
 
-				background: linear-gradient(
-					180deg,
-					rgba(39, 0, 56, 1) 0%,
-					rgba(76, 9, 134, 1) 43%,
-					rgba(0, 108, 255, 1) 100%
-				);
-				background-size: 1px var(--height);
+                background: linear-gradient(180deg,
+                        rgba(39, 0, 56, 1) 0%,
+                        rgba(76, 9, 134, 1) 43%,
+                        rgba(0, 108, 255, 1) 100%);
+                background-size: 1px var(--height);
 
-				transition: 0.3s;
-				transition-property: height;
-				overflow: hidden;
-				transform: scale(-1, -1);
-				border-radius: inherit;
-				color: white;
-				z-index: 0;
-			}
-		}
+                transition: 0.3s;
+                transition-property: height;
+                overflow: hidden;
+                transform: scale(-1, -1);
+                border-radius: inherit;
+                color: white;
+                z-index: 0;
+            }
+        }
 
-		.voltmeter {
-			top: calc(var(--height) / 2 - var(--height) / 6);
-			left: calc(var(--width) / 6 * 2);
-		}
+        .voltmeter {
+            top: calc(var(--height) / 2 - var(--height) / 6);
+            left: calc(var(--width) / 6 * 2);
+        }
 
-		.ampermeter {
-			top: 0px;
-			left: calc(var(--width) / 6 * 3);
-		}
+        .ampermeter {
+            top: 0px;
+            left: calc(var(--width) / 6 * 3);
+        }
 
-		.resistor {
-			position: absolute;
+        .resistor {
+            position: absolute;
 
-			top: calc(var(--height) / 2 - var(--height) * 0.4);
-			right: 0;
+            top: calc(var(--height) / 2 - var(--height) * 0.4);
+            right: 0;
 
-			width: calc(var(--width) / 14);
-			height: calc(var(--height) * 0.8);
-			line-height: calc(var(--height) * 0.8);
-		}
+            width: calc(var(--width) / 14);
+            height: calc(var(--height) * 0.8);
+            line-height: calc(var(--height) * 0.8);
+        }
 
-		.wire.top {
-			top: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
+        .wire.top {
+            top: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
 
-			width: var(--width);
-			height: var(--size);
-		}
+            width: var(--width);
+            height: var(--size);
+        }
 
-		.wire.bottom {
-			bottom: calc(
-				var(--height) / 3 - var(--height) / 6 - var(--size) / 2
-			);
+        .wire.bottom {
+            bottom: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
 
-			width: var(--width);
-			height: var(--size);
-		}
+            width: var(--width);
+            height: var(--size);
+        }
 
-		.wire.vertical {
-			top: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
-			bottom: calc(
-				var(--height) / 3 - var(--height) / 6 - var(--size) / 2
-			);
-			left: calc(var(--width) / 6 * 2 + var(--width) / 12);
+        .wire.vertical {
+            top: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
+            bottom: calc(var(--height) / 3 - var(--height) / 6 - var(--size) / 2);
+            left: calc(var(--width) / 6 * 2 + var(--width) / 12);
 
-			width: var(--size);
-			height: auto;
-		}
-	}
+            width: var(--size);
+            height: auto;
+        }
+    }
 }

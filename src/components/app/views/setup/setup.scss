@@ -1,0 +1,226 @@
+[view="setup"] {
+    .header {
+        width: 100vw;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100vw;
+        transform: translate(0, 0);
+
+        .setup {
+            display: block;
+            width: 920px;
+            height: 720px;
+            background-image: url("assets/images/setup.jpg");
+            transform: translate(0, 0);
+
+            border-radius: 16px;
+
+            .element {
+                box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+                border-radius: 16px;
+
+                background-color: rgb(240, 240, 240);
+                font-size: 5vw;
+                text-align: center;
+            }
+
+            .meter {
+                position: absolute;
+                display: flex;
+                align-items: center;
+
+                width: 300px;
+                height: 220px;
+                --height: calc(240px * 3);
+
+                transition: 0.2s;
+                transition-property: transform;
+                cursor: pointer;
+
+                .arrow {
+                    top: calc(3.9 * var(--unit));
+                }
+
+                .buttons {
+                    margin-top: calc(2 * var(--unit));
+                }
+
+                &:hover {
+                    transform: scale(1.6);
+
+                    z-index: 100;
+                }
+            }
+
+            .voltmeter {
+                top: 50px;
+                left: 8px;
+            }
+
+            .ampermeter {
+                top: 50px;
+                left: 320px;
+            }
+
+            .toggles {
+                position: absolute;
+                right: 8px;
+                top: 325px;
+                display: flex;
+                flex-direction: column;
+
+                .toggle {
+                    display: inline-block;
+                    position: relative;
+                    width: 7em;
+                    height: 4em;
+
+                    font-size: 2vmin;
+                    font-weight: bold;
+                    text-align: center;
+                    text-transform: uppercase;
+                    color: #888;
+                    border-bottom: 0.5em solid #fff;
+
+                    user-select: none;
+                    overflow: hidden;
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        top: 1em;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #999;
+                        border: 0.5em solid #fff;
+                        border-bottom: 0;
+                    }
+
+                    &>input {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+
+                        &:checked+.left {
+                            background-color: #0084d0;
+                            color: #fff;
+                            bottom: 0px;
+                            left: 0.5em;
+                            height: 2.5em;
+                            width: 3em;
+                            transform: rotate(0deg) skewX(0deg);
+
+                            &::before {
+                                background-color: transparent;
+                                width: 3.0833em;
+                            }
+                        }
+
+                        &:checked+.left+.right {
+                            background-color: #ddd;
+                            color: #888;
+                            bottom: 0.4em;
+                            right: 0.8em;
+                            height: 2.4em;
+                            width: 2.75em;
+                            transform: rotate(-15deg) skewX(-15deg);
+
+                            &::before {
+                                background-color: #ccc;
+                            }
+                        }
+                    }
+
+                    .left,
+                    .right {
+                        cursor: pointer;
+                        position: absolute;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 2.5em;
+                        width: 3em;
+                        transition: 0.2s;
+
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            width: 0.4em;
+                            height: 2.45em;
+                            bottom: -0.45em;
+                            background-color: #ccc;
+                            transform: skewY(-65deg);
+                        }
+                    }
+
+                    .left {
+                        height: 2.4em;
+                        width: 2.75em;
+                        left: 0.85em;
+                        bottom: 0.4em;
+                        background-color: #ddd;
+                        transform: rotate(15deg) skewX(15deg);
+
+                        &::before {
+                            left: -0.4em;
+                        }
+                    }
+
+                    .right {
+                        right: 0.5em;
+                        bottom: 0;
+                        background-color: #bd5757;
+                        color: #fff;
+
+                        &::before {
+                            right: -0.375em;
+                            background-color: transparent;
+                            transform: skewY(65deg);
+                        }
+                    }
+                }
+            }
+
+            .power {
+                --level: 0;
+                position: absolute;
+                top: 465px;
+                left: 700px;
+                width: 64px;
+                height: 64px;
+
+                border-radius: 100%;
+                background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(55, 55, 55, 1) 100%);
+
+                overflow: hidden;
+                cursor: pointer;
+
+                transform: rotateZ(calc(360deg * var(--level)));
+                transition: 0.2s transform;
+
+                &:after {
+                    position: absolute;
+                    top: -4px;
+                    left: 27px;
+                    content: "";
+                    width: 10px;
+                    height: 32px;
+                    background-color: grey;
+                    opacity: 0.4;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+}
