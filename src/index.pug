@@ -18,9 +18,17 @@ html(lang="en")
         .page(controller="tabs")
             div(tab="greeting" view="greeting")
             div(tab="machine" view="machine")
-            div(tab="example" view="table" controller="tablectrl" data-example="true")
-            div(tab="table" view="table" controller="tablectrl")
-            div(tab="complex" view="table" controller="table2ctrl" data-complex="true")
+            div(tab="example" view="table"
+                controller="tablectrl" data-example="true"
+                data-title="Пример заполнения таблицы для однопредельных приборов"
+            )
+            div(tab="table" view="table" controller="tablectrl"
+                data-title="Характеристики однопредельных приборов"
+            )
+            div(tab="complex" view="table"
+                controller="table2ctrl" data-complex="true"
+                data-title="Характеристики многопредельных приборов"    
+            )
             div(tab="help" view="help")
             div(tab="help2" view="help2")
         div(view="footer")

@@ -1,7 +1,7 @@
 [view="table"] {
     .variants {
         position: absolute;
-        top: 8px;
+        top: 0px;
         left: 50vw;
         transform: translateX(-50%);
         color: #555;
@@ -56,11 +56,22 @@
         }
     }
 
+    .header {
+        width: 100vw;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
     .content {
         display: flex;
         flex-direction: column;
         align-items: center;
         max-width: 100vw;
+        transform: translate(0, 0);
 
         .elements {
             display: flex;

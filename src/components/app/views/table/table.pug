@@ -1,15 +1,16 @@
-if example !== "true" && complex !== "true"
-    label.variants
-        select(
-            controller="variant"
-            onchange="Controller.setVariant(this.value)"
-        )
-            option(selected disabled) Ваш Вариант?
-            - for (var i = 1; i <= 30; ++i) {
-                option(value=i) Вариант #{i}
-            - }
-
+.header=title
 .content
+    if example !== "true" && complex !== "true"
+        label.variants
+            select(
+                controller="variant"
+                onchange="Controller.setVariant(this.value)"
+            )
+                option(selected disabled) Ваш Вариант?
+                - for (var i = 1; i <= 30; ++i) {
+                    option(value=i) Вариант #{i}
+                - }
+
     .elements.swapped
         .meter.voltmeter(
             view="device"
