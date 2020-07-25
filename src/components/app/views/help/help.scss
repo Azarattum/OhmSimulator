@@ -1,5 +1,6 @@
 [view="help"],
-[view="help2"] {
+[view="help2"],
+[view="help3"] {
     padding-bottom: 64px;
     max-width: 80vw;
     display: flex;
@@ -15,6 +16,7 @@
         transform: translateX(-50%);
         max-width: 80%;
         max-height: 50vh;
+        border-radius: 16px;
     }
 
     .card {

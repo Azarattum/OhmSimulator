@@ -19,6 +19,7 @@ import TableView from "./views/table/table.view";
 import GreetingView from "./views/greeting/greeting.view";
 import HelpView from "./views/help/help.view";
 import Help2View from "./views/help2/help2.view";
+import Help3View from "./views/help3/help3.view";
 
 /**
  * Main application class
@@ -46,6 +47,7 @@ export default class App {
 			GreetingView,
 			HelpView,
 			Help2View,
+			Help3View,
 			DeviceView
 		];
 
