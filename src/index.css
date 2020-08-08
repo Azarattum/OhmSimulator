@@ -73,6 +73,18 @@ body > .hints > .hint.hidden {
 	opacity: 0;
 }
 
+.debug {
+	position: fixed;
+	color: blue;
+	background-color: rgba(0, 0, 0, 0.1);
+	padding: 8px;
+	z-index: 99999;
+}
+.debug > p {
+	cursor: pointer;
+	margin: 4px;
+}
+
 @keyframes blink {
 	0% {
 		color: currentColor;

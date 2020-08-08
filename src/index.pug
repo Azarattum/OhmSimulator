@@ -11,6 +11,13 @@ html(lang="en")
         style
             include index.css
     body
+        .debug
+            p(onclick="Tabs.change('greeting')") Main
+            p(onclick="Tabs.change('help')") Help
+            p(onclick="Tabs.change('example')") Example
+            p(onclick="Tabs.change('table')") Table 1
+            p(onclick="Tabs.change('complex')") Table 2
+            p(onclick="Tabs.change('machine')") Machine
         .hints(controller="hints")
             .hint(iterate="data.hints")
                 .text
