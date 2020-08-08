@@ -65,8 +65,8 @@ export default class App {
 		const config = {
 			//Resistance
 			Devices: [132],
-			//Maximum voltage
-			Power: [30],
+			//Default maximum voltage
+			Power: [24],
 			TableCtrl: [Layout],
 			Table2Ctrl: [Layout]
 		};

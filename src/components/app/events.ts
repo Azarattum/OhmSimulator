@@ -88,6 +88,10 @@ export default class EventsHandler implements IEventsHandler {
 				setTimeout(async () => {
 					this.hintsController.showHint(Messages.complex);
 				}, 100);
+			} else if (tab == "machine") {
+				setTimeout(async () => {
+					this.hintsController.showHint(Messages.machine);
+				}, 100);
 			}
 		});
 
@@ -99,6 +103,18 @@ export default class EventsHandler implements IEventsHandler {
 		//Resistor changed event
 		this.machineController.on("resistorChanged", (resistance: number) => {
 			this.devicesController.setResistance(resistance);
+		});
+
+		this.machineController.on("powered", () => {
+			this.hintsController.showHint(Messages.powered, true);
+		});
+
+		this.machineController.on("ready", () => {
+			this.hintsController.showHint(Messages.ready);
+		});
+
+		this.machineController.on("activated", () => {
+			this.hintsController.showHint(Messages.activated);
 		});
 
 		//Register variant update

@@ -27,31 +27,26 @@
 			)
 
 	.hint
-		p(class!="item " + data.voltage) 1) Toggle on 30V
-		p(class!="item " + data.resistor) 2) Insert resistor
-		p(class!="item " + data.clamps.left) 3) Close left clamp
-		p(class!="item " + data.clamps.right) 4) Close right clamp
+		p(class!="item " + data.resistor) Закрепите резистор к клеммам
+		p(class!="item " + data.clamps.left) Закрутите левую клемму
+		p(class!="item " + data.clamps.right) Закрутите правую клемму
+		p(class!="item " + data.power) Включите установку
+		p(class!="item " + data.voltage) Установите 24В
 
 	.toggles
 		label.toggle
 			input(
-				type="radio" name="voltage"
+				type="checkbox"
 				bind="data.voltage"
-				onclick="Controller.updateStage()"
-			)
-			span.left 30V
-			span.right &#x2B58;
-		label.toggle
-			input(
-				type="radio" name="voltage"
 				onclick="Controller.updateStage()"
 			)
 			span.left 24V
 			span.right &#x2B58;
 		label.toggle
 			input(
-				type="radio" name="voltage"
+				type="checkbox"
+				bind="data.power"
 				onclick="Controller.updateStage()"
 			)
-			span.left 220V
+			span.left |
 			span.right &#x2B58;

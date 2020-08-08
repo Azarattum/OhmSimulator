@@ -3,10 +3,13 @@ import Controller from "../../common/controller.abstract";
 /**
  * Machine controller
  */
-export default class Machine extends Controller<"resistorChanged">() {
+export default class Machine extends Controller<
+	"resistorChanged" | "powered" | "ready" | "activated"
+>() {
 	private resistors: HTMLElement | null = null;
 	private slot: HTMLElement | null = null;
 	private circuit: HTMLElement | null = null;
+	private active: boolean = false;
 
 	public initialize(): void {
 		this.bind();
@@ -24,13 +27,17 @@ export default class Machine extends Controller<"resistorChanged">() {
 	}
 
 	public updateStage(): void {
+		const power = this.data.power;
 		setTimeout(() => {
 			this.circuit?.classList.remove("active");
+			if (this.data.power == "false") return;
+			if (power == "false") this.emit("powered");
 			if (!this.slot?.children.length) return;
 			if (this.data.clamps.left == "false") return;
 			if (this.data.clamps.right == "false") return;
 			if (this.data.voltage == "false") return;
 
+			this.emit("ready");
 			this.circuit?.classList.add("active");
 		}, 0);
 	}
@@ -86,10 +93,13 @@ export default class Machine extends Controller<"resistorChanged">() {
 	 * Activates the machine and moves to the next stage
 	 */
 	public activate(): void {
+		if (this.active) return;
 		if (!this.slot?.children.length) return;
 		if (this.data.clamps.left == "false") return;
 		if (this.data.clamps.right == "false") return;
 		if (this.data.voltage == "false") return;
+		if (this.data.power == "false") return;
+		this.active = true;
 
 		const img = this.container.querySelector("img");
 		const width = img?.clientWidth;
@@ -103,5 +113,6 @@ export default class Machine extends Controller<"resistorChanged">() {
 		const inactive = this.container.querySelector(".inactive");
 		this.circuit?.classList.remove("active");
 		inactive?.classList.remove("inactive");
+		this.emit("activated");
 	}
 }

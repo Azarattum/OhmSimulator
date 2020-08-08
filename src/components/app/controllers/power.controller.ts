@@ -9,7 +9,7 @@ export default class Power extends Controller<"voltageChanged">() {
 	private maximum: number = 100;
 	private step: number = 1;
 
-	public initialize(maximum: number = 100, precision: number = 10): void {
+	public initialize(maximum: number = 24, precision: number = 12): void {
 		this.voltage = 0;
 		this.maximum = maximum;
 		this.step = maximum / precision;
