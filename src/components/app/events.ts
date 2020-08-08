@@ -11,6 +11,7 @@ import Messages from "./models/messages.class";
 import Variants from "./models/variants.class";
 import Utils from "../common/utils.class";
 import Table2Ctrl from "./controllers/table2.controller";
+import Charter from "./controllers/charter.controller";
 
 /**
  * Event handler for application components
@@ -25,6 +26,7 @@ export default class EventsHandler implements IEventsHandler {
 	private table2Controller: Table2Ctrl;
 	private tabsController: Tabs;
 	private hintsController: Hints;
+	private charterController: Charter;
 
 	private deviceViewes: Device[];
 
@@ -44,6 +46,9 @@ export default class EventsHandler implements IEventsHandler {
 		this.machineController = components["Machine"].find(
 			x => (x.constructor as any).type == "Controllers"
 		) as Machine;
+		this.charterController = components["Charter"].find(
+			x => (x.constructor as any).type == "Controllers"
+		) as Charter;
 		this.tableController = components["TableCtrl"].find(
 			x => !(x as TableCtrl).isExample
 		) as TableCtrl;
@@ -99,6 +104,10 @@ export default class EventsHandler implements IEventsHandler {
 		//Voltage changed event
 		this.powerController.on("voltageChanged", (voltage: number) => {
 			this.devicesController.updateValues(voltage);
+			this.charterController.setValues(
+				this.devicesController.voltage,
+				this.devicesController.amperage
+			);
 		});
 
 		//Resistor changed event
@@ -123,6 +132,7 @@ export default class EventsHandler implements IEventsHandler {
 
 		this.machineController.on("activated", () => {
 			this.hintsController.showHint(Messages.activated);
+			this.charterController.activate();
 		});
 
 		//Register variant update
@@ -172,6 +182,17 @@ export default class EventsHandler implements IEventsHandler {
 				this.table2Controller.setVariant(variant);
 			}
 		});
+
+		this.charterController.on(
+			"pointAttempt",
+			(voltage: number | null, amperage: number | null) => {
+				if (voltage == null || amperage == null) {
+					this.hintsController.showHint(Messages.wrong);
+				} else {
+					this.hintsController.showHint(Messages.registered);
+				}
+			}
+		);
 
 		const mistaken = (correct: string | null): void => {
 			if (correct == null) {

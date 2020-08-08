@@ -61,7 +61,6 @@ export default class Machine extends Controller<
 
 	public setResistance(resistance: number): void {
 		this.validResistance = +resistance;
-		console.log(resistance);
 	}
 
 	public setResistor(resistance: number): void {
@@ -82,7 +81,6 @@ export default class Machine extends Controller<
 		);
 		if (element) {
 			this.slot.appendChild(element);
-			console.log(resistance);
 			if (+resistance === this.validResistance) {
 				this.data.resistor = "true";
 			} else {

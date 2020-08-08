@@ -10,6 +10,7 @@ import TableController from "./controllers/table.controller";
 import Table2Controller from "./controllers/table2.controller";
 import VariantController from "./controllers/variant.controller";
 import HintsController from "./controllers/hints.controller";
+import CharterController from "./controllers/charter.controller";
 /**Views */
 import MachineView from "./views/machine/machine.view";
 import CircuitView from "./views/circuit/circuit.view";
@@ -20,6 +21,7 @@ import GreetingView from "./views/greeting/greeting.view";
 import HelpView from "./views/help/help.view";
 import Help2View from "./views/help2/help2.view";
 import Help3View from "./views/help3/help3.view";
+import CharterView from "./views/charter/charter.view";
 
 /**
  * Main application class
@@ -40,9 +42,11 @@ export default class App {
 			Table2Controller,
 			VariantController,
 			HintsController,
+			CharterController,
 			FooterView,
 			MachineView,
 			CircuitView,
+			CharterView,
 			TableView,
 			GreetingView,
 			HelpView,

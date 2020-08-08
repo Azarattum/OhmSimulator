@@ -4,8 +4,9 @@ import Controller from "../../common/controller.abstract";
  * Device controller
  */
 export default class Devices extends Controller<"">() {
-	private voltage: number = 0;
-	private resistance: number = 1;
+	public voltage: number = 0;
+	public amperage: number = 0;
+	public resistance: number = 1;
 
 	public initialize(resistance: number): void {
 		this.resistance = resistance;
@@ -36,6 +37,7 @@ export default class Devices extends Controller<"">() {
 	 */
 	public updateValues(voltage: number = this.voltage): void {
 		this.voltage = voltage;
+		this.amperage = (voltage / this.resistance) * 1000;
 		if (
 			this.data.voltage1 === "false" &&
 			this.data.voltage2 === "false" &&
