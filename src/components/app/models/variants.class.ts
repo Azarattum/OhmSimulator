@@ -15,7 +15,7 @@ export default class Variants {
 	}
 
 	private static get resistances(): number[] {
-		return [40, 50, 100, 120, 200];
+		return [50, 100, 120, 200];
 	}
 
 	public static get(id: number): IVariant {
@@ -28,7 +28,7 @@ export default class Variants {
 			voltmeterMultiplierId: (id * 3) % 4,
 			isSwapped: id % 2 == 0,
 			compact: id,
-			resistance: this.resistances[id % 5]
+			resistance: this.resistances[id % 4]
 		} as IVariant;
 
 		const voltmeterRanges = [0.5, 1, 2, 3];

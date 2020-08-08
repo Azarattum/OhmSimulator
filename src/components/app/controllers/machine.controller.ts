@@ -10,6 +10,7 @@ export default class Machine extends Controller<
 	private slot: HTMLElement | null = null;
 	private circuit: HTMLElement | null = null;
 	private active: boolean = false;
+	private validResistance: number = 50;
 
 	public initialize(): void {
 		this.bind();
@@ -33,6 +34,7 @@ export default class Machine extends Controller<
 			if (this.data.power == "false") return;
 			if (power == "false") this.emit("powered");
 			if (!this.slot?.children.length) return;
+			if (this.data.resistor == "false") return;
 			if (this.data.clamps.left == "false") return;
 			if (this.data.clamps.right == "false") return;
 			if (this.data.voltage == "false") return;
@@ -57,6 +59,11 @@ export default class Machine extends Controller<
 		this.setResistor(+resistance);
 	}
 
+	public setResistance(resistance: number): void {
+		this.validResistance = +resistance;
+		console.log(resistance);
+	}
+
 	public setResistor(resistance: number): void {
 		if (!this.slot) return;
 		if (
@@ -75,8 +82,17 @@ export default class Machine extends Controller<
 		);
 		if (element) {
 			this.slot.appendChild(element);
-			this.data.resistor = "true";
-			this.emit("resistorChanged", resistance);
+			console.log(resistance);
+			if (+resistance === this.validResistance) {
+				this.data.resistor = "true";
+			} else {
+				this.data.resistor = "false";
+			}
+			this.emit(
+				"resistorChanged",
+				resistance,
+				this.data.resistor == "true"
+			);
 		}
 	}
 
@@ -95,6 +111,7 @@ export default class Machine extends Controller<
 	public activate(): void {
 		if (this.active) return;
 		if (!this.slot?.children.length) return;
+		if (this.data.resistor == "false") return;
 		if (this.data.clamps.left == "false") return;
 		if (this.data.clamps.right == "false") return;
 		if (this.data.voltage == "false") return;

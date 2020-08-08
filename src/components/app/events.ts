@@ -102,9 +102,16 @@ export default class EventsHandler implements IEventsHandler {
 		});
 
 		//Resistor changed event
-		this.machineController.on("resistorChanged", (resistance: number) => {
-			this.devicesController.setResistance(resistance);
-		});
+		this.machineController.on(
+			"resistorChanged",
+			(resistance: number, right: boolean) => {
+				if (!right) {
+					this.hintsController.showHint(Messages.resistor);
+					return;
+				}
+				this.devicesController.setResistance(resistance);
+			}
+		);
 
 		this.machineController.on("powered", () => {
 			this.hintsController.showHint(Messages.powered, true);
@@ -156,6 +163,7 @@ export default class EventsHandler implements IEventsHandler {
 
 			//Update resistance
 			this.devicesController.setResistance(variant.resistance);
+			this.machineController.setResistance(variant.resistance);
 
 			//Update table validator
 			if (this.tabsController.current == "table") {

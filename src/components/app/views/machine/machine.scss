@@ -161,7 +161,7 @@
 			}
 		}
 
-		$resistances: 132, 242, 325, 464;
+		$resistances: 50, 100, 120, 200;
 		$assets: "assets/images";
 		@each $value in $resistances {
 			.resistor[data-resistance="#{$value}"] {
