@@ -1,4 +1,5 @@
 import Controller, { element } from "../../common/controller.abstract";
+import Chart from "chart.js";
 
 /**
  * Charter controller
@@ -6,8 +7,12 @@ import Controller, { element } from "../../common/controller.abstract";
 export default class Charter extends Controller<"pointAttempt">() {
 	@element("table")
 	private table: HTMLElement | null = null;
+	@element(".bar")
+	private bar: HTMLElement | null = null;
 	@element(".graph")
 	private graph: HTMLElement | null = null;
+	@element(".chart")
+	private chart: HTMLElement | null = null;
 
 	private points: { x: number; y: number }[] = [];
 
@@ -17,6 +22,58 @@ export default class Charter extends Controller<"pointAttempt">() {
 	public initialize(): void {
 		this.bind();
 		this.expose("add");
+		this.expose("showChart");
+		this.expose("hideChart");
+	}
+
+	public showChart(): void {
+		if (!this.chart) return;
+		const canvas = this.chart.querySelector("canvas") as HTMLCanvasElement;
+		const context = canvas.getContext("2d");
+		if (!context) return;
+
+		new Chart(context, {
+			type: "line",
+			data: {
+				datasets: [
+					{
+						data: this.points,
+						lineTension: 0,
+						backgroundColor: "rgba(0, 0, 0, 0.8)",
+						borderColor: "rgba(0, 0, 0, 0.6)",
+						fill: false
+					}
+				]
+			},
+			options: {
+				legend: { display: false },
+				scales: {
+					yAxes: [
+						{
+							scaleLabel: {
+								display: true,
+								labelString: "I (мА)"
+							}
+						}
+					],
+					xAxes: [
+						{
+							type: "linear",
+							scaleLabel: {
+								display: true,
+								labelString: "U (В)"
+							}
+						}
+					]
+				}
+			}
+		});
+
+		this.chart.classList.add("active");
+	}
+
+	public hideChart(): void {
+		this.chart?.classList.remove("active");
 	}
 
 	public add(): void {
@@ -29,7 +86,7 @@ export default class Charter extends Controller<"pointAttempt">() {
 			!this.graph ||
 			x < 0 ||
 			y < 0 ||
-			this.points.find(p => p.x == x && p.y == y)
+			this.points.find(p => p.x == x || p.y == y)
 		) {
 			return;
 		}
@@ -47,6 +104,7 @@ export default class Charter extends Controller<"pointAttempt">() {
 		this.table.style.display = "inline-table";
 		this.graph.style.display = "block";
 		this.points.push({ x, y });
+		this.points.sort((a, b) => a.x - b.x);
 
 		this.data.points = this.points;
 		this.emit("pointAttempt", x, y);
@@ -58,6 +116,6 @@ export default class Charter extends Controller<"pointAttempt">() {
 	}
 
 	public activate(): void {
-		this.container.style.transform = "none";
+		if (this.bar) this.bar.style.transform = "none";
 	}
 }

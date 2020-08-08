@@ -1,14 +1,17 @@
-.inputbox
-    h3.title Резултаты
-    input(type="text" bind="data.voltage" placeholder="В")
-    input(type="text" bind="data.amperage" placeholder="мА")
-    br
-    button(onclick="Controller.add()") ОК
-    table
-        tr
-            th U
-            th I
-        tr(iterate="data.points")
-            td!=data.points.x
-            td!=data.points.y
-    button.graph(onclick="") График
+.bar
+    .inputbox
+        h3.title Резултаты
+        input(type="text" bind="data.voltage" placeholder="В")
+        input(type="text" bind="data.amperage" placeholder="мА")
+        br
+        button(onclick="Controller.add()") ОК
+        table
+            tr
+                th U
+                th I
+            tr(iterate="data.points")
+                td!=data.points.x
+                td!=data.points.y
+        button.graph(onclick="Controller.showChart()") График
+.chart
+    canvas(width="600" height="400" onclick="Controller.hideChart()")

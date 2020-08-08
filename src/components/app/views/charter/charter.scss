@@ -1,80 +1,110 @@
 [view="charter"] {
-	position: fixed;
-	top: 0;
-	right: 0;
-	height: 100vh;
-	width: max-content;
-	display: flex;
-	align-items: center;
-	pointer-events: none;
+	position: absolute;
+	.bar {
+		position: fixed;
+		top: 0;
+		right: 0;
+		height: 100vh;
+		width: max-content;
+		display: flex;
+		align-items: center;
+		pointer-events: none;
 
-	transition: transform 1s;
-	transform: translateX(110%);
+		transition: transform 1s;
+		transform: translateX(110%);
 
-	h3 {
-		margin: 4px;
+		h3 {
+			margin: 4px;
+		}
+
+		.inputbox {
+			pointer-events: all;
+			background-color: white;
+			box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.3);
+			padding: 16px;
+			border-radius: 16px;
+
+			input {
+				margin: 4px;
+				width: 48px;
+			}
+
+			button {
+				width: calc(100% - 8px);
+				margin: 4px;
+
+				padding: 8px;
+				border: none;
+				outline: none;
+				color: #555;
+				font-weight: bold;
+
+				border-radius: 8px;
+				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+				transition: box-shadow 0.2s;
+
+				cursor: pointer;
+
+				&:not(:disabled):hover {
+					box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+				}
+
+				&:not(:disabled):active {
+					box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+				}
+			}
+
+			table {
+				display: none;
+				width: calc(100% - 8px);
+				margin: 4px;
+
+				td {
+					border: 1px solid rgba(0, 0, 0, 0.3);
+				}
+
+				td,
+				th {
+					width: 50%;
+				}
+			}
+
+			.point {
+				.item {
+					display: inline-block;
+				}
+			}
+
+			.graph {
+				display: none;
+			}
+		}
 	}
 
-	.inputbox {
-		pointer-events: all;
-		background-color: white;
-		box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.3);
+	.chart {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(0.8);
+		width: 600px;
+		height: 400px;
+		opacity: 0;
+		pointer-events: none;
 		padding: 16px;
+
+		transition: opacity 0.3s,
+			transform 0.3s cubic-bezier(0.46, 0.185, 0.72, 1.415);
+
 		border-radius: 16px;
+		box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.6);
 
-		input {
-			margin: 4px;
-			width: 48px;
-		}
+		background-color: white;
+		cursor: pointer;
 
-		button {
-			width: calc(100% - 8px);
-			margin: 4px;
-
-			padding: 8px;
-			border: none;
-			outline: none;
-			color: #555;
-			font-weight: bold;
-
-			border-radius: 8px;
-			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
-			transition: box-shadow 0.2s;
-
-			cursor: pointer;
-
-			&:not(:disabled):hover {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-			}
-
-			&:not(:disabled):active {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
-			}
-		}
-
-		table {
-			display: none;
-			width: calc(100% - 8px);
-			margin: 4px;
-
-			td {
-				border: 1px solid rgba(0, 0, 0, 0.3);
-			}
-
-			td,
-			th {
-				width: 50%;
-			}
-		}
-
-		.point {
-			.item {
-				display: inline-block;
-			}
-		}
-
-		.graph {
-			display: none;
+		&.active {
+			opacity: 1;
+			pointer-events: all;
+			transform: translate(-50%, -50%);
 		}
 	}
 }
