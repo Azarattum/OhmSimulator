@@ -1,4 +1,13 @@
 [view="machine"] {
+	.header {
+		text-align: center;
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-top: 16px;
+		margin-bottom: 16px;
+		text-transform: uppercase;
+	}
+
 	.machine {
 		transform: translateX(0);
 		display: flex;
@@ -332,6 +341,12 @@
 				transform: scale(5) translateY(-20%);
 			}
 		}
+	}
+
+	.disclaimer {
+		text-align: center;
+		margin-top: 16px;
+		opacity: 0.8;
 	}
 }
 

@@ -60,6 +60,7 @@ export default class EventsHandler implements IEventsHandler {
 	public async registerEvents(): Promise<void> {
 		//Tab changed event
 		this.tabsController.on("tabchanged", (tab: string) => {
+			location.hash = "";
 			if ((this.tabsController.visits.get(tab) || 0) > 1) {
 				return;
 			}
@@ -204,6 +205,18 @@ export default class EventsHandler implements IEventsHandler {
 		this.table2Controller.on("done", done);
 
 		//Set defaul tab
-		this.tabsController.change("greeting");
+		let tab = "greeting";
+		switch (location.hash) {
+			case "#help":
+				tab = "help";
+				break;
+			case "#help2":
+				tab = "help2";
+				break;
+			case "#help3":
+				tab = "help3";
+				break;
+		}
+		this.tabsController.change(tab);
 	}
 }
