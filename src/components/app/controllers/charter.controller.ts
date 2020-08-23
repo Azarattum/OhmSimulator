@@ -25,6 +25,7 @@ export default class Charter extends Controller<"pointAttempt">() {
 		this.expose("add");
 		this.expose("toggleChart");
 		this.expose("hideChart");
+		this.data.accuracy = "100";
 	}
 
 	public setResistance(resistance: number): void {
@@ -145,6 +146,25 @@ export default class Charter extends Controller<"pointAttempt">() {
 		this.graph.style.display = "block";
 		this.points.push({ x: +x, y: +y });
 		this.points.sort((a, b) => a.x - b.x);
+
+		this.data.accuracy = (
+			100 *
+			Math.sqrt(
+				this.points.reduce((acc, p) => {
+					return acc + p.x == 0
+						? 1
+						: Math.pow(
+								1 -
+									Math.abs(
+										1 -
+											p.y /
+												((p.x / this.resistance) * 1000)
+									),
+								2
+						  );
+				}, 0)
+			)
+		).toFixed(0);
 
 		this.data.points = this.points;
 		this.emit("pointAttempt", x, y);
