@@ -18,6 +18,7 @@ export default class Machine extends Controller<
 		this.circuit = this.container.querySelector(".circuit");
 		this.slot = this.container.querySelector(".slot");
 		this.data.resistor = "false";
+		this.setResistance(this.validResistance);
 
 		this.expose("activate");
 		this.expose("dragResistor");
@@ -61,6 +62,14 @@ export default class Machine extends Controller<
 
 	public setResistance(resistance: number): void {
 		this.validResistance = +resistance;
+
+		if (!this.resistors) return;
+		this.resistors
+			.querySelectorAll(".resistor.valid")
+			.forEach(x => x.classList.remove("valid"));
+		this.resistors
+			?.querySelector(`.resistor[data-resistance="${resistance}"]`)
+			?.classList.add("valid");
 	}
 
 	public setResistor(resistance: number): void {
@@ -73,6 +82,10 @@ export default class Machine extends Controller<
 		}
 
 		for (const resistor of this.slot?.children) {
+			if (resistor.classList.contains("example")) {
+				resistor.remove();
+				continue;
+			}
 			this.resistors?.appendChild(resistor);
 		}
 

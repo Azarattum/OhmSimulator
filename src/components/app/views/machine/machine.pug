@@ -3,6 +3,7 @@
 	.inactive(view="circuit")
 	img(src="assets/images/machine.svg" draggable="false")
 	.slot(ondrop="Controller.dropResistor(event)" ondragover="Controller.allowDrop(event)")
+		.resistor.example(data-resistance=50)
 
 	input(
 		type="checkbox" id="clamp-left"
