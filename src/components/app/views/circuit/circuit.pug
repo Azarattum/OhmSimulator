@@ -2,6 +2,7 @@
 	.element.power(
 		controller="power"
 		onclick="Power.updateVoltage()"
+		oncontextmenu="Power.updateVoltage(false);return false;"
 	) &#x26a1;
 	.element.meter.voltmeter(
 		view="device"

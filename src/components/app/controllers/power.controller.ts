@@ -31,10 +31,13 @@ export default class Power extends Controller<"voltageChanged">() {
 	/**
 	 * Update power voltage
 	 */
-	public updateVoltage(): void {
-		this.voltage += this.step;
+	public updateVoltage(up: boolean = true): void {
+		this.voltage += this.step * (+up * 2 - 1);
 		if (this.voltage > this.maximum) {
 			this.voltage = 0;
+		}
+		if (this.voltage < 0) {
+			this.voltage = this.maximum;
 		}
 
 		this.container.style.setProperty(
