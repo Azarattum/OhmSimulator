@@ -38,7 +38,7 @@ export default class Charter extends Controller<
 	}
 
 	public validate(): void {
-		const resistance = this.data.result;
+		const resistance = +this.data.result.replace(",", ".");
 		const error = this.resistance * 0.05;
 
 		if (Math.abs(this.resistance - resistance) < error) {
