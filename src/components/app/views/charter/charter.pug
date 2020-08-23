@@ -12,6 +12,6 @@
             tr(iterate="data.points")
                 td!=data.points.x
                 td!=data.points.y
-        button.graph(onclick="Controller.showChart()") График
+        button.graph(onclick="Controller.toggleChart()") График
 .chart
     canvas(width="600" height="400" onclick="Controller.hideChart()")

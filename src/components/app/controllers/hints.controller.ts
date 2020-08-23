@@ -38,9 +38,14 @@ export default class Hints extends Controller<"">() {
 			this.persistant.push(node);
 			node.classList.add("no-hide");
 			node.addEventListener("click", () => {
+				this.persistant.splice(this.persistant.indexOf(node), 1);
 				node.classList.add("hidden");
 				setTimeout(() => {
-					this.container.removeChild(node);
+					try {
+						this.container.removeChild(node);
+					} catch {
+						//Catch them all!
+					}
 				}, 601);
 			});
 		}
@@ -53,8 +58,15 @@ export default class Hints extends Controller<"">() {
 		this.persistant.forEach(x => {
 			x.classList.add("hidden");
 			setTimeout(() => {
-				this.container.removeChild(x);
+				if (x) {
+					try {
+						this.container.removeChild(x);
+					} catch {
+						//Catch them all!
+					}
+				}
 			}, 601);
 		});
+		this.persistant = [];
 	}
 }

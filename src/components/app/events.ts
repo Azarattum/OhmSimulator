@@ -119,6 +119,7 @@ export default class EventsHandler implements IEventsHandler {
 					return;
 				}
 				this.devicesController.setResistance(resistance);
+				this.charterController.setResistance(resistance);
 			}
 		);
 
@@ -173,6 +174,7 @@ export default class EventsHandler implements IEventsHandler {
 			});
 
 			//Update resistance
+			this.charterController.setResistance(variant.resistance);
 			this.devicesController.setResistance(variant.resistance);
 			this.machineController.setResistance(variant.resistance);
 

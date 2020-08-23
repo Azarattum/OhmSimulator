@@ -18,12 +18,25 @@ export default class Charter extends Controller<"pointAttempt">() {
 
 	private voltage: number = 0;
 	private amperage: number = 0;
+	private resistance: number = 50;
 
 	public initialize(): void {
 		this.bind();
 		this.expose("add");
-		this.expose("showChart");
+		this.expose("toggleChart");
 		this.expose("hideChart");
+	}
+
+	public setResistance(resistance: number): void {
+		this.resistance = +resistance;
+	}
+
+	public toggleChart(): void {
+		if (this.chart?.classList.contains("active")) {
+			this.hideChart();
+		} else {
+			this.showChart();
+		}
 	}
 
 	public showChart(): void {
@@ -31,6 +44,7 @@ export default class Charter extends Controller<"pointAttempt">() {
 		const canvas = this.chart.querySelector("canvas") as HTMLCanvasElement;
 		const context = canvas.getContext("2d");
 		if (!context) return;
+		const leastSquarePoints = this.findLineByLeastSquares(this.points);
 
 		new Chart(context, {
 			type: "line",
@@ -40,13 +54,35 @@ export default class Charter extends Controller<"pointAttempt">() {
 						data: this.points,
 						lineTension: 0,
 						backgroundColor: "rgba(0, 0, 0, 0.8)",
-						borderColor: "rgba(0, 0, 0, 0.6)",
-						fill: false
+						borderColor: "rgba(0, 0, 0, 0.15)",
+						fill: false,
+						label: "Ваши измерения"
+					},
+					{
+						data: leastSquarePoints,
+						lineTension: 0,
+						backgroundColor: "#08d18e",
+						borderColor: "#08d18e",
+						fill: false,
+						label: "Линия наименьших квадратов"
+					},
+					{
+						data: this.points.map(p => {
+							return {
+								x: p.x,
+								y: (p.x / this.resistance) * 1000
+							};
+						}),
+						lineTension: 0,
+						backgroundColor: "#5e0ca7",
+						borderColor: "#5e0ca7",
+						fill: false,
+						label: "Эталонный график"
 					}
 				]
 			},
 			options: {
-				legend: { display: false },
+				legend: { display: true },
 				scales: {
 					yAxes: [
 						{
@@ -107,7 +143,7 @@ export default class Charter extends Controller<"pointAttempt">() {
 
 		this.table.style.display = "inline-table";
 		this.graph.style.display = "block";
-		this.points.push({ x, y });
+		this.points.push({ x: +x, y: +y });
 		this.points.sort((a, b) => a.x - b.x);
 
 		this.data.points = this.points;
@@ -121,5 +157,43 @@ export default class Charter extends Controller<"pointAttempt">() {
 
 	public activate(): void {
 		if (this.bar) this.bar.style.transform = "none";
+	}
+
+	private findLineByLeastSquares(
+		points: { x: number; y: number }[]
+	): { x: number; y: number }[] {
+		let sumX = 0;
+		let sumY = 0;
+		let sumXY = 0;
+		let sumXX = 0;
+		let count = 0;
+		let x = 0;
+		let y = 0;
+
+		if (points.length === 0) {
+			return [];
+		}
+
+		for (let i = 0; i < points.length; i++) {
+			x = +points[i].x;
+			y = +points[i].y;
+			sumX += x;
+			sumY += y;
+			sumXX += x * x;
+			sumXY += x * y;
+			count++;
+		}
+
+		const m = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+		const b = sumY / count - (m * sumX) / count;
+
+		const result = [];
+		for (let i = 0; i < points.length; i++) {
+			x = +points[i].x;
+			y = Math.max(x * m + b, 0);
+			result.push({ x, y });
+		}
+
+		return result;
 	}
 }
