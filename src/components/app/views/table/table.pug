@@ -1,10 +1,10 @@
 .header=title
 .content
     if example !== "true" && complex !== "true"
-        label.variants
+        label.variants(data-chosen="none")
             select(
                 controller="variant"
-                onchange="Controller.setVariant(this.value)"
+                onchange="Controller.setVariant(this.value);this.parentElement.dataset.chosen = this.value;"
             )
                 option(selected disabled) Ваш Вариант?
                 - for (var i = 1; i <= 30; ++i) {

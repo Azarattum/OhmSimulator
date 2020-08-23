@@ -1,231 +1,255 @@
 [view="table"] {
-	.variants {
-		position: absolute;
-		left: 50vw;
-		transform: translateX(-50%);
-		color: #555;
+    .variants {
+        position: absolute;
+        left: 50vw;
+        transform: translateX(-50%);
+        border-radius: 4px;
+        color: #555;
 
-		&:after {
-			content: "<>";
-			position: absolute;
+        &:after {
+            content: "<>";
+            position: absolute;
 
-			top: 10px;
-			right: 8px;
+            top: 10px;
+            right: 8px;
 
-			font: 11px "Consolas", monospace;
-			font-weight: bold;
-			color: #666;
-			-webkit-transform: rotate(90deg);
-			-moz-transform: rotate(90deg);
-			transform: rotate(90deg);
-			padding: 0 0 2px;
+            font: 11px "Consolas", monospace;
+            font-weight: bold;
+            color: #666;
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            transform: rotate(90deg);
+            padding: 0 0 2px;
 
-			border-bottom: 1px solid #ddd;
-			pointer-events: none;
-		}
+            border-bottom: 1px solid #ddd;
+            pointer-events: none;
+        }
 
-		&:before {
-			content: "";
-			position: absolute;
+        &:before {
+            content: "";
+            position: absolute;
 
-			top: 8px;
-			right: 6px;
-			width: 20px;
-			height: 20px;
+            top: 8px;
+            right: 6px;
+            width: 20px;
+            height: 20px;
 
-			background: #eee;
-			pointer-events: none;
-			display: block;
-		}
+            background: #eee;
+            pointer-events: none;
+            display: block;
+        }
 
-		select {
-			width: 140px;
-			height: 35px;
-			padding: 4px;
-			border-radius: 4px;
-			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-			background: #eee;
-			border: none;
-			outline: none;
-			display: inline-block;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			appearance: none;
-			cursor: pointer;
-		}
-	}
+        select {
+            width: 140px;
+            height: 35px;
+            padding: 4px;
+            border-radius: 4px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            background: #eee;
+            border: none;
+            outline: none;
+            display: inline-block;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+    }
 
-	.header {
-		width: 100vw;
-		text-align: center;
-		font-size: 1.2em;
-		font-weight: bold;
-		margin-top: 16px;
-		margin-bottom: 16px;
-		text-transform: uppercase;
-	}
+    .variants[data-chosen="none"] {
+        animation: variant-select 1s infinite;
 
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		max-width: 100vw;
+        &~div {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+    }
 
-		.elements {
-			display: flex;
-			width: 100vw;
-			justify-content: space-evenly;
-			margin-bottom: 32px;
+    .header {
+        width: 100vw;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
 
-			&.swapped {
-				flex-direction: row-reverse;
-			}
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100vw;
 
-			.meter {
-				box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
-				border-radius: 16px;
+        .elements {
+            display: flex;
+            width: 100vw;
+            justify-content: space-evenly;
+            margin-bottom: 32px;
 
-				background-color: rgb(240, 240, 240);
-				width: 300px;
-				height: 220px;
-				padding-top: 20px;
-				--height: calc(240px * 3);
+            &.swapped {
+                flex-direction: row-reverse;
+            }
 
-				.arrow {
-					top: calc(3.9 * var(--unit));
-				}
+            .meter {
+                box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+                border-radius: 16px;
 
-				.precision,
-				.label,
-				.arrow,
-				.system,
-				.scale,
-				label {
-					cursor: help;
-				}
+                background-color: rgb(240, 240, 240);
+                width: 300px;
+                height: 220px;
+                padding-top: 20px;
+                --height: calc(240px * 3);
 
-				label {
-					transform: translateX(0);
-					z-index: 1;
-				}
+                .arrow {
+                    top: calc(3.9 * var(--unit));
+                }
 
-				.system {
-					z-index: 2;
-				}
+                .precision,
+                .label,
+                .arrow,
+                .system,
+                .scale,
+                label {
+                    cursor: help;
+                }
 
-				.precision:hover::after,
-				.label:hover::after,
-				.arrow:hover::before,
-				.system:hover::after,
-				.scale:hover::after,
-				label:hover::after {
-					position: absolute;
-					left: 50%;
-					bottom: 100%;
-					width: min-content;
-					transform: translateX(-50%);
+                label {
+                    transform: translateX(0);
+                    z-index: 1;
+                }
 
-					font-size: 14px;
-					font-weight: normal;
-					padding: 4px;
-					border-radius: 4px;
-					background-color: white;
-					box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
-				}
+                .system {
+                    z-index: 2;
+                }
 
-				.system:hover::after {
-					content: "Система измерительного прибора";
-					font-weight: normal;
-					transform: rotate(-180deg);
-				}
+                .precision:hover::after,
+                .label:hover::after,
+                .arrow:hover::before,
+                .system:hover::after,
+                .scale:hover::after,
+                label:hover::after {
+                    position: absolute;
+                    left: 50%;
+                    bottom: 100%;
+                    width: min-content;
+                    transform: translateX(-50%);
 
-				.precision:hover::after {
-					content: "Класс точности";
-				}
+                    font-size: 14px;
+                    font-weight: normal;
+                    padding: 4px;
+                    border-radius: 4px;
+                    background-color: white;
+                    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+                }
 
-				label:hover::after {
-					content: "Кнопка множителя";
-				}
+                .system:hover::after {
+                    content: "Система измерительного прибора";
+                    font-weight: normal;
+                    transform: rotate(-180deg);
+                }
 
-				input:checked + label:hover::after {
-					content: "Выбранный множитель" !important;
-				}
+                .precision:hover::after {
+                    content: "Класс точности";
+                }
 
-				.scale:hover::after {
-					content: "Шкала";
-					opacity: 0.7;
-				}
+                label:hover::after {
+                    content: "Кнопка множителя";
+                }
 
-				.arrow:hover::before {
-					transform: translate(-50%, -150%);
-					content: "Стрелка";
-					opacity: 0.7;
-				}
+                input:checked+label:hover::after {
+                    content: "Выбранный множитель" !important;
+                }
 
-				&.voltmeter .label:hover::after {
-					content: "Вольтметр";
-				}
+                .scale:hover::after {
+                    content: "Шкала";
+                    opacity: 0.7;
+                }
 
-				&.ampermeter .label:hover::after {
-					content: "Миллиамперметр";
-				}
-			}
-		}
+                .arrow:hover::before {
+                    transform: translate(-50%, -150%);
+                    content: "Стрелка";
+                    opacity: 0.7;
+                }
 
-		& > .table,
-		& > .table2 {
-			margin-top: 32px;
+                &.voltmeter .label:hover::after {
+                    content: "Вольтметр";
+                }
 
-			& > .handsontable > .wtHolder {
-				display: flex;
-				justify-content: center;
-			}
+                &.ampermeter .label:hover::after {
+                    content: "Миллиамперметр";
+                }
+            }
+        }
 
-			.handsontable table thead th {
-				white-space: pre-line;
-				word-break: break-word;
-				min-width: 80px;
-				max-width: calc(80vw / 8);
-			}
-		}
-	}
+        &>.table,
+        &>.table2 {
+            margin-top: 32px;
 
-	.buttons {
-		position: relative;
-		display: flex;
-		justify-content: center;
+            &>.handsontable>.wtHolder {
+                display: flex;
+                justify-content: center;
+            }
 
-		button {
-			font-size: 1.1em;
-			margin: 16px;
-			padding: 8px;
-			border: none;
-			outline: none;
-			color: #555;
-			font-weight: bold;
+            .handsontable table thead th {
+                white-space: pre-line;
+                word-break: break-word;
+                min-width: 80px;
+                max-width: calc(80vw / 8);
+            }
+        }
+    }
 
-			border-radius: 8px;
-			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
-			transition: box-shadow 0.2s;
+    .buttons {
+        position: relative;
+        display: flex;
+        justify-content: center;
 
-			cursor: pointer;
+        button {
+            font-size: 1.1em;
+            margin: 16px;
+            padding: 8px;
+            border: none;
+            outline: none;
+            color: #555;
+            font-weight: bold;
 
-			&:not(:disabled):hover {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-			}
+            border-radius: 8px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.2s;
 
-			&:not(:disabled):active {
-				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
-			}
+            cursor: pointer;
 
-			&:disabled {
-				color: #aaa;
-				cursor: not-allowed;
-			}
-		}
-	}
+            &:not(:disabled):hover {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+            }
+
+            &:not(:disabled):active {
+                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+            }
+
+            &:disabled {
+                color: #aaa;
+                cursor: not-allowed;
+            }
+        }
+    }
 }
 
 .handsontable .htAutocompleteArrow {
-	color: #969494;
+    color: #969494;
+}
+
+@keyframes variant-select {
+    0% {
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0);
+    }
+
+    50% {
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+    }
+
+    100% {
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0);
+    }
 }
