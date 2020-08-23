@@ -20,7 +20,7 @@ html(lang="en")
             p(onclick="Tabs.change('machine')") Machine
         .hints(controller="hints")
             .hint(iterate="data.hints")
-                .text
+                .text Загрузка...
                 .close
         .page(controller="tabs")
             div(tab="greeting" view="greeting")

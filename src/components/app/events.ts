@@ -254,5 +254,8 @@ export default class EventsHandler implements IEventsHandler {
 				break;
 		}
 		this.tabsController.change(tab);
+
+		//Show loaded page
+		(document.querySelector(".page") as HTMLElement).style.opacity = "1";
 	}
 }
