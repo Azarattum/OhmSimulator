@@ -189,6 +189,10 @@ export default class EventsHandler implements IEventsHandler {
 			(voltage: number | null, amperage: number | null) => {
 				if (voltage == null || amperage == null) {
 					this.hintsController.showHint(Messages.wrong);
+				} else if (voltage == -1 || amperage == -1) {
+					this.hintsController.showHint(Messages.misspell);
+				} else if (voltage == -2 || amperage == -2) {
+					this.hintsController.showHint(Messages.dublicate);
 				} else {
 					this.hintsController.showHint(Messages.registered);
 				}

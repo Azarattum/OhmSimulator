@@ -77,17 +77,21 @@ export default class Charter extends Controller<"pointAttempt">() {
 	}
 
 	public add(): void {
-		const x = +this.data.voltage;
-		const y = +this.data.amperage;
+		const x = +this.data.voltage.replace(",", ".");
+		const y = +this.data.amperage.replace(",", ".");
 		if (
 			!Number.isFinite(x) ||
 			!Number.isFinite(y) ||
 			!this.table ||
 			!this.graph ||
 			x < 0 ||
-			y < 0 ||
-			this.points.find(p => p.x == x || p.y == y)
+			y < 0
 		) {
+			this.emit("pointAttempt", -1, -1);
+			return;
+		}
+		if (this.points.find(p => p.x == x || p.y == y)) {
+			this.emit("pointAttempt", -2, -2);
 			return;
 		}
 
