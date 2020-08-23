@@ -21,6 +21,7 @@ import GreetingView from "./views/greeting/greeting.view";
 import HelpView from "./views/help/help.view";
 import Help2View from "./views/help2/help2.view";
 import Help3View from "./views/help3/help3.view";
+import Help4View from "./views/help4/help4.view";
 import CharterView from "./views/charter/charter.view";
 import SuccessView from "./views/success/success.view";
 
@@ -54,6 +55,7 @@ export default class App {
 			HelpView,
 			Help2View,
 			Help3View,
+			Help4View,
 			DeviceView
 		];
 
