@@ -6,6 +6,7 @@ import Messages from "../models/messages.class";
  */
 export default class Hints extends Controller<"">() {
 	private template: HTMLElement | null = null;
+	private persistant: HTMLElement[] = [];
 
 	public initialize(resistance: number): void {
 		this.bind();
@@ -34,6 +35,7 @@ export default class Hints extends Controller<"">() {
 				this.container.removeChild(node);
 			}, 4001);
 		} else {
+			this.persistant.push(node);
 			node.classList.add("no-hide");
 			node.addEventListener("click", () => {
 				node.classList.add("hidden");
@@ -42,5 +44,17 @@ export default class Hints extends Controller<"">() {
 				}, 601);
 			});
 		}
+	}
+
+	/**
+	 * Closes all active hints
+	 */
+	public closeAll(): void {
+		this.persistant.forEach(x => {
+			x.classList.add("hidden");
+			setTimeout(() => {
+				this.container.removeChild(x);
+			}, 601);
+		});
 	}
 }

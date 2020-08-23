@@ -127,10 +127,11 @@ export default class EventsHandler implements IEventsHandler {
 		});
 
 		this.machineController.on("ready", () => {
-			this.hintsController.showHint(Messages.ready);
+			this.hintsController.showHint(Messages.ready, true);
 		});
 
 		this.machineController.on("activated", () => {
+			this.hintsController.closeAll();
 			this.hintsController.showHint(Messages.activated);
 			this.charterController.activate();
 		});
