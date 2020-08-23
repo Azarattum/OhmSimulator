@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata&display=swap");
 
 [view="device"] {
     .device {
@@ -12,12 +12,12 @@
             .deviders {
                 font-size: 13.7px;
                 font-weight: bold;
-                font-family: "Roboto Mono", monospace;
+                font-family: "Courier", "Roboto Mono", monospace;
             }
 
             .numbers {
                 font-size: 18.7px;
-                font-family: "Roboto Mono", monospace;
+                font-family: "Courier", "Roboto Mono", monospace;
             }
         }
 
@@ -34,7 +34,7 @@
             display: inline-block;
             position: absolute;
 
-            top: calc(3.9 * var(--unit) - 8px);
+            top: calc(3.9 * var(--unit) - 10px);
             left: calc(50% - 2px);
 
             background: var(--color);
@@ -45,7 +45,7 @@
             border-bottom-right-radius: 5px;
 
             transition: 0.6s;
-            transform: rotateZ(calc((var(--value) / var(--limit)) * 120deg - 60deg));
+            transform: rotateZ(calc((var(--value) / var(--limit)) * 118.5deg - 60deg));
             transform-origin: bottom;
             transition-property: transform;
             transition-timing-function: cubic-bezier(0.25, 0.1, 0.27, 1.225);
