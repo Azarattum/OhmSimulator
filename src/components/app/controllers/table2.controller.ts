@@ -111,7 +111,11 @@ export default class Table2Ctrl extends Controller<
 					?.toFixed(1)
 					.replace(".", ",");
 
-				callback(value == null || value === "" || value === valid);
+				callback(
+					value == null ||
+						value === "" ||
+						value.replace(".", ",") === valid
+				);
 				return valid;
 			}
 		);
@@ -371,6 +375,8 @@ export default class Table2Ctrl extends Controller<
 		if (value === "") return;
 		if (Number.isFinite(+value) && col != 2) {
 			value = this.formatNumber(+value);
+		} else {
+			value = value.replace(".", ",");
 		}
 		if (!(validator instanceof Function)) return;
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -417,7 +423,11 @@ export default class Table2Ctrl extends Controller<
 				return { row, col, value };
 			},
 			beforeValueRender: (value): any => {
-				if (Number.isFinite(value)) {
+				if (
+					Number.isFinite(value) ||
+					(typeof value == "string" &&
+						Number.isFinite(+value.replace(",", ".")))
+				) {
 					value = value.toString().replace(".", ",");
 				}
 				return value;
