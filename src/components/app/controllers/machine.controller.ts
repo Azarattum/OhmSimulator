@@ -32,12 +32,30 @@ export default class Machine extends Controller<
 		const power = this.data.power;
 		setTimeout(() => {
 			this.circuit?.classList.remove("active");
-			if (this.data.power == "false") return;
-			if (power == "false") this.emit("powered");
+			this.container
+				.querySelectorAll(".clamp")
+				.forEach(x => x.classList.remove("example"));
+
+			if (this.data.power == "true") {
+				if (power == "false") this.emit("powered");
+			}
 			if (!this.slot?.children.length) return;
 			if (this.data.resistor == "false") return;
+			this.container
+				.querySelector(".clamp.left")
+				?.classList.add("example");
 			if (this.data.clamps.left == "false") return;
+			this.container
+				.querySelector(".clamp.left")
+				?.classList.remove("example");
+			this.container
+				.querySelector(".clamp.right")
+				?.classList.add("example");
 			if (this.data.clamps.right == "false") return;
+			this.container
+				.querySelector(".clamp.right")
+				?.classList.remove("example");
+			if (this.data.power == "false") return;
 			if (this.data.voltage == "false") return;
 
 			this.emit("ready");
@@ -104,6 +122,7 @@ export default class Machine extends Controller<
 				resistance,
 				this.data.resistor == "true"
 			);
+			this.updateStage();
 		}
 	}
 

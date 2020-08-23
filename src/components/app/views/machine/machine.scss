@@ -105,7 +105,7 @@
             display: none;
 
             &:checked+.clamp {
-                transform: rotateZ(180deg);
+                transform: rotateZ(180deg) !important;
                 background-color: #505050;
                 z-index: 3;
             }
@@ -124,6 +124,14 @@
             z-index: -1;
             cursor: pointer;
             transition: 0.2s;
+
+            &:hover {
+                animation: none !important;
+            }
+
+            &.example {
+                animation: shake 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;
+            }
 
             &.left {
                 left: calc(20% - 3px);
@@ -148,6 +156,8 @@
                 filter: saturate(0) !important;
                 opacity: 0.5 !important;
                 animation: drop 4s infinite;
+                pointer-events: none;
+                z-index: -1;
             }
         }
 
@@ -432,5 +442,29 @@
 
     100% {
         border: solid 0px var(--color-text);
+    }
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: rotateZ(-5deg);
+    }
+
+    20%,
+    80% {
+        transform: rotateZ(10deg);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: rotateZ(-20deg);
+    }
+
+    40%,
+    60% {
+        transform: rotateZ(20deg);
     }
 }
