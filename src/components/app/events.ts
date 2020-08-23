@@ -201,6 +201,14 @@ export default class EventsHandler implements IEventsHandler {
 			}
 		);
 
+		this.charterController.on("validated", (success: boolean) => {
+			if (success) {
+				this.tabsController.change("success");
+			} else {
+				this.hintsController.showHint(Messages.error);
+			}
+		});
+
 		const mistaken = (correct: string | null): void => {
 			if (correct == null) {
 				this.hintsController.showHint(Messages.mistake);

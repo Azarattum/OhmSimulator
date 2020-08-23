@@ -4,7 +4,9 @@ import Chart from "chart.js";
 /**
  * Charter controller
  */
-export default class Charter extends Controller<"pointAttempt">() {
+export default class Charter extends Controller<
+	"pointAttempt" | "validated"
+>() {
 	@element("table")
 	private table: HTMLElement | null = null;
 	@element(".bar")
@@ -13,6 +15,8 @@ export default class Charter extends Controller<"pointAttempt">() {
 	private graph: HTMLElement | null = null;
 	@element(".chart")
 	private chart: HTMLElement | null = null;
+	@element(".result")
+	private result: HTMLElement | null = null;
 
 	private points: { x: number; y: number }[] = [];
 
@@ -25,11 +29,23 @@ export default class Charter extends Controller<"pointAttempt">() {
 		this.expose("add");
 		this.expose("toggleChart");
 		this.expose("hideChart");
+		this.expose("validate");
 		this.data.accuracy = "100";
 	}
 
 	public setResistance(resistance: number): void {
 		this.resistance = +resistance;
+	}
+
+	public validate(): void {
+		const resistance = this.data.result;
+		const error = this.resistance * 0.05;
+
+		if (Math.abs(this.resistance - resistance) < error) {
+			this.emit("validated", true);
+		} else {
+			this.emit("validated", false);
+		}
 	}
 
 	public toggleChart(): void {
@@ -167,6 +183,11 @@ export default class Charter extends Controller<"pointAttempt">() {
 		).toFixed(0);
 
 		this.data.points = this.points;
+
+		if (this.points.length >= 4 && this.result) {
+			this.result.style.display = "block";
+		}
+
 		this.emit("pointAttempt", x, y);
 	}
 

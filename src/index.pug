@@ -18,6 +18,7 @@ html(lang="en")
             p(onclick="Tabs.change('table')") Table 1
             p(onclick="Tabs.change('complex')") Table 2
             p(onclick="Tabs.change('machine')") Machine
+            p(onclick="Tabs.change('success')") Success
         .hints(controller="hints")
             .hint(iterate="data.hints")
                 .text Загрузка...
@@ -39,4 +40,5 @@ html(lang="en")
             div(tab="help2" view="help2")
             div(tab="help3" view="help3")
             div(tab="machine" view="machine")
+            div(tab="success" view="success")
         div(view="footer")

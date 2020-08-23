@@ -14,5 +14,10 @@
                 td!=data.points.x
                 td!=data.points.y
         button.graph(onclick="Controller.toggleChart()") График
+        .result
+            h4 Ответ:
+            div
+                input(type="text" bind="data.result" placeholder="Ом")
+                button(onclick="Controller.validate()") OK
 .chart
     canvas(width="600" height="400" onclick="Controller.hideChart()")

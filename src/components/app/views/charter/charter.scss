@@ -92,6 +92,25 @@
                 display: none;
             }
         }
+
+        .result {
+            display: none;
+
+            h4 {
+                margin-top: 8px;
+                margin-bottom: 0px;
+                text-indent: 6px;
+            }
+
+            div {
+                display: flex;
+                flex-direction: row;
+
+                input {
+                    margin: 6px;
+                }
+            }
+        }
     }
 
     .chart {
