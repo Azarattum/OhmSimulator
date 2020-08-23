@@ -60,5 +60,5 @@
                 )
                 label(
                     for=name+"-radio-"+index+"-"+uuid
-                    style="background:hsl("+(index / JSON.parse(ranges).length * 255 + 17)+", 100%, 69%)" 
+                    style="--hue:"+(index / JSON.parse(ranges).length * 255 + 17)
                 )=("x" + range)
