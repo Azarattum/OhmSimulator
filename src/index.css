@@ -57,10 +57,11 @@ body > .hints > .hint:not(.no-hide) > .close {
 
 body > .hints > .hint > .close {
 	position: absolute;
-	font-size: 0.45em;
+	font-size: 0.5em;
 	opacity: 0.9;
 	right: 8px;
-	animation: blink 1.5s 3;
+	animation: blink 1.5s 4;
+	transform-origin: bottom right;
 }
 
 body > .hints > .hint.no-hide {
@@ -90,12 +91,15 @@ body > .hints > .hint.hidden {
 @keyframes blink {
 	0% {
 		color: currentColor;
+		transform: scale(1);
 	}
 	50% {
 		color: rgb(255, 36, 36);
+		transform: scale(1.1);
 		opacity: 1 !important;
 	}
 	100% {
+		transform: scale(1);
 		color: currentColor;
 	}
 }
