@@ -1,6 +1,6 @@
 .device(
     class=name
-    style="--limit:"+(+step*5)
+    style="--limit:"+(+factor*5)
     )
     .scale
         svg(viewbox="0 0 508 175")
@@ -25,12 +25,12 @@
             text(width="500").numbers
                 textpath(xlink:href="#curve2"+uuid xml:space="preserve")
                     each i in [0, 1, 2, 3, 4]
-                        - var j = i * (+step)
-                        | #{(j || " ") + " ".repeat(8 - j.toString().length - ((i==4)? (j + step).toString().length - 1: 0))}
+                        - var j = i * (+factor)
+                        | #{(j || " ") + " ".repeat(8 - j.toString().length - ((i==4)? (j + factor).toString().length - 1: 0))}
             text.numbers.min(
                 transform="translate(425, 172)" 
                 text-anchor="middle"
-            ) !{5 * (+step)}
+            ) !{5 * (+factor)}
 
             if compact === "true"
                 text(width="500").deviders

@@ -12,6 +12,8 @@ import Variants from "./models/variants.class";
 import Utils from "../common/utils.class";
 import Table2Ctrl from "./controllers/table2.controller";
 import Charter from "./controllers/charter.controller";
+import Intro from "intro.js";
+import "../../../node_modules/intro.js/introjs.css";
 
 /**
  * Event handler for application components
@@ -135,6 +137,21 @@ export default class EventsHandler implements IEventsHandler {
 			this.hintsController.closeAll();
 			this.hintsController.showHint(Messages.activated);
 			this.charterController.activate();
+			setTimeout(() => {
+				Intro()
+					.setOptions({
+						nextLabel: "Далее",
+						prevLabel: "Назад",
+						skipLabel: "Пропустить",
+						doneLabel: "Понятно!",
+						showProgress: true,
+						showBullets: false,
+						hideNext: true,
+						hidePrev: true,
+						showStepNumbers: false
+					})
+					.start();
+			}, 2000);
 		});
 
 		//Register variant update
@@ -156,14 +173,14 @@ export default class EventsHandler implements IEventsHandler {
 				if (data.example === "true") return;
 
 				if (data.name == "voltmeter") {
-					data.step = variant.voltmeterStep.toString();
+					data.factor = variant.voltmeterStep.toString();
 					data.precision = variant.voltmeterPrecision.toFixed(1);
 					data.compact = ((variant.compact + 2) % 3 == 0).toString();
 					if (data.fixed != null) {
 						data.fixed = variant.voltmeterMultiplierId.toString();
 					}
 				} else {
-					data.step = variant.ampermeterStep.toString();
+					data.factor = variant.ampermeterStep.toString();
 					data.precision = variant.ampermeterPrecision.toFixed(1);
 					data.compact = (variant.compact % 5 == 0).toString();
 					if (data.fixed != null) {

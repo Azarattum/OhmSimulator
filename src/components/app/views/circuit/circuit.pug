@@ -1,28 +1,37 @@
 .circuit(onclick="Machine.activate()" controller="devices")
 	.element.power(
+		data-step="1"
+		data-intro="Этот элемент отвечает за изменение напряжения в цепи"
 		controller="power"
 		onclick="Power.updateVoltage()"
 		oncontextmenu="Power.updateVoltage(false);return false;"
 	) &#x26a1;
 	.element.meter.voltmeter(
 		view="device"
+		data-step="2"
+		data-intro="Вольтметр показавает текущее нарпряжение (Вольты)"
 		data-buttons="true"
 		data-name="voltmeter"
 		data-label="V"
-		data-step="2"
+		data-factor="2"
 		data-ranges="[0.5, 1, 2, 3]"
 		data-precision="1.5"
 	)
 	.element.meter.ampermeter(
 		view="device"
+		data-step="3"
+		data-intro="Миллиамперметр показавает текущую силу тока (Миллиамперы)"
 		data-buttons="true"
 		data-name="ampermeter"
 		data-label="mA"
-		data-step="20"
+		data-factor="20"
 		data-ranges="[1, 2, 5, 20]"
 		data-precision="2.0"
 	)
-	.element.resistor &Omega;
+	.element.resistor(
+		data-step="4"
+		data-intro="Так обозначен исследуемый вами резистор"
+	) &Omega;
 
 	.wire.top
 	.wire.bottom

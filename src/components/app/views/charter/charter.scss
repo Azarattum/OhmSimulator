@@ -1,142 +1,143 @@
 [view="charter"] {
-    position: absolute;
+	position: absolute;
 
-    .bar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        height: 100vh;
-        width: max-content;
-        display: flex;
-        align-items: center;
-        pointer-events: none;
+	.bar {
+		position: fixed;
+		top: 50%;
+		right: 0;
+		height: max-content;
+		width: max-content;
+		display: flex;
+		align-items: center;
+		pointer-events: none;
 
-        transition: transform 1s;
-        transform: translateX(110%);
+		transition: transform 1s;
+		transform: translate(110%, -50%);
 
-        table {
-            caption-side: bottom;
+		table {
+			caption-side: bottom;
 
-            .accuracy {
-                display: table-caption;
-                text-align: center;
-                font-size: 0.9em;
-                opacity: 0.9;
-                margin-bottom: 4px;
-            }
-        }
+			.accuracy {
+				display: table-caption;
+				text-align: center;
+				font-size: 0.9em;
+				opacity: 0.9;
+				margin-bottom: 4px;
+			}
+		}
 
-        h3 {
-            margin: 4px;
-        }
+		h3 {
+			margin: 4px;
+		}
 
-        .inputbox {
-            pointer-events: all;
-            background-color: white;
-            box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.3);
-            padding: 16px;
-            border-radius: 16px;
+		.inputbox {
+			pointer-events: all;
+			background-color: white;
+			box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.3);
+			padding: 16px;
+			border-bottom-left-radius: 16px;
+			border-top-left-radius: 16px;
 
-            input {
-                margin: 4px;
-                width: 48px;
-            }
+			input {
+				margin: 4px;
+				width: 48px;
+			}
 
-            button {
-                width: calc(100% - 8px);
-                margin: 4px;
+			button {
+				width: calc(100% - 8px);
+				margin: 4px;
 
-                padding: 8px;
-                border: none;
-                outline: none;
-                color: #555;
-                font-weight: bold;
+				padding: 8px;
+				border: none;
+				outline: none;
+				color: #555;
+				font-weight: bold;
 
-                border-radius: 8px;
-                box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
-                transition: box-shadow 0.2s;
+				border-radius: 8px;
+				box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4);
+				transition: box-shadow 0.2s;
 
-                cursor: pointer;
+				cursor: pointer;
 
-                &:not(:disabled):hover {
-                    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
-                }
+				&:not(:disabled):hover {
+					box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+				}
 
-                &:not(:disabled):active {
-                    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
-                }
-            }
+				&:not(:disabled):active {
+					box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.7);
+				}
+			}
 
-            table {
-                display: none;
-                width: calc(100% - 8px);
-                margin: 4px;
+			table {
+				display: none;
+				width: calc(100% - 8px);
+				margin: 4px;
 
-                td {
-                    border: 1px solid rgba(0, 0, 0, 0.3);
-                }
+				td {
+					border: 1px solid rgba(0, 0, 0, 0.3);
+				}
 
-                td,
-                th {
-                    width: 50%;
-                }
-            }
+				td,
+				th {
+					width: 50%;
+				}
+			}
 
-            .point {
-                .item {
-                    display: inline-block;
-                }
-            }
+			.point {
+				.item {
+					display: inline-block;
+				}
+			}
 
-            .graph {
-                display: none;
-            }
-        }
+			.graph {
+				display: none;
+			}
+		}
 
-        .result {
-            display: none;
+		.result {
+			display: none;
 
-            h4 {
-                margin-top: 8px;
-                margin-bottom: 0px;
-                text-indent: 6px;
-            }
+			h4 {
+				margin-top: 8px;
+				margin-bottom: 0px;
+				text-indent: 6px;
+			}
 
-            div {
-                display: flex;
-                flex-direction: row;
+			div {
+				display: flex;
+				flex-direction: row;
 
-                input {
-                    margin: 6px;
-                }
-            }
-        }
-    }
+				input {
+					margin: 6px;
+				}
+			}
+		}
+	}
 
-    .chart {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.8);
-        width: 600px;
-        height: 400px;
-        opacity: 0;
-        pointer-events: none;
-        padding: 16px;
+	.chart {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(0.8);
+		width: 600px;
+		height: 400px;
+		opacity: 0;
+		pointer-events: none;
+		padding: 16px;
 
-        transition: opacity 0.3s,
-            transform 0.3s cubic-bezier(0.46, 0.185, 0.72, 1.415);
+		transition: opacity 0.3s,
+			transform 0.3s cubic-bezier(0.46, 0.185, 0.72, 1.415);
 
-        border-radius: 16px;
-        box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.6);
+		border-radius: 16px;
+		box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.6);
 
-        background-color: white;
-        cursor: pointer;
+		background-color: white;
+		cursor: pointer;
 
-        &.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: translate(-50%, -50%);
-        }
-    }
+		&.active {
+			opacity: 1;
+			pointer-events: all;
+			transform: translate(-50%, -50%);
+		}
+	}
 }

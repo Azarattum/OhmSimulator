@@ -197,7 +197,7 @@ export default class Charter extends Controller<
 	}
 
 	public activate(): void {
-		if (this.bar) this.bar.style.transform = "none";
+		if (this.bar) this.bar.style.transform = "translateY(-50%)";
 	}
 
 	private findLineByLeastSquares(
