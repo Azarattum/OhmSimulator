@@ -8,7 +8,7 @@
 		"coverage": "jest --coverage --config env/jest.config.js"
 	},
 	"dependencies": {
-		"chart.js": "^2.9.3",
+		"chart.js": "^2.9.4",
 		"handsontable": "^10.0.0",
 		"intro.js": "^2.9.3"
 	},
