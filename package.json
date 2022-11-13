@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"chart.js": "^2.9.4",
-		"handsontable": "^10.0.0",
+		"handsontable": "^12.2.0",
 		"intro.js": "^2.9.3"
 	},
 	"devDependencies": {
